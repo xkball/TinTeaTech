@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.xkball.tin_tea_tech.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "tin_tea_tech.refmap.json",
+  "mixins": [
+    "TTMixinFMLModContainer"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8"
+}
