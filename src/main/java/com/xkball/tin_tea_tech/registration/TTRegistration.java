@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech.registration;
 
-import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import static com.xkball.tin_tea_tech.TinTeaTech.MODID;
 
