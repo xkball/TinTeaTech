@@ -1,0 +1,31 @@
+[057月2023 13:22:37.622] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\xkball\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.0.35, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, tin_tea_tech, --all, --output, E:\aworks\mod\1.20.1\tin_tea_tech\src\generated\resources, --existing, E:\aworks\mod\1.20.1\tin_tea_tech\src\main\resources, --mixin.config, tin_tea_tech.mixins.json]
+[057月2023 13:22:37.630] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.7 by Azul Systems, Inc.; OS Windows 10 arch amd64 version 10.0
+[057月2023 13:22:37.834] [main/WARN] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Configuration file E:\aworks\mod\1.20.1\tin_tea_tech\run-data\config\fml.toml is not correct. Correcting
+[057月2023 13:22:37.836] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
+[057月2023 13:22:37.863] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[057月2023 13:22:37.961] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/xkball/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[057月2023 13:22:38.677] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\xkball\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.0.35\23170a4a30ff6c0fa06499843d59aeb9fc6251b3\javafmllanguage-1.20.1-47.0.35.jar is missing mods.toml file
+[057月2023 13:22:38.681] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\xkball\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.0.35\4db60514ec40e674e6d418dcc2f5a0b3b33ee323\lowcodelanguage-1.20.1-47.0.35.jar is missing mods.toml file
+[057月2023 13:22:38.686] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\xkball\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.0.35\fcb5f28da4e1dd808b3636d9c5dd9133b19c8c26\mclanguage-1.20.1-47.0.35.jar is missing mods.toml file
+[057月2023 13:22:38.690] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\xkball\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.0.35\7dd26b29e1873e125e38a5a390b8525089cd98b0\fmlcore-1.20.1-47.0.35.jar is missing mods.toml file
+[057月2023 13:22:38.805] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[057月2023 13:22:41.095] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by tin_tea_tech.mixins.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[057月2023 13:22:41.096] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[057月2023 13:22:41.102] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\xkball\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, tin_tea_tech, --all, --output, E:\aworks\mod\1.20.1\tin_tea_tech\src\generated\resources, --existing, E:\aworks\mod\1.20.1\tin_tea_tech\src\main\resources]
+[057月2023 13:22:41.606] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
+[057月2023 13:22:41.608] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
+[057月2023 13:22:41.619] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
+[057月2023 13:22:41.619] [main/INFO] [mixin/]: Selecting config tin_tea_tech.mixins.json
+[057月2023 13:22:41.624] [main/WARN] [mixin/]: Reference map 'tin_tea_tech.refmap.json' for tin_tea_tech.mixins.json could not be read. If this is a development environment you can ignore this message
+[057月2023 13:22:41.626] [main/INFO] [mixin/]: Preparing tin_tea_tech.mixins.json (0)
+[057月2023 13:22:42.297] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [tin_tea_tech]
+[057月2023 13:22:49.554] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.0.35, for MC 1.20.1 with MCP 20230612.114412
+[057月2023 13:22:49.571] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.0.35 Initialized
+[057月2023 13:22:50.507] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/xkball/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.0.35_mapped_official_1.20.1/forge-1.20.1-47.0.35_mapped_official_1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[057月2023 13:22:50.508] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/xkball/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.0.35_mapped_official_1.20.1/forge-1.20.1-47.0.35_mapped_official_1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[057月2023 13:22:50.784] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: en_us
+[057月2023 13:22:50.809] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: en_us finished after 25 ms
+[057月2023 13:22:50.810] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: zh_cn
+[057月2023 13:22:50.812] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: zh_cn finished after 2 ms
+[057月2023 13:22:50.812] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 29 ms
+[057月2023 13:22:50.823] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 2, old count: 0, new count: 3, removed stale: 0, written: 2

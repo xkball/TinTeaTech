@@ -2,6 +2,9 @@ package com.xkball.tin_tea_tech;
 
 import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.config.TTConfig;
+import com.xkball.tin_tea_tech.data.DataGen;
+import com.xkball.tin_tea_tech.registration.AutoRegManager;
+import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.registration.TTRegistration;
 import com.xkball.tin_tea_tech.utils.Timer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,13 +27,19 @@ public class TinTeaTech
 {
     public static final String MODID = "tin_tea_tech";
     public static final String MOD_NAME = "Tin Tea Tech";
+    
+    public static final String MOD_NAME_CHINESE = "锡茶科技";
     private static final Logger LOGGER = LogUtils.getLogger();
     
 
     public TinTeaTech() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(TTCreativeTab::addCreative);
+        modEventBus.addListener(DataGen::onGatherData);
         TTRegistration.init(modEventBus);
+        AutoRegManager.init();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -39,9 +48,8 @@ public class TinTeaTech
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, TTConfig.SPEC);
     }
-
-    @SubscribeEvent
-    public static void commonSetup(final FMLCommonSetupEvent event) {
+    
+    public void commonSetup(final FMLCommonSetupEvent event) {
         var timer = new Timer();
         
         LOGGER.debug(MOD_NAME + " common setup completed in "+timer.timeNS()+" ns.");
