@@ -1,4 +1,7 @@
 {
   "block.tin_tea_tech.scaffolding_block": "Scaffolding Block",
-  "creative_tab.tin_tea_tech.building_block_tab": "Tin Tea Tech: Building Blocks"
+  "block.tin_tea_tech.solid_combustion_chamber": "Solid Combustion Chamber",
+  "creative_tab.tin_tea_tech.building_block_tab": "Tin Tea Tech: Building Blocks",
+  "creative_tab.tin_tea_tech.machine_tab": "Tin Tea Tech: Machines",
+  "info.tin_tea_tech.block_name": "Block Name: "
 }

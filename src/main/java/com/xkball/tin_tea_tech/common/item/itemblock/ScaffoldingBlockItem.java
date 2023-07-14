@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech.common.item.itemblock;
 
-import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.common.blocks.ScaffoldingBlock;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import com.xkball.tin_tea_tech.registration.TTRegistration;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-@CreativeTag
 public class ScaffoldingBlockItem extends BlockItem {
     
     public ScaffoldingBlockItem() {

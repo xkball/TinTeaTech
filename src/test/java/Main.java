@@ -1,17 +1,31 @@
-import com.xkball.tin_tea_tech.TinTeaTech;
-import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
-import com.xkball.tin_tea_tech.registration.TTCreativeTab;
+import com.xkball.tin_tea_tech.capability.heat.HeatHandler;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(TTCreativeTab.TTBuildingBlockTab.class);
-        System.out.println(formClassName(Main.class.getSimpleName()));
-        System.out.println(formClassName(AutomaticRegistration.class.getSimpleName()));
-        System.out.println(formClassName(TTCreativeTab.class.getSimpleName()));
-        System.out.println(formClassName(TinTeaTech.class.getSimpleName()));
+//        System.out.println(TTCreativeTab.TTBuildingBlockTab.class);
+//        System.out.println(formClassName(Main.class.getSimpleName()));
+//        System.out.println(formClassName(AutomaticRegistration.class.getSimpleName()));
+//        System.out.println(formClassName(TTCreativeTab.class.getSimpleName()));
+//        System.out.println(formClassName(TinTeaTech.class.getSimpleName()));
+        for(int i=0;i<20;i++){
+            var heat = new HeatHandler(i+990);
+            System.out.println("t:" + heat.heatValue() +" gap: " +heat.heatGap());
+        }
+        var heat = new HeatHandler();
+        System.out.println(heat);
+        for(int i=0;i<10;i++){
+            heat.increase(10);
+            System.out.println(heat);
+        }
+        heat = new HeatHandler();
+        for(int i=0;i<10;i++){
+            heat.decrease(10);
+            System.out.println(heat);
+        }
+        
     }
     
     private static String formClassName(String className){

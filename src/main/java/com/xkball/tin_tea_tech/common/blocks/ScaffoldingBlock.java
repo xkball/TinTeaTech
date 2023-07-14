@@ -1,13 +1,16 @@
 package com.xkball.tin_tea_tech.common.blocks;
 
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
+import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.common.item.itemblock.ScaffoldingBlockItem;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.GlowInkSacItem;
@@ -32,9 +35,14 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-@AutomaticRegistration(blockItem = ScaffoldingBlockItem.class)
+@AutomaticRegistration
+@CreativeTag
+@AutomaticRegistration.Block(blockItem = ScaffoldingBlockItem.class,singleton = true)
 @I18N(chinese = "脚手架",english = "Scaffolding Block")
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ScaffoldingBlock extends Block implements SimpleWaterloggedBlock {
     
     // private static final Logger LOGGER = LogUtils.getLogger();
@@ -254,6 +262,12 @@ public class ScaffoldingBlock extends Block implements SimpleWaterloggedBlock {
         else {
             return !blockState.getValue(BUTTON) && collisionContext.isAbove(BELOW_BLOCK, blockPos, true) ? UNSTABLE_SHAPE_TOP : Shapes.empty();
         }
+    }
+    
+    @Override
+    @SuppressWarnings("deprecation")
+    public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
+        pEntity.resetFallDistance();
     }
     
     @Override

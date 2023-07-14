@@ -1,17 +1,27 @@
 package com.xkball.tin_tea_tech.utils;
 
 public class Timer {
-    private final long startTime;
+    private final long startNS;
+    private final long startMS;
     
     public Timer(){
-        startTime = System.nanoTime();
+        startNS = System.nanoTime();
+        startMS = System.currentTimeMillis();
     }
     
     public long timeNS(){
-        return System.nanoTime() - startTime;
+        return System.nanoTime() - startNS;
     }
     
-    public long getStartTime() {
-        return startTime;
+    public long timeMS(){
+        return System.currentTimeMillis() - startMS;
+    }
+    
+    public long getStartNS() {
+        return startNS;
+    }
+    
+    public long getStartMS() {
+        return startMS;
     }
 }

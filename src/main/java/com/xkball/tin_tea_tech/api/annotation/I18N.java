@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 public @interface I18N {
     
     String prefix() default "";
+    
     String chinese();
     
     String english();

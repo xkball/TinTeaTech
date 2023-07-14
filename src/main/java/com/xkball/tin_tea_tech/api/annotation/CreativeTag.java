@@ -9,6 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 //给物品使用
+//给MTE使用
+//BlockItem除外 这时候给Block用
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CreativeTag {

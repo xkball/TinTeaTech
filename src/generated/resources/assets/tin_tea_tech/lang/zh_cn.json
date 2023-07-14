@@ -1,4 +1,7 @@
 {
   "block.tin_tea_tech.scaffolding_block": "脚手架",
-  "creative_tab.tin_tea_tech.building_block_tab": "锡茶科技: 建筑方块"
+  "block.tin_tea_tech.solid_combustion_chamber": "固态燃烧室",
+  "creative_tab.tin_tea_tech.building_block_tab": "锡茶科技: 建筑方块",
+  "creative_tab.tin_tea_tech.machine_tab": "锡茶科技: 机器",
+  "info.tin_tea_tech.block_name": "方块名称: "
 }
