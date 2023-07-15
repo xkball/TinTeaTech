@@ -1,5 +1,6 @@
 package com.xkball.tin_tea_tech.common.tile_entity;
 
+import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
@@ -13,9 +14,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -41,6 +44,8 @@ public class TTTileEntityBase extends BlockEntity {
     final int offset;
     
     boolean firstTicked = false;
+    @Nullable
+    protected Player tester = null;
     
     public TTTileEntityBase(BlockPos pos, BlockState blockState) {
         super(AutoRegManager.TILE_ENTITY_BASE.get(), pos, blockState);
@@ -53,7 +58,18 @@ public class TTTileEntityBase extends BlockEntity {
         offset = ThreadLocalRandom.current().nextInt(20);
     }
     
+    @SuppressWarnings("unused")
     public static void tick(Level level, BlockPos pos, BlockState state, TTTileEntityBase entity){
+        if(entity.tester != null){
+            var time = System.nanoTime();
+            entity.mte.tick();
+            time = System.nanoTime() - time;
+            entity.tester.sendSystemMessage(DataProvider.crossLine());
+            entity.tester.sendSystemMessage(Component.translatable("info.tin_tea_tech.tick_used")
+                    .append(Component.literal(" "+time+" ns")));
+            entity.tester = null;
+            return;
+        }
         if(!entity.firstTicked){
             entity.firstTicked = true;
             entity.mte.firstTick();
@@ -61,7 +77,8 @@ public class TTTileEntityBase extends BlockEntity {
         entity.mte.tick();
     }
     
-    public static void clientTick(Level level,BlockPos pos,BlockState state,TTTileEntityBase entity){
+    @SuppressWarnings("unused")
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TTTileEntityBase entity){
         if(!entity.firstTicked){
             entity.firstTicked = true;
             entity.mte.firstClientTick();
@@ -195,4 +212,9 @@ public class TTTileEntityBase extends BlockEntity {
     public int getOffset() {
         return offset;
     }
+    
+    public void setTester(Player tester) {
+        this.tester = tester;
+    }
+    
 }

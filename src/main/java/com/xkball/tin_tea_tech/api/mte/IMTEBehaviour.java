@@ -6,6 +6,8 @@ import com.xkball.tin_tea_tech.client.render.DefaultMTERender;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
+import com.xkball.tin_tea_tech.network.TTNetworkHandler;
+import com.xkball.tin_tea_tech.network.packet.MTEClientToServerDataPacket;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -79,6 +81,13 @@ public interface IMTEBehaviour {
     
     default void readCustomData(int id,ByteBuf byteBuf){}
     
+    default void sentToServer(Consumer<CompoundTag> tag){
+        var tagToSent = new CompoundTag();
+        tag.accept(new CompoundTag());
+        TTNetworkHandler.sentToServer(new MTEClientToServerDataPacket(getPos(),tagToSent));
+    }
+    default void readClientData(CompoundTag data){}
+    
     //与玩家的交互
     default InteractionResult use(Player pPlayer, InteractionHand pHand, BlockHitResult pHit){
         return InteractionResult.PASS;
@@ -144,6 +153,9 @@ public interface IMTEBehaviour {
         return (TTTileEntityBlock) AutoRegManager.getRegistryObject(getName()).get();
     }
     
+    default void addTester(Player player){
+        getTileEntity().setTester(player);
+    }
     default Item getItem(){
         return (Item) AutoRegManager.getRegistryObject(getName()+"_item").get();
     }

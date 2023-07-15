@@ -23,6 +23,13 @@ public class DataGen {
         static {
             localizations = new HashMap<>();
             addLangKey("info.tin_tea_tech.block_name","Block Name: ","方块名称: ");
+            addLangKey("info.tin_tea_tech.block_pos","Block Pos: ","方块位置: ");
+            addLangKey("info.tin_tea_tech.tick_used","Last tick used","上一tick消耗了: ");
+            addLangKey("info.tin_tea_tech.block_info","Block Info: ","方块信息: ");
+            addLangKey("info.tin_tea_tech.mte_info","MetaTileEntity Info","MTE信息: ");
+            addLangKey("info.tin_tea_tech.inventory","Machine Inventory: ","机器内部存储: ");
+            addLangKey("info.tin_tea_tech.shot","Shot: ","槽位: ");
+            addLangKey("info.tin_tea_tech.item","Item: ","物品: ");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

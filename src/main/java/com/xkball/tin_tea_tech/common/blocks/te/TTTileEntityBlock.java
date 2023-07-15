@@ -126,12 +126,13 @@ public class TTTileEntityBlock extends BaseEntityBlock {
         if(te instanceof TTTileEntityBase && !pLevel.isClientSide){
             var mte = ((TTTileEntityBase) te).getMte();
             mte.onNeighborChanged(pState,pLevel,pPos,pBlock,pFromPos,pIsMoving);
-            for(var direction : Direction.values()){
-                var face = mte.getFacingType(pState,direction);
-                if(face != FacingType.Common){
-                    mte.onFacingChanged(direction,face,pState,pLevel,pPos,pBlock,pFromPos,pIsMoving);
-                }
+            var d = pFromPos.subtract(pPos);
+            var direction = Direction.fromDelta(d.getX(),d.getY(),d.getZ());
+            var face = mte.getFacingType(pState,direction);
+            if(face != FacingType.Common){
+                mte.onFacingChanged(direction,face,pState,pLevel,pPos,pBlock,pFromPos,pIsMoving);
             }
+            
         }
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
     }

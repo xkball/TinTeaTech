@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ScaffoldingBlockItem extends BlockItem {
     
     public ScaffoldingBlockItem() {
-        super((Block) AutoRegManager.getRegistryObject(ScaffoldingBlock.class).get(), TTRegistration.itemProperty);
+        super((Block) AutoRegManager.getRegistryObject(ScaffoldingBlock.class).get(), TTRegistration.getItemProperty());
     }
     
     @Override

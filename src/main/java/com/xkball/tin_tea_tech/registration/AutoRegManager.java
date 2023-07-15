@@ -8,7 +8,9 @@ import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.Model;
+import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
+import com.xkball.tin_tea_tech.common.item.TTCommonItem;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.utils.Timer;
@@ -41,7 +43,7 @@ public class AutoRegManager {
     //所有自动注册的玩意都放进去
     private static final Map<String,RegistryObject<?>> nameRegMap = new HashMap<>();
     private static final List<Class<? extends MetaTileEntity>> mteClassList = new ArrayList<>();
-    public static final List<Class<?>> modelClasses = new ArrayList<>();
+    public static final List<String> models = new ArrayList<>();
     
     //                          TabName,ItemName
     public static final Multimap<String,String> itemTabMap = LinkedHashMultimap.create();
@@ -72,7 +74,7 @@ public class AutoRegManager {
                                 BlockEntityType.Builder.of(TTTileEntityBase::new,allMTEBlock())
                                         .build(DSL.remainderType())
                 );
-                modelClasses.addAll(re.getAnnotations().stream().filter(
+                models.addAll(re.getAnnotations().stream().filter(
                         (ad) -> ad.annotationType().equals(Type.getType(Model.class))
                 ).map(
                         (ad) -> {
@@ -81,7 +83,12 @@ public class AutoRegManager {
                             } catch (ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
-                        }).toList());
+                        }).flatMap(
+                        (aClass) -> {
+                            var an = aClass.getAnnotation(Model.class);
+                            return Arrays.stream(an.resources());
+                        }
+                ).toList());
                 LogUtils.getLogger().debug(TinTeaTech.MOD_NAME+" finished generate registry object in " + timer.timeMS() + " ms.");
             } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                      InvocationTargetException | InstantiationException e) {
@@ -178,7 +185,7 @@ public class AutoRegManager {
             assignCreativeTag(clazz,itemName);
             nameRegMap.put(itemName,TTRegistration.ITEMS.register(name+"_item",
                     () -> new BlockItem((Block) AutoRegManager.getRegistryObject(name).get(),
-                            TTRegistration.itemProperty)));
+                            TTRegistration.getItemProperty())));
             
             
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
@@ -253,6 +260,27 @@ public class AutoRegManager {
                         }
             );
         }
+        //还是物品
+        else if(IItemBehaviour.class.isAssignableFrom(clazz)){
+            assignCreativeTag(clazz,name);
+            Class<?> itemClass;
+            if(clazz.isAnnotationPresent(AutomaticRegistration.Item.class)){
+                itemClass = clazz.getAnnotation(AutomaticRegistration.Item.class).itemClass();
+            } else {
+                itemClass = TTCommonItem.class;
+            }
+            return TTRegistration.ITEMS.register(name,
+                    () -> {
+                        try {
+                            //noinspection RedundantCast
+                            return (Item) itemClass.getConstructor(IItemBehaviour.class)
+                                    .newInstance( (IItemBehaviour)clazz.getConstructor().newInstance());
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                                 NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
         throw new RuntimeException("Not support Type!");
     }
     
@@ -263,7 +291,7 @@ public class AutoRegManager {
                         try {
                             var constructor = clazz.getDeclaredConstructor(Block.class,Item.Properties.class);
                             //noinspection RedundantCast
-                            constructor.newInstance((Block)getRegistryObject(blockKey).get(),TTRegistration.itemProperty);
+                            constructor.newInstance((Block)getRegistryObject(blockKey).get(),TTRegistration.getItemProperty());
                         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                                  InvocationTargetException e){
                             throw new RuntimeException(e);
@@ -313,6 +341,9 @@ public class AutoRegManager {
         }
         else if(className.startsWith("MTE")){
             result = className.substring(3);
+        }
+        else if(className.endsWith("Behaviour")){
+            result = className.substring(0,className.lastIndexOf("B"));
         }
         StringBuilder builder = new StringBuilder();
         for(MatchResult s : pattern.matcher(result).results().toList()){

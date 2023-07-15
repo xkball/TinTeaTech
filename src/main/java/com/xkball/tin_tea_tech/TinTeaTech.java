@@ -1,16 +1,17 @@
 package com.xkball.tin_tea_tech;
 
 import com.mojang.logging.LogUtils;
-import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.client.render.MTERender;
 import com.xkball.tin_tea_tech.config.TTConfig;
 import com.xkball.tin_tea_tech.data.DataGen;
+import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import com.xkball.tin_tea_tech.registration.TTRegistration;
 import com.xkball.tin_tea_tech.utils.Timer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,6 +44,7 @@ public class TinTeaTech
     
     public static int ticks = 0;
     public static int clientTicks = 0;
+    public static RandomSource random = RandomSource.createNewThreadLocalInstance();
     
     public TinTeaTech() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -64,7 +66,7 @@ public class TinTeaTech
     
     public void commonSetup(final FMLCommonSetupEvent event) {
         var timer = new Timer();
-        
+        event.enqueueWork(TTNetworkHandler::init);
         LOGGER.debug(MOD_NAME + " common setup completed in "+timer.timeNS()+" ns.");
     }
 
@@ -116,11 +118,8 @@ public class TinTeaTech
         @SubscribeEvent
         public static void onRegModel(ModelEvent.RegisterAdditional registerAdditional) {
            // registerAdditional.register(new ResourceLocation(TinTeaTech.FLAME_REACTION_MODID,"block/solid_fuel_burning_box_on"));
-            for(var clazz : AutoRegManager.modelClasses){
-                var an = clazz.getAnnotation(Model.class);
-                for(var r : an.resources()){
-                    registerAdditional.register(new ResourceLocation(r));
-                }
+            for(var rl : AutoRegManager.models){
+               registerAdditional.register(new ResourceLocation(rl));
             }
         }
         

@@ -43,9 +43,9 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
 
-    mappings channel: mapping_channel, version: mapping_version
+    //mappings channel: mapping_channel, version: mapping_version
     //mappings channel: 'parchment', version: "1.19.2-2022.08.14-1.20.1"
-    mappings channel: 'parchment', version: '1.19.2-2022.11.27-1.20.1'
+    mappings channel: 'parchment', version: '2023.07.09-1.20.1'
 
     copyIdeResources = true
 
@@ -103,17 +103,23 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven { // TOP
+        url "https://maven.k-4u.nl"
+    }
 }
 
 dependencies {
      minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-//      compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-//     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-//     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    implementation fg.deobf("curse.maven:jei-238222:4644453")
+    //implementation fg.deobf("mcjty.theoneprobe:theoneprobe:${top_version}")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }

@@ -3,5 +3,15 @@
   "block.tin_tea_tech.solid_combustion_chamber": "Solid Combustion Chamber",
   "creative_tab.tin_tea_tech.building_block_tab": "Tin Tea Tech: Building Blocks",
   "creative_tab.tin_tea_tech.machine_tab": "Tin Tea Tech: Machines",
-  "info.tin_tea_tech.block_name": "Block Name: "
+  "creative_tab.tin_tea_tech.misc_tab": "Tin Tea Tech Misc",
+  "info.tin_tea_tech.block_info": "Block Info: ",
+  "info.tin_tea_tech.block_name": "Block Name: ",
+  "info.tin_tea_tech.block_pos": "Block Pos: ",
+  "info.tin_tea_tech.inventory": "Machine Inventory: ",
+  "info.tin_tea_tech.item": "Item: ",
+  "info.tin_tea_tech.mte_info": "MetaTileEntity Info",
+  "info.tin_tea_tech.shot": "Shot: ",
+  "info.tin_tea_tech.tick_used": "Last tick used",
+  "item.tin_tea_tech.tricorder": "Tricorder",
+  "item.tin_tea_tech.universal_saddle": "Universal Saddle"
 }

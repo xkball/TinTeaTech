@@ -9,6 +9,11 @@ public class Timer {
         startMS = System.currentTimeMillis();
     }
     
+    public Timer(boolean nsOnly){
+        startNS = System.nanoTime();
+        startMS = 0;
+    }
+    
     public long timeNS(){
         return System.nanoTime() - startNS;
     }

@@ -58,7 +58,7 @@ public abstract class MTEHeatSource extends MetaTileEntity {
             }
             var b = !getLevel().getBlockState(getPos().above()).isAir();
             var dec = b ? 50 : 100;
-            dec = heatSource.heatValue() <= 1000 ? 0 : dec;
+            dec = heatSource.heatValue() <= 0 ? 0 : dec+(heatSource.heatValue());
             var inc = timeLeft>0 && enabled ? heatProducedPT*5 : 0;
             heatSource.decrease(dec - inc);
             markDirty();

@@ -6,6 +6,7 @@ import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.api.annotation.Model;
+import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.mte.FacingType;
 import com.xkball.tin_tea_tech.capability.item.TTCommonItemHandler;
@@ -15,9 +16,12 @@ import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -33,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -42,7 +48,7 @@ import java.util.function.Supplier;
 @AutomaticRegistration.MTE(block = HorizontalMTEBlock.class)
 @Model(resources = {"flamereaction:block/solid_fuel_burning_box_on","flamereaction:block/solid_fuel_burning_box"})
 @I18N(chinese = "固态燃烧室",english = "Solid Combustion Chamber")
-public class MTESolidCombustionChamber extends MTEHeatSource {
+public class MTESolidCombustionChamber extends MTEHeatSource implements DataProvider {
     
     private static final ResourceLocation LIT = TinTeaTech.frcResource("block/solid_fuel_burning_box_on");
     private static final ResourceLocation OFF = TinTeaTech.frcResource("block/solid_fuel_burning_box");
@@ -90,6 +96,22 @@ public class MTESolidCombustionChamber extends MTEHeatSource {
     }
     
     @Override
+    public void firstTick() {
+        sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(enabled));
+        sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
+    }
+    
+    @Override
+    public void firstClientTick() {
+        sentToServer((t) -> {});
+    }
+    
+    @Override
+    public void readClientData(CompoundTag data) {
+        firstTick();
+    }
+    
+    @Override
     public MetaTileEntity newMetaTileEntity(BlockPos pos, TTTileEntityBase te) {
         return new MTESolidCombustionChamber(pos,te);
     }
@@ -103,7 +125,8 @@ public class MTESolidCombustionChamber extends MTEHeatSource {
     public void onFacingChanged(Direction direction,FacingType facingType, BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if(facingType == FacingType.MainFace){
             var neighborState = pLevel.getBlockState(pFromPos);
-            if(enabled && Block.isFaceFull(neighborState.getShape(pLevel,pFromPos),direction)){
+            //noinspection deprecation
+            if(enabled && neighborState.isSolid() && Block.isFaceFull(neighborState.getShape(pLevel,pFromPos),direction)){
                 enabled = false;
                 sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(false));
                 sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
@@ -115,7 +138,7 @@ public class MTESolidCombustionChamber extends MTEHeatSource {
     @Override
     public InteractionResult use(Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         var item = pPlayer.getItemInHand(pHand);
-        if(item.is(Items.FLINT_AND_STEEL)){
+        if(!enabled && item.is(Items.FLINT_AND_STEEL)){
             item.hurtAndBreak(1,pPlayer,(b) -> b.broadcastBreakEvent(pHand));
             this.enabled = true;
             sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(true));
@@ -123,12 +146,13 @@ public class MTESolidCombustionChamber extends MTEHeatSource {
             markDirty();
             return InteractionResult.SUCCESS;
         }
-        if(!item.isEmpty()){
+        if(!item.isEmpty() && itemHandler.get().isItemValid(0,item)){
             var returnItem = itemHandler.get().insertItem(0,item.copy(),false);
             item.setCount(returnItem.getCount());
+            return InteractionResult.SUCCESS;
         }
         //pPlayer.sendSystemMessage(Component.literal("?"));
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
     
     @Override
@@ -151,5 +175,16 @@ public class MTESolidCombustionChamber extends MTEHeatSource {
         if(id == TTValue.DATA_UPDATE){
             timeLeft = byteBuf.readInt();
         }
+    }
+    
+    @Override
+    public Collection<Component> getInfo() {
+        var list = new ArrayList<Component>(4);
+        list.add(Component.literal("enabled: " + enabled)
+                .withStyle(enabled ? ChatFormatting.GREEN : ChatFormatting.RED));
+        list.add(Component.literal("time left: "+ timeLeft));
+        list.add(Component.literal("heat increase pt: "+ heatProducedPT));
+        list.add(Component.literal(heatSource.toString()));
+        return list;
     }
 }

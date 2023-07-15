@@ -118,7 +118,7 @@ public class HeatHandler implements IHeatSource {
     
     @Override
     public String toString() {
-        return "heatValue: "+heat+" heatBuff: "+heatBuff+" capacity: "+capacity;
+        return "heatValue: "+(heat-1000)+" heatBuff: "+heatBuff+" capacity: "+capacity;
     }
     
     @Override

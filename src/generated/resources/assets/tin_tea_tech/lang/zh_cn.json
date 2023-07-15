@@ -3,5 +3,15 @@
   "block.tin_tea_tech.solid_combustion_chamber": "固态燃烧室",
   "creative_tab.tin_tea_tech.building_block_tab": "锡茶科技: 建筑方块",
   "creative_tab.tin_tea_tech.machine_tab": "锡茶科技: 机器",
-  "info.tin_tea_tech.block_name": "方块名称: "
+  "creative_tab.tin_tea_tech.misc_tab": "锡茶科技: 杂项",
+  "info.tin_tea_tech.block_info": "方块信息: ",
+  "info.tin_tea_tech.block_name": "方块名称: ",
+  "info.tin_tea_tech.block_pos": "方块位置: ",
+  "info.tin_tea_tech.inventory": "机器内部存储: ",
+  "info.tin_tea_tech.item": "物品: ",
+  "info.tin_tea_tech.mte_info": "MTE信息: ",
+  "info.tin_tea_tech.shot": "槽位: ",
+  "info.tin_tea_tech.tick_used": "上一tick消耗了: ",
+  "item.tin_tea_tech.tricorder": "三录仪",
+  "item.tin_tea_tech.universal_saddle": "万用鞍"
 }

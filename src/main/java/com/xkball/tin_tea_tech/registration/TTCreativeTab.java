@@ -4,6 +4,7 @@ import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.common.item.itemblock.ScaffoldingBlockItem;
+import com.xkball.tin_tea_tech.common.item_behaviour.UniversalSaddleBehaviour;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.heat_source.MTESolidCombustionChamber;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.ParametersAreNullableByDefault;
 
 //@Mod.EventBusSubscriber
@@ -31,9 +33,26 @@ public class TTCreativeTab {
 //        }
 //
 //    }
+    @ParametersAreNonnullByDefault
+    public static class TTCreativeTabBase extends CreativeModeTab{
+    
+        protected TTCreativeTabBase(Builder builder) {
+            super(builder);
+        }
+        @Override
+        public ResourceLocation getBackgroundLocation() {
+        return backgroundLocation;
+    }
+    
+        @Override
+        public boolean shouldDisplay() {
+        return true;
+    }
+    
+    }
     @AutomaticRegistration
     @I18N(chinese = TinTeaTech.MOD_NAME_CHINESE+": 建筑方块",english = TinTeaTech.MOD_NAME+": Building Blocks")
-    public static class TTBuildingBlockTab extends CreativeModeTab{
+    public static class TTBuildingBlockTab extends TTCreativeTabBase{
         
       
         
@@ -56,19 +75,11 @@ public class TTCreativeTab {
         }
         
         
-        @Override
-        public ResourceLocation getBackgroundLocation() {
-            return backgroundLocation;
-        }
-        
-        @Override
-        public boolean shouldDisplay() {
-            return true;
-        }
+       
     }
     @AutomaticRegistration
     @I18N(chinese = TinTeaTech.MOD_NAME_CHINESE+": 机器",english = TinTeaTech.MOD_NAME+": Machines")
-    public static class TTMachineTab extends CreativeModeTab{
+    public static class TTMachineTab extends TTCreativeTabBase{
         
         protected TTMachineTab() {
             super(CreativeModeTab.builder()
@@ -87,16 +98,26 @@ public class TTCreativeTab {
             return Component.translatable("creative_tab.tin_tea_tech.machine_tab");
         }
         
-        
-        @Override
-        public ResourceLocation getBackgroundLocation() {
-            return backgroundLocation;
+    }
+    
+    @AutomaticRegistration
+    @I18N(chinese = TinTeaTech.MOD_NAME_CHINESE+": 杂项",english = TinTeaTech.MOD_NAME+" Misc")
+    public static class TTMiscTab extends TTCreativeTabBase{
+        protected TTMiscTab() {
+            super(CreativeModeTab.builder()
+                    .withTabsBefore(ResourceKey.create(Registries.CREATIVE_MODE_TAB,TinTeaTech.ttResource("machine_tab")))
+                    .icon(() ->
+                            ((Item)AutoRegManager.getRegistryObject(UniversalSaddleBehaviour.class).get()).getDefaultInstance())
+                    .displayItems((parameters, output) -> {
+                                for(var clazz : AutoRegManager.itemTabMap.get(AutoRegManager.fromClassName(TTMiscTab.class))){
+                                    output.accept((Item)AutoRegManager.getRegistryObject(clazz).get());
+                                }
+                            }
+                    ));
         }
-        
         @Override
-        public boolean shouldDisplay() {
-            return true;
+        public Component getDisplayName() {
+            return Component.translatable("creative_tab.tin_tea_tech.misc_tab");
         }
-        
     }
 }

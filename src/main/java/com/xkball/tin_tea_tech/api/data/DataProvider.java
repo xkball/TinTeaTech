@@ -14,21 +14,24 @@ import static net.minecraft.network.chat.Component.literal;
 public interface DataProvider {
     Collection<Component> getInfo();
     
-    default Component crossLine(){
-        return literal("--------------------------------------").withStyle(ChatFormatting.AQUA);
+    static Component crossLine(){
+        return literal("------------------------------------------").withStyle(ChatFormatting.AQUA);
     }
     
-    default Collection<Component> blockInfo(BlockState state, BlockPos pos){
+    static Collection<Component> blockInfo(BlockState state, BlockPos pos){
         ArrayList<Component> result = new ArrayList<>();
         result.add(crossLine());
+        result.add(translatable("block_info").withStyle(ChatFormatting.BOLD));
         result.add(translatable("block_name")
                 .append(state.getBlock().getName()));
         result.add(translatable("block_pos")
-                .append(literal("x: "+pos.getX()+" y: "+pos.getY()+" z: "+pos.getZ())));
+                .append(literal(" x: "+pos.getX()+" y: "+pos.getY()+" z: "+pos.getZ())));
         return result;
     }
     
-    default MutableComponent translatable(String key){
-        return Component.translatable("info.tin_tea_tech"+key);
+    
+    
+    static MutableComponent translatable(String key){
+        return Component.translatable("info.tin_tea_tech."+key);
     }
 }

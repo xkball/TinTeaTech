@@ -1,6 +1,7 @@
 package com.xkball.tin_tea_tech.api.annotation;
 
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
+import com.xkball.tin_tea_tech.common.item.TTCommonItem;
 import net.minecraft.world.item.BlockItem;
 
 import java.lang.annotation.ElementType;
@@ -36,5 +37,12 @@ public @interface AutomaticRegistration {
         //类名
         //不能用class 否则服务器会爆炸
         String renderer() default "com.xkball.tin_tea_tech.client.render.DefaultMTERender" ;
+    }
+    
+    //仅用于IItemBehaviour
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Item{
+        Class<? extends net.minecraft.world.item.Item> itemClass() default TTCommonItem.class;
     }
 }
