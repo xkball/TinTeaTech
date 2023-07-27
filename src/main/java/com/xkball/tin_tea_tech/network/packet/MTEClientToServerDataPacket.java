@@ -38,6 +38,7 @@ public class MTEClientToServerDataPacket implements ITTPacket {
                     var player = context.get().getSender();
                     if(player != null){
                         var level = player.level();
+                        if(! level.isLoaded(blockPos)) return;
                         var te = level.getBlockEntity(blockPos);
                         if(te instanceof TTTileEntityBase){
                             ((TTTileEntityBase) te).getMte().readClientData(data);

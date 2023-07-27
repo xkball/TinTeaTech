@@ -29,5 +29,7 @@ public interface IHeatSource extends INBTSerializable<CompoundTag> {
     
     void decrease(int heat);
     
+    void reset(int heatValue,int heatBuff);
+    
     IHeatSource combine(IHeatSource another);
 }

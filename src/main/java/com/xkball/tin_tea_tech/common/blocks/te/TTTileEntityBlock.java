@@ -1,7 +1,8 @@
 package com.xkball.tin_tea_tech.common.blocks.te;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.xkball.tin_tea_tech.api.mte.FacingType;
+import com.xkball.tin_tea_tech.api.facing.FacingType;
+import com.xkball.tin_tea_tech.common.item_behaviour.WrenchBehaviour;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
@@ -14,6 +15,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
@@ -93,12 +95,16 @@ public class TTTileEntityBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         var te = pLevel.getBlockEntity(pPos);
         if(te instanceof TTTileEntityBase && !pLevel.isClientSide){
-           if(pPlayer.isShiftKeyDown()){
-               return ((TTTileEntityBase) te).getMte().useShift(pPlayer,pHand,pHit);
-           }
-           else {
-               return ((TTTileEntityBase) te).getMte().use(pPlayer,pHand,pHit);
-           }
+            var itemStack = pPlayer.getItemInHand(pHand);
+            if(itemStack.is((Item) AutoRegManager.getRegistryObject(WrenchBehaviour.class).get())){
+                return ((TTTileEntityBase) te).getMte().useByWrench(pPlayer,pHand,pHit);
+            }
+            if(pPlayer.isShiftKeyDown()){
+                return ((TTTileEntityBase) te).getMte().useShift(pPlayer,pHand,pHit);
+            }
+            else {
+                return ((TTTileEntityBase) te).getMte().use(pPlayer,pHand,pHit);
+            }
         }
         return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
     }
@@ -111,6 +117,8 @@ public class TTTileEntityBlock extends BaseEntityBlock {
     @Override
     @SuppressWarnings("deprecation")
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if(pState == pNewState) return;
+        if(pState.getBlock() == pNewState.getBlock()) return;
         var te = pLevel.getBlockEntity(pPos);
         if(te instanceof TTTileEntityBase && !pLevel.isClientSide){
             var mte = ((TTTileEntityBase) te).getMte();
@@ -145,6 +153,9 @@ public class TTTileEntityBlock extends BaseEntityBlock {
         return FacingType.Common;
     }
     
-    
+    @Nullable
+    public Direction getFacingDirection(BlockState blockState,FacingType facingType){
+        return null;
+    }
     
 }

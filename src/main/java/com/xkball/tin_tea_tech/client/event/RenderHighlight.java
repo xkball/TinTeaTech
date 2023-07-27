@@ -1,12 +1,12 @@
 package com.xkball.tin_tea_tech.client.event;
 
-import com.xkball.tin_tea_tech.common.item_behaviour.TricorderBehaviour;
-import com.xkball.tin_tea_tech.registration.AutoRegManager;
+import com.xkball.tin_tea_tech.api.facing.FacingType;
+import com.xkball.tin_tea_tech.data.tag.TTItemTags;
+import com.xkball.tin_tea_tech.utils.LevelUtils;
 import com.xkball.tin_tea_tech.utils.RenderUtil;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,11 +21,11 @@ public class RenderHighlight {
     public static void onRenderingHighlight(RenderHighlightEvent.Block event){
         var entity = event.getCamera().getEntity();
         if(entity instanceof Player player){
-            //todo 改为用tag识别物品
-            Item itemC = (Item) AutoRegManager.getRegistryObject(TricorderBehaviour.class).get();
-        
-            if(player.getItemInHand(InteractionHand.MAIN_HAND).is(itemC)
-                || player.getItemInHand(InteractionHand.OFF_HAND).is(itemC)){
+//            //DONE 改为用tag识别物品
+//            Item itemC = (Item) AutoRegManager.getRegistryObject(TricorderBehaviour.class).get();
+            var tag = TTItemTags.tagMap.get("tool");
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).is(tag)
+                || player.getItemInHand(InteractionHand.OFF_HAND).is(tag)){
                 var hitResult = event.getTarget();
                 var pos = hitResult.getBlockPos();
                 var direction = hitResult.getDirection();
@@ -86,6 +86,17 @@ public class RenderHighlight {
 //
 //                    }
 //                }
+                double finalCx = cx;
+                double finalCy = cy;
+                double finalCz = cz;
+                LevelUtils.getMTEAndExecute(player.level(),pos,
+                        (mte) -> {
+                        var bs = mte.getBlockState();
+                        if(mte.getFacingType(bs,direction) == FacingType.MainFace){
+                            RenderUtil.drawShape(vertexConsumer,poseStack,RenderUtil.crossMusk,direction,
+                                    finalCx, finalCy, finalCz,0f,0f,0f,0.4f);
+                        }
+                        });
             }
         }
     }

@@ -81,6 +81,12 @@ public class HeatHandler implements IHeatSource {
         }
     }
     
+    @Override
+    public void reset(int heatValue, int heatBuff) {
+        this.heat = heatValue+1000;
+        this.heatBuff = heatBuff;
+    }
+    
     //并不精准
     //为了防止玩家偷鸡 所以直接取较低温作为结果
     @Override

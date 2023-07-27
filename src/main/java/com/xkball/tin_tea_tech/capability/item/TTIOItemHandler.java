@@ -91,4 +91,10 @@ public class TTIOItemHandler extends ItemStackHandler implements TTItemHandler {
         
         return slot < inputs && super.isItemValid(slot, stack);
     }
+    
+    @Override
+    public void setItem(int slot, ItemStack itemStack) {
+        validateSlotIndex(slot);
+        this.stacks.set(slot, itemStack);
+    }
 }

@@ -8,7 +8,7 @@ import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
-import com.xkball.tin_tea_tech.api.mte.FacingType;
+import com.xkball.tin_tea_tech.api.facing.FacingType;
 import com.xkball.tin_tea_tech.capability.item.TTCommonItemHandler;
 import com.xkball.tin_tea_tech.common.blocks.te.HorizontalMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -93,22 +93,15 @@ public class MTESolidCombustionChamber extends MTEHeatSource implements DataProv
             sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
             markDirty();
         }
+        if(getOffsetTick() % 100 == 0 && heatSource.heatValue()<0){
+            heatSource.reset(0,0);
+        }
     }
     
     @Override
-    public void firstTick() {
+    public void syncRenderData() {
         sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(enabled));
         sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
-    }
-    
-    @Override
-    public void firstClientTick() {
-        sentToServer((t) -> {});
-    }
-    
-    @Override
-    public void readClientData(CompoundTag data) {
-        firstTick();
     }
     
     @Override

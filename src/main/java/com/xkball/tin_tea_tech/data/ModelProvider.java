@@ -7,6 +7,7 @@ import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -26,7 +27,7 @@ public class ModelProvider extends ItemModelProvider {
         }
         for(var entry : AutoRegManager.allEntries()){
             var clazz = entry.getKey();
-            if(IItemBehaviour.class.isAssignableFrom(clazz) && clazz.isAnnotationPresent(Model.class)){
+            if((IItemBehaviour.class.isAssignableFrom(clazz) || Item.class.isAssignableFrom(clazz) )&& clazz.isAnnotationPresent(Model.class)){
                 //只应执行一次
                 for(var rl : clazz.getAnnotation(Model.class).resources()){
                     simpleItem(clazz,rl);

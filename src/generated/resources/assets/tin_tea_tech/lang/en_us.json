@@ -1,9 +1,16 @@
 {
   "block.tin_tea_tech.scaffolding_block": "Scaffolding Block",
   "block.tin_tea_tech.solid_combustion_chamber": "Solid Combustion Chamber",
+  "block.tin_tea_tech.test_pipe": "Test PiPe",
   "creative_tab.tin_tea_tech.building_block_tab": "Tin Tea Tech: Building Blocks",
   "creative_tab.tin_tea_tech.machine_tab": "Tin Tea Tech: Machines",
   "creative_tab.tin_tea_tech.misc_tab": "Tin Tea Tech Misc",
+  "gui.tin_tea_tech.displayInventory": "Display Inventory",
+  "gui.tin_tea_tech.gui_setting": "GUI Setting",
+  "gui.tin_tea_tech.holo_glass_plugin": "HoloGlass Plugin",
+  "gui.tin_tea_tech.lock_inventory": "LockInventory",
+  "gui.tin_tea_tech.plugins_installed": "PluginsInstalled: ",
+  "gui.title.tin_tea_tech.holo_glass": "Holo Glass",
   "info.tin_tea_tech.block_info": "Block Info: ",
   "info.tin_tea_tech.block_name": "Block Name: ",
   "info.tin_tea_tech.block_pos": "Block Pos: ",
@@ -12,6 +19,13 @@
   "info.tin_tea_tech.mte_info": "MetaTileEntity Info",
   "info.tin_tea_tech.shot": "Shot: ",
   "info.tin_tea_tech.tick_used": "Last tick used",
+  "item.tin_tea_tech.bearing_indicator": "BearingIndicator",
+  "item.tin_tea_tech.holo_glass": "Holo Glass",
+  "item.tin_tea_tech.player_radar": "PlayerRadar",
+  "item.tin_tea_tech.test_item": "TestItem",
   "item.tin_tea_tech.tricorder": "Tricorder",
-  "item.tin_tea_tech.universal_saddle": "Universal Saddle"
+  "item.tin_tea_tech.universal_saddle": "Universal Saddle",
+  "item.tin_tea_tech.wrench": "Wrench",
+  "key.category.tin_tea_tech": "Tin Tea Tech",
+  "key.tin_tea_tech.open_holo_glass": "Open Holo Glass"
 }

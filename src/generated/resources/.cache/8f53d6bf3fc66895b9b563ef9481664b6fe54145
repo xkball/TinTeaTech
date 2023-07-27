@@ -1,4 +1,9 @@
-// 1.20.1	2023-07-15T16:39:06.2215969	Item Models: tin_tea_tech
+// 1.20.1	2023-07-27T01:22:48.8475075	Item Models: tin_tea_tech
+098369e3b39ba8b45bef6b450242fabb674a8ae7 assets/tin_tea_tech/models/item/bearing_indicator.json
+1adcf4470c03dec0353a405a6b21a56f8ea28746 assets/tin_tea_tech/models/item/holo_glass.json
+91ba19ffca4cd5742dd1542121becc70e983a9ff assets/tin_tea_tech/models/item/player_radar.json
 3f05ddcc343ae71d1b6712c6577756fdd1ec4efc assets/tin_tea_tech/models/item/solid_combustion_chamber_item.json
+d3cc06a842e327a0445822cd067e87a7afafbf25 assets/tin_tea_tech/models/item/test_item.json
 78a51558dd8b894e14133cf884ea79fb1ce3c03e assets/tin_tea_tech/models/item/tricorder.json
 94dd192b76d333eefe14c082c06385dc15627ffc assets/tin_tea_tech/models/item/universal_saddle.json
+f3ee91b71c80faa84f20ff45e43d556b07adddfb assets/tin_tea_tech/models/item/wrench.json

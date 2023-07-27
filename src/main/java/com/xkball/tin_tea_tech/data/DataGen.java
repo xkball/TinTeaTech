@@ -1,6 +1,7 @@
 package com.xkball.tin_tea_tech.data;
 
 import com.mojang.datafixers.util.Pair;
+import com.xkball.tin_tea_tech.TinTeaTech;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 
@@ -13,10 +14,14 @@ public class DataGen {
     public static void onGatherData(GatherDataEvent event) {
         var gen = event.getGenerator();
         var packOutput = gen.getPackOutput();
+        var lookupProvider = event.getLookupProvider();
         gen.addProvider(event.includeClient(), new LanguageProviders.EnglishLanguageProvider(packOutput));
         gen.addProvider(event.includeClient(), new LanguageProviders.ChineseLanguageProvider(packOutput));
         gen.addProvider(event.includeClient(), new ModelProvider(packOutput, helper));
         gen.addProvider(event.includeClient(), new StateProvider(packOutput, helper));
+        var blockTagProvider = new TagProviders.BlockTagProvider(packOutput,lookupProvider);
+        gen.addProvider(event.includeClient(),blockTagProvider);
+        gen.addProvider(event.includeClient(),new TagProviders.ItemTagProvider(packOutput,lookupProvider,blockTagProvider.contentsGetter()));
     }
     
     public static class LangUtils{
@@ -30,6 +35,14 @@ public class DataGen {
             addLangKey("info.tin_tea_tech.inventory","Machine Inventory: ","机器内部存储: ");
             addLangKey("info.tin_tea_tech.shot","Shot: ","槽位: ");
             addLangKey("info.tin_tea_tech.item","Item: ","物品: ");
+            addLangKey("key.tin_tea_tech.open_holo_glass", "Open Holo Glass","打开云钩");
+            addLangKey("key.category.tin_tea_tech",TinTeaTech.MOD_NAME, TinTeaTech.MOD_NAME_CHINESE);
+            addLangKey("gui.title.tin_tea_tech.holo_glass","Holo Glass","云钩界面");
+            addLangKey("gui.tin_tea_tech.displayInventory","Display Inventory","显示物品栏");
+            addLangKey("gui.tin_tea_tech.holo_glass_plugin","HoloGlass Plugin","云钩插件");
+            addLangKey("gui.tin_tea_tech.gui_setting","GUI Setting","GUI设置");
+            addLangKey("gui.tin_tea_tech.plugins_installed","PluginsInstalled: ","已安装插件: ");
+            addLangKey("gui.tin_tea_tech.lock_inventory","LockInventory","锁定物品栏位置");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

@@ -22,6 +22,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TTCommonItem extends Item {
+    
     final IItemBehaviour itemBehaviour;
     
     public TTCommonItem(IItemBehaviour iItemBehaviour) {
@@ -58,5 +59,9 @@ public class TTCommonItem extends Item {
     @Override
     public InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand) {
         return itemBehaviour.interactLivingEntity(pStack, pPlayer, pInteractionTarget, pUsedHand);
+    }
+    
+    public IItemBehaviour getItemBehaviour() {
+        return itemBehaviour;
     }
 }

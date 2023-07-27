@@ -2,6 +2,7 @@ package com.xkball.tin_tea_tech.api.mte;
 
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
+import com.xkball.tin_tea_tech.api.facing.FacingType;
 import com.xkball.tin_tea_tech.client.render.DefaultMTERender;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -52,10 +53,15 @@ public interface IMTEBehaviour {
     default void onNeighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving){}
     
     //跟面有关的NC更新会调用
-    default void onFacingChanged(Direction direction,FacingType facingType,BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving){}
+    default void onFacingChanged(Direction direction, FacingType facingType, BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving){}
     
     default FacingType getFacingType(BlockState state,Direction direction){
         return this.getBlock().getFacingType(state,direction);
+    }
+    
+    @Nullable
+    default Direction getFacingDirection(FacingType facingType){
+        return getBlock().getFacingDirection(getBlockState(),facingType);
     }
     //tick相关
     int getOffsetTick();
@@ -81,6 +87,8 @@ public interface IMTEBehaviour {
     
     default void readCustomData(int id,ByteBuf byteBuf){}
     
+    default void syncRenderData(){}
+    
     default void sentToServer(Consumer<CompoundTag> tag){
         var tagToSent = new CompoundTag();
         tag.accept(new CompoundTag());
@@ -105,8 +113,12 @@ public interface IMTEBehaviour {
     default boolean beforeExplosion(){
         return true;
     }
-    
     TTTileEntityBase getTileEntity();
+    default void afterRotation(Direction to) {}
+    
+    default InteractionResult useByWrench(Player pPlayer, InteractionHand pHand, BlockHitResult pHit){
+        return InteractionResult.PASS;
+    }
     
     //render
     //应该全部ClientOnly?
@@ -160,7 +172,9 @@ public interface IMTEBehaviour {
         return (Item) AutoRegManager.getRegistryObject(getName()+"_item").get();
     }
     default Level getLevel(){
-        return getTileEntity().getLevel();
+        if(getTileEntity() != null)
+            return getTileEntity().getLevel();
+        return null;
     }
     default BlockPos getPos(){
         return getTileEntity().getBlockPos();

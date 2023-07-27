@@ -1,5 +1,7 @@
 import com.xkball.tin_tea_tech.capability.heat.HeatHandler;
+import com.xkball.tin_tea_tech.utils.TTUtils;
 
+import java.util.BitSet;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -10,21 +12,30 @@ public class Main {
 //        System.out.println(formClassName(AutomaticRegistration.class.getSimpleName()));
 //        System.out.println(formClassName(TTCreativeTab.class.getSimpleName()));
 //        System.out.println(formClassName(TinTeaTech.class.getSimpleName()));
-        for(int i=0;i<20;i++){
-            var heat = new HeatHandler(i+990);
-            System.out.println("t:" + heat.heatValue() +" gap: " +heat.heatGap());
-        }
-        var heat = new HeatHandler();
-        System.out.println(heat);
-        for(int i=0;i<10;i++){
-            heat.increase(10);
-            System.out.println(heat);
-        }
-        heat = new HeatHandler();
-        for(int i=0;i<10;i++){
-            heat.decrease(10);
-            System.out.println(heat);
-        }
+//        for(int i=0;i<20;i++){
+//            var heat = new HeatHandler(i+990);
+//            System.out.println("t:" + heat.heatValue() +" gap: " +heat.heatGap());
+//        }
+//        var heat = new HeatHandler();
+//        System.out.println(heat);
+//        for(int i=0;i<10;i++){
+//            heat.increase(10);
+//            System.out.println(heat);
+//        }
+//        heat = new HeatHandler();
+//        for(int i=0;i<10;i++){
+//            heat.decrease(10);
+//            System.out.println(heat);
+//        }
+        BitSet bitSet = new BitSet();
+        bitSet.set(10);
+        bitSet.set(60);
+        bitSet.set(1);
+        bitSet.set(0);
+        long l = TTUtils.longValueOfBitSet(bitSet);
+        BitSet r = TTUtils.forLongToBitSet(l,61);
+        System.out.println(Long.toString(l,2));
+        System.out.println(r);
         
     }
     

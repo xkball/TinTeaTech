@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ParametersAreNonnullByDefault
-public class MTERender  implements BlockEntityRenderer<TTTileEntityBase> {
+public class MTERender implements BlockEntityRenderer<TTTileEntityBase> {
     
     private final Map<Class<? extends BlockEntityRenderer<?>>,BlockEntityRenderer<?>> rendererCache;
     

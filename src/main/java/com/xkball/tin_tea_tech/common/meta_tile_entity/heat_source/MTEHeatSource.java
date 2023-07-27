@@ -1,16 +1,22 @@
 package com.xkball.tin_tea_tech.common.meta_tile_entity.heat_source;
 
+import com.xkball.tin_tea_tech.api.TTValue;
 import com.xkball.tin_tea_tech.api.heat.IHeatSource;
+import com.xkball.tin_tea_tech.capability.TTCapability;
 import com.xkball.tin_tea_tech.capability.heat.HeatHandler;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -30,12 +36,16 @@ public abstract class MTEHeatSource extends MetaTileEntity {
     
     protected final IHeatSource heatSource = new HeatHandler();
     
+    //cap
+    private final LazyOptional<IHeatSource> heatCap;
+    
     public MTEHeatSource(@Nonnull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);
         if(isClient() && te != null){
             litModel = getModel(getLitModel());
             offModel = getModel(getOffModel());
         }
+        heatCap = LazyOptional.of(() -> heatSource);
     }
     
     
@@ -55,6 +65,11 @@ public abstract class MTEHeatSource extends MetaTileEntity {
         if(this.getOffsetTick() % 5 == 0){
             if(timeLeft > 0) {
                 timeLeft--;
+            }
+            if(enabled && timeLeft == 0){
+                enabled = false;
+                sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(enabled));
+                sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
             }
             var b = !getLevel().getBlockState(getPos().above()).isAir();
             var dec = b ? 50 : 100;
@@ -98,5 +113,11 @@ public abstract class MTEHeatSource extends MetaTileEntity {
 //        itemHandler.get().deserializeNBT(DataUtils.readTag(byteBuf));
     }
     
-    
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap == TTCapability.HEAT){
+            return heatCap.cast();
+        }
+        return super.getCapability(cap, side);
+    }
 }

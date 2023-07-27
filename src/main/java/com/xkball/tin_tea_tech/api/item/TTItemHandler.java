@@ -1,6 +1,7 @@
 package com.xkball.tin_tea_tech.api.item;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 
@@ -11,4 +12,6 @@ public interface TTItemHandler extends IItemHandler, INBTSerializable<CompoundTa
         }
         return true;
     }
+    
+    void setItem(int slot, ItemStack itemStack);
 }

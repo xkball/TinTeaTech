@@ -4,9 +4,15 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "tin_tea_tech.refmap.json",
   "mixins": [
-    "TTMixinFlintAndSteel"
+    "TTMixinFlintAndSteel",
+    "TTMixinInventoryMenu",
+    "TTMixinPlayer"
   ],
   "client": [
+    "client.TTMixinArmorRender",
+    "client.TTMixinCreativeInventoryScreen",
+    "client.TTMixinCustomHeadRender",
+    "client.TTMixinMinecraft"
   ],
   "minVersion": "0.8"
 }

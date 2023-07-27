@@ -8,18 +8,28 @@ import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.Model;
+import com.xkball.tin_tea_tech.api.annotation.Tag;
+import com.xkball.tin_tea_tech.api.client.gui.IGUIProvider;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.item.TTCommonItem;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
+import com.xkball.tin_tea_tech.data.tag.TTBlockTags;
+import com.xkball.tin_tea_tech.data.tag.TTItemTags;
 import com.xkball.tin_tea_tech.utils.Timer;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.forgespi.language.ModFileScanData;
@@ -31,6 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class AutoRegManager {
     
@@ -48,7 +59,13 @@ public class AutoRegManager {
     //                          TabName,ItemName
     public static final Multimap<String,String> itemTabMap = LinkedHashMultimap.create();
     
+    @OnlyIn(Dist.CLIENT)
+    public static final Int2ObjectMap<IGUIProvider> ttGuiMap = new Int2ObjectArrayMap<>();
+    @OnlyIn(Dist.CLIENT)
+    public static final List<IGuiOverlay> overlays = new ArrayList<>();
     public static RegistryObject<BlockEntityType<TTTileEntityBase>> TILE_ENTITY_BASE;
+    
+    public static ModFileScanData re;
     
     
     public static void init(){
@@ -61,7 +78,8 @@ public class AutoRegManager {
                 scanResults.setAccessible(true);
                 var modClass = FMLModContainer.class.getDeclaredField("modClass");
                 modClass.setAccessible(true);
-                ModFileScanData re = (ModFileScanData) scanResults.get(mc);
+                re = (ModFileScanData) scanResults.get(mc);
+                
                 var type = Type.getType(AutomaticRegistration.class);
                 var list = re.getAnnotations().stream().filter(
                                 (ad) -> ad.annotationType().equals(type) && ad.targetType() == ElementType.TYPE)
@@ -73,10 +91,12 @@ public class AutoRegManager {
                         "tile_entity_base",() ->
                                 BlockEntityType.Builder.of(TTTileEntityBase::new,allMTEBlock())
                                         .build(DSL.remainderType())
-                );
-                models.addAll(re.getAnnotations().stream().filter(
-                        (ad) -> ad.annotationType().equals(Type.getType(Model.class))
-                ).map(
+                 );
+                 var modelType = Type.getType(Model.class);
+                 
+                 models.addAll(re.getAnnotations().stream().filter(
+                        (ad) -> ad.annotationType().equals(modelType)
+                    ).map(
                         (ad) -> {
                             try {
                                 return getRealClass(ad.clazz().getClassName());
@@ -89,6 +109,42 @@ public class AutoRegManager {
                             return Arrays.stream(an.resources());
                         }
                 ).toList());
+                 var itemTagType = Type.getType(Tag.Item.class);
+                re.getAnnotations().stream().filter(
+                        (ad) -> ad.annotationType().equals(itemTagType)
+                ).map((ad) -> {
+                    try {
+                        return getRealClass(ad.clazz().getClassName());
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).flatMap((clazz) -> {
+                    var an = clazz.getAnnotation(Tag.Item.class);
+                    return Arrays.stream(an.value());
+                }).forEach(TTItemTags::create);
+//                var blockTagType = Type.getType(Tag.Block.class);
+//                re.getAnnotations().stream().filter(
+//                        (ad) -> ad.annotationType().equals(blockTagType)
+//                ).map((ad) -> {
+//                    try {
+//                        return getRealClass(ad.clazz().getClassName());
+//                    } catch (ClassNotFoundException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                })
+                allClass(Tag.Block.class).flatMap((clazz) -> {
+                    var an = clazz.getAnnotation(Tag.Block.class);
+                    return Arrays.stream(an.value());
+                }).forEach(TTBlockTags::create);
+                
+                if(TinTeaTech.isClient()){
+                    for(var cc : allClass(IGUIProvider.class).toList()){
+                        IGUIProvider iguiProvider = (IGUIProvider) cc.getConstructor(CompoundTag.class).newInstance(new CompoundTag());
+                        ttGuiMap.put(iguiProvider.getID(),iguiProvider);
+                    }
+                }
+                
+                
                 LogUtils.getLogger().debug(TinTeaTech.MOD_NAME+" finished generate registry object in " + timer.timeMS() + " ms.");
             } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException |
                      InvocationTargetException | InstantiationException e) {
@@ -96,6 +152,18 @@ public class AutoRegManager {
             }
             
         }
+    }
+    
+    private static <T> Stream<Class<?>> allClass(Class<T> tClass){
+        var type = Type.getType(tClass);
+        return re.getAnnotations().stream().filter((ad) -> ad.annotationType().equals(type))
+                .map((ad) -> {
+                    try {
+                        return getRealClass(ad.clazz().getClassName());
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
     
     public static Collection<RegistryObject<?>> allRegistryObjects(){
@@ -144,6 +212,14 @@ public class AutoRegManager {
     //BlockClass 并不是方块真正的类
     //而是RegistryObjectMap里的key
     private static void newRegistry(Class<?> clazz){
+        if (IGuiOverlay.class.isAssignableFrom(clazz)) {
+            try {
+                overlays.add((IGuiOverlay) clazz.getConstructor().newInstance());
+                return;
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
         //如果不是mte
         if(!MetaTileEntity.class.isAssignableFrom(clazz)){
             var ro = newRegistry1(clazz);

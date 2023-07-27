@@ -2,11 +2,15 @@ package com.xkball.tin_tea_tech.common.blocks.te;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.xkball.tin_tea_tech.api.mte.FacingType;
+import com.xkball.tin_tea_tech.api.block.IRotatable;
+import com.xkball.tin_tea_tech.api.facing.FacingType;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
+import com.xkball.tin_tea_tech.utils.LevelUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -20,7 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class HorizontalMTEBlock extends TTTileEntityBlock{
+public class HorizontalMTEBlock extends TTTileEntityBlock implements IRotatable {
     
     public static final DirectionProperty horizontalFacing = BlockStateProperties.HORIZONTAL_FACING;
     
@@ -65,5 +69,28 @@ public class HorizontalMTEBlock extends TTTileEntityBlock{
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(horizontalFacing,
                 pContext.getHorizontalDirection().getOpposite());
+    }
+    
+    @Override
+    public @Nullable Direction getFacingDirection(BlockState blockState,FacingType facingType) {
+        if(facingType == FacingType.MainFace){
+            return blockState.getValue(horizontalFacing);
+        }
+        return super.getFacingDirection(blockState,facingType);
+    }
+    
+    @Override
+    public boolean rotation(Level level, BlockPos pos, BlockState blockState, Direction to) {
+        if(to.getAxis() != Direction.Axis.Y){
+            blockState = blockState.setValue(horizontalFacing,to);
+            level.setBlock(pos,blockState,1);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public void afterRotation(Level level,BlockPos pos, BlockState blockState, Direction to) {
+        LevelUtils.getMTEAndExecute(level,pos,(mte) -> mte.afterRotation(to));
     }
 }

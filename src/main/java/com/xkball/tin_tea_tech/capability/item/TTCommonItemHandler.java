@@ -18,4 +18,10 @@ public class TTCommonItemHandler extends ItemStackHandler implements TTItemHandl
     public TTCommonItemHandler(NonNullList<ItemStack> stacks) {
         super(stacks);
     }
+    
+    @Override
+    public void setItem(int slot, ItemStack itemStack) {
+        validateSlotIndex(slot);
+        this.stacks.set(slot, itemStack);
+    }
 }

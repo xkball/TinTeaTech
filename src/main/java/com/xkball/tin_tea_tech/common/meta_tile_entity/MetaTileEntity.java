@@ -103,6 +103,16 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     }
     
     @Override
+    public void firstClientTick() {
+        sentToServer((t) -> {});
+    }
+    
+    @Override
+    public void readClientData(CompoundTag data) {
+        syncRenderData();
+    }
+    
+    @Override
     public void sentCustomData(int id, Consumer<ByteBuf> bufConsumer) {
         if (this.te != null) {
             this.te.sentCustomData(id,bufConsumer);
