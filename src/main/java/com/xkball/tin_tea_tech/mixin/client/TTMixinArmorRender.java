@@ -62,9 +62,8 @@ public abstract class TTMixinArmorRender <T extends LivingEntity, M extends Huma
                 this.renderModel(pMatrixStack, pBuffer, pPackedLight, holoGlass, model, flag, 1.0F, 1.0F, 1.0F, this.getArmorResource(pLivingEntity, is, pSlot, null));
                 
                 
-                ArmorTrim.getTrim(pLivingEntity.level().registryAccess(), is).ifPresent((p_289638_) -> {
-                    this.renderTrim(holoGlass.getMaterial(), pMatrixStack, pBuffer, pPackedLight, p_289638_, model, flag);
-                });
+                ArmorTrim.getTrim(pLivingEntity.level().registryAccess(), is).ifPresent((p_289638_) ->
+                        this.renderTrim(holoGlass.getMaterial(), pMatrixStack, pBuffer, pPackedLight, p_289638_, model, flag));
                
             }
         }

@@ -14,8 +14,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static com.xkball.tin_tea_tech.utils.RenderUtil.H01;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class PipeMTEBlock extends TTTileEntityBlock{

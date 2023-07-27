@@ -105,6 +105,7 @@ public class HoloGlassPluginSubScreen extends ModeSubScreen<HoloGlassScreen> {
                     if (carried.isEmpty()){
                         var i = slot.getItem().getCount();
                         outScreen.setCarriedItem(slot.extractItem(i/2, false));
+                        return true;
                     }
                 }
             }
@@ -114,6 +115,7 @@ public class HoloGlassPluginSubScreen extends ModeSubScreen<HoloGlassScreen> {
                     var slot = getSlot(pMouseX, pMouseY);
                     if (slot != null){
                         outScreen.setCarriedItem(slot.getItem().copy());
+                        return true;
                     }
                 }
             }

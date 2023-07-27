@@ -3,7 +3,6 @@ package com.xkball.tin_tea_tech.client.gui.components;
 import com.xkball.tin_tea_tech.api.client.gui.IComponent;
 import com.xkball.tin_tea_tech.api.client.gui.ISubScreen;
 import com.xkball.tin_tea_tech.client.gui.screen.TTScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.Nullable;
 

@@ -38,10 +38,10 @@ public class WrenchBehaviour implements IItemBehaviour {
                     bs.rotate(level,pos,Rotation.CLOCKWISE_90);
                 }
             }
-            else {
-//                player.sendSystemMessage(Component.literal(hitFacing.toString()));
-//                player.sendSystemMessage(Component.literal(hitFacing.toDirection(direction).toString()));
-            }
+//            else {
+////                player.sendSystemMessage(Component.literal(hitFacing.toString()));
+////                player.sendSystemMessage(Component.literal(hitFacing.toDirection(direction).toString()));
+//            }
           }
         return InteractionResult.SUCCESS;
     }

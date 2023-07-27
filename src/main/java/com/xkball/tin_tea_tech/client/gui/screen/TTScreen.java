@@ -19,6 +19,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+//在SubScreen泛型化之前写的 懒得管了
+@SuppressWarnings("rawtypes")
 @ParametersAreNonnullByDefault
 public abstract class TTScreen extends Screen implements IGUIProvider, PosGetter {
     

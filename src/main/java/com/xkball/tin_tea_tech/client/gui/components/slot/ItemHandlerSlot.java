@@ -36,9 +36,9 @@ public class ItemHandlerSlot implements Renderable {
     
     public void setItem(ItemStack item){
         itemStackHandler.setStackInSlot(slot,item);
-        if(TinTeaTech.isClient()){
-          //  TTNetworkHandler.CHANNEL.sendToServer(new SyncGUIDataPacket(slot,item));
-        }
+//        if(TinTeaTech.isClient()){
+//          //  TTNetworkHandler.CHANNEL.sendToServer(new SyncGUIDataPacket(slot,item));
+//        }
     }
     
     public ItemStack extractItem(int amount, boolean simulate){

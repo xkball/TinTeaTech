@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech.network.packet;
 
-import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.network.ITTPacket;
 import com.xkball.tin_tea_tech.client.hud.TricorderHUD;
 import com.xkball.tin_tea_tech.common.item_behaviour.TricorderBehaviour;

@@ -9,7 +9,6 @@ import com.xkball.tin_tea_tech.utils.TTUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.BitSet;
 import java.util.Collection;
-import java.util.List;
 
 public abstract class MTEPipe extends MetaTileEntity {
     
