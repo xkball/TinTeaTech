@@ -2,12 +2,16 @@ package com.xkball.tin_tea_tech.utils;
 
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.NonNullSupplier;
 
 import java.util.BitSet;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class TTUtils {
+    
+    //使用它的时候不应该抛出异常
+    public static final NonNullSupplier<RuntimeException> exceptionSupplier = RuntimeException::new;
     
     public static int clamp(int max,int min,int value){
         return value>max ? max : Math.max(value, min);

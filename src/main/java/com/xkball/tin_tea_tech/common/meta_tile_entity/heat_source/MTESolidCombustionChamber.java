@@ -9,6 +9,7 @@ import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.facing.FacingType;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.capability.item.TTCommonItemHandler;
 import com.xkball.tin_tea_tech.common.blocks.te.HorizontalMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -83,6 +84,11 @@ public class MTESolidCombustionChamber extends MTEHeatSource implements DataProv
     }
     
     @Override
+    public boolean canApplyCover(Direction direction, Cover cover) {
+        return direction != getFacingDirection(FacingType.MainFace);
+    }
+    
+    @Override
     public void tick() {
         super.tick();
         if(enabled && timeLeft<5 && !itemHandler.get().isEmpty()){
@@ -99,6 +105,7 @@ public class MTESolidCombustionChamber extends MTEHeatSource implements DataProv
     
     @Override
     public void syncRenderData() {
+        super.syncRenderData();
         sentCustomData(TTValue.ENABLED,(b) -> b.writeBoolean(enabled));
         sentCustomData(TTValue.DATA_UPDATE,(b) -> b.writeInt(timeLeft));
     }

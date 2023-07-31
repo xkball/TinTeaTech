@@ -62,6 +62,7 @@ public abstract class MTEHeatSource extends MetaTileEntity {
     //5T进行一次运算
     @Override
     public void tick() {
+        super.tick();
         if(this.getOffsetTick() % 5 == 0){
             if(timeLeft > 0) {
                 timeLeft--;

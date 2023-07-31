@@ -77,7 +77,7 @@ public class ScanPacket implements ITTPacket {
                         if(player != null){
                             var level = player.level();
                             if(level.isLoaded(blockPos)){
-                                var r = TricorderBehaviour.scan(level,blockPos,null);
+                                var r = TricorderBehaviour.scan(level,blockPos,player,false);
                                 TTNetworkHandler.sentToClientPlayer(new ScanPacket(blockPos,r),player);
                             }
                           }

@@ -1,4 +1,6 @@
 {
+  "block.tin_tea_tech.copper_drawer": "铜抽屉",
+  "block.tin_tea_tech.item_pipe": "物品管道",
   "block.tin_tea_tech.scaffolding_block": "脚手架",
   "block.tin_tea_tech.solid_combustion_chamber": "固态燃烧室",
   "block.tin_tea_tech.test_pipe": "测试管道",
@@ -6,6 +8,7 @@
   "creative_tab.tin_tea_tech.machine_tab": "锡茶科技: 机器",
   "creative_tab.tin_tea_tech.misc_tab": "锡茶科技: 杂项",
   "gui.tin_tea_tech.displayInventory": "显示物品栏",
+  "gui.tin_tea_tech.display_nbt": "三录仪显示NBT",
   "gui.tin_tea_tech.gui_setting": "GUI设置",
   "gui.tin_tea_tech.holo_glass_plugin": "云钩插件",
   "gui.tin_tea_tech.lock_inventory": "锁定物品栏位置",
@@ -20,12 +23,15 @@
   "info.tin_tea_tech.shot": "槽位: ",
   "info.tin_tea_tech.tick_used": "上一tick消耗了: ",
   "item.tin_tea_tech.bearing_indicator": "方位指示器",
+  "item.tin_tea_tech.crowbar": "撬棍",
   "item.tin_tea_tech.holo_glass": "云钩",
+  "item.tin_tea_tech.item_input_cover": "物品输入覆盖版",
   "item.tin_tea_tech.player_radar": "玩家雷达",
   "item.tin_tea_tech.test_item": "测试物品",
   "item.tin_tea_tech.tricorder": "三录仪",
   "item.tin_tea_tech.universal_saddle": "万用鞍",
   "item.tin_tea_tech.wrench": "扳手",
   "key.category.tin_tea_tech": "锡茶科技",
-  "key.tin_tea_tech.open_holo_glass": "打开云钩"
+  "key.tin_tea_tech.open_holo_glass": "打开云钩",
+  "key.tin_tea_tech.print_nbt": "显示NBT"
 }

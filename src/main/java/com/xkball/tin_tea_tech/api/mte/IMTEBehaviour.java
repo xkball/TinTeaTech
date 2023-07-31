@@ -1,8 +1,11 @@
 package com.xkball.tin_tea_tech.api.mte;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.facing.FacingType;
+import com.xkball.tin_tea_tech.api.mte.cover.Cover;
+import com.xkball.tin_tea_tech.api.mte.cover.VerticalCover;
 import com.xkball.tin_tea_tech.client.render.DefaultMTERender;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -11,6 +14,7 @@ import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.network.packet.MTEClientToServerDataPacket;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
@@ -21,6 +25,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,6 +53,12 @@ public interface IMTEBehaviour {
         return LazyOptional.empty();
     }
     
+    VerticalCover getCoverHandler();
+    
+    default boolean canApplyCover(Direction direction, Cover cover){
+        return false;
+    }
+    
     //block方法
     //所有NC更新都会调用
     default void onNeighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving){}
@@ -57,6 +68,11 @@ public interface IMTEBehaviour {
     
     default FacingType getFacingType(BlockState state,Direction direction){
         return this.getBlock().getFacingType(state,direction);
+    }
+    
+    @Nullable
+    default BlockPlaceContext updateBlockPlaceContext(BlockPlaceContext context){
+        return context;
     }
     
     @Nullable
@@ -157,6 +173,9 @@ public interface IMTEBehaviour {
         }
         return DefaultMTERender.class;
     }
+    
+    @OnlyIn(Dist.CLIENT)
+    default void renderAdditional(TTTileEntityBase pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource,int light,int pPackedOverlay){}
     
     //INFO
     String getName();

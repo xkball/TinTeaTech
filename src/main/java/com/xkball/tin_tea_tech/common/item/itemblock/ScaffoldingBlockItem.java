@@ -50,6 +50,7 @@ public class ScaffoldingBlockItem extends BlockItem {
                 }
                 
                 int i = 0;
+                @SuppressWarnings("SpellCheckingInspection")
                 BlockPos.MutableBlockPos mbpos = blockpos.mutable().move(direction);
                 
                 while (i < 50) {

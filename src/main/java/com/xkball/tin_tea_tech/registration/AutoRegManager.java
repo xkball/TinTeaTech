@@ -11,8 +11,11 @@ import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.api.annotation.Tag;
 import com.xkball.tin_tea_tech.api.client.gui.IGUIProvider;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
+import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
+import com.xkball.tin_tea_tech.common.item.CoverItem;
 import com.xkball.tin_tea_tech.common.item.TTCommonItem;
+import com.xkball.tin_tea_tech.common.item.itemblock.MTEItemBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.data.tag.TTBlockTags;
@@ -59,9 +62,7 @@ public class AutoRegManager {
     //                          TabName,ItemName
     public static final Multimap<String,String> itemTabMap = LinkedHashMultimap.create();
     
-    @OnlyIn(Dist.CLIENT)
     public static final Int2ObjectMap<IGUIProvider> ttGuiMap = new Int2ObjectArrayMap<>();
-    @OnlyIn(Dist.CLIENT)
     public static final List<IGuiOverlay> overlays = new ArrayList<>();
     public static RegistryObject<BlockEntityType<TTTileEntityBase>> TILE_ENTITY_BASE;
     
@@ -221,6 +222,10 @@ public class AutoRegManager {
             }
         }
         //如果不是mte
+        if(Cover.class.isAssignableFrom(clazz)){
+            newCover(clazz);
+            return;
+        }
         if(!MetaTileEntity.class.isAssignableFrom(clazz)){
             var ro = newRegistry1(clazz);
             classRegMap.put(clazz,ro);
@@ -231,6 +236,21 @@ public class AutoRegManager {
         }
        
     }
+    
+    private static void newCover(Class<?> clazz){
+        var name = fromClassName(clazz);
+        if(clazz.isAnnotationPresent(AutomaticRegistration.Cover.class)){
+            var type = clazz.getAnnotation(AutomaticRegistration.Cover.class).type();
+            var ro = TTRegistration.ITEMS.register(name,
+                    () -> new CoverItem(type)
+            );
+            assignCreativeTag(clazz,name);
+            classRegMap.put(clazz,ro);
+            nameRegMap.put(name,ro);
+        }
+      
+    }
+    
     
     private static void newMTE(Class<?> clazz){
         try {
@@ -260,7 +280,7 @@ public class AutoRegManager {
             var itemName = name+"_item";
             assignCreativeTag(clazz,itemName);
             nameRegMap.put(itemName,TTRegistration.ITEMS.register(name+"_item",
-                    () -> new BlockItem((Block) AutoRegManager.getRegistryObject(name).get(),
+                    () -> new MTEItemBlock((TTTileEntityBlock) AutoRegManager.getRegistryObject(name).get(),
                             TTRegistration.getItemProperty())));
             
             

@@ -1,6 +1,8 @@
 package com.xkball.tin_tea_tech;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
+import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.client.key.vanilla.VanillaInputHandler;
 import com.xkball.tin_tea_tech.client.render.MTERender;
 import com.xkball.tin_tea_tech.config.TTConfig;
@@ -20,6 +22,7 @@ import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -30,6 +33,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TinTeaTech.MODID)
@@ -49,6 +55,9 @@ public class TinTeaTech
     public static int ticks = 0;
     public static int clientTicks = 0;
     public static RandomSource random = RandomSource.createNewThreadLocalInstance();
+    
+    //可能在不同维度上撞  但是我决定忽略这种可能
+    public static final Map<BlockPos, Connections> lastPlace = new HashMap<>();
     
     public TinTeaTech() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -83,10 +92,20 @@ public class TinTeaTech
         
         LOGGER.debug(MOD_NAME + " setup on server starting completed in "+timer.timeNS()+" ns.");
     }
+    
+    @SubscribeEvent
+    public static void onServerClose(ServerStoppingEvent event){
+        var timer = new Timer();
+        lastPlace.clear();
+        LOGGER.debug(MOD_NAME + " handle server stopping completed in "+timer.timeNS()+" ns.");
+    }
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event){
         if(event.phase == TickEvent.Phase.START){
             ticks++;
+            if(ticks%100==0){
+                lastPlace.clear();
+            }
         }
     }
     
@@ -114,6 +133,7 @@ public class TinTeaTech
         @SubscribeEvent
         public static void onRegKey(RegisterKeyMappingsEvent event){
             event.register(VanillaInputHandler.OPEN_HOLO_GlASS_KEY);
+            event.register(VanillaInputHandler.PRINT_NBT);
         }
         
         @SubscribeEvent

@@ -2,6 +2,7 @@ package com.xkball.tin_tea_tech.data;
 
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.Tag;
+import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.data.tag.TTBlockTags;
 import com.xkball.tin_tea_tech.data.tag.TTItemTags;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;

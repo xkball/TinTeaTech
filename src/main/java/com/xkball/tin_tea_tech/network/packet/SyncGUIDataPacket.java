@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.BiConsumer;
@@ -65,7 +66,7 @@ public class SyncGUIDataPacket implements ITTPacket {
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(
                 () -> {
-                    if(TinTeaTech.isClient()){
+                    if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
                         type.handle.accept(Minecraft.getInstance().player,this);
                         return;
                     }

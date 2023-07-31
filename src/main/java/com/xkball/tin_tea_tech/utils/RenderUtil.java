@@ -28,6 +28,18 @@ public class RenderUtil {
         crossMusk = new Shape2D()
                 .addLine(new Line2D(new Point2D(H1,H1),new Point2D(H2,H2)))
                 .addLine(new Line2D(new Point2D(H1,H2),new Point2D(H2,H1))).end();
+        leftCross = new Shape2D()
+                .addLine(new Line2D(new Point2D(0,H1),new Point2D(H1,H2)))
+                .addLine(new Line2D(new Point2D(0,H2),new Point2D(H1,H1))).end();
+        rightCross = new Shape2D()
+                .addLine(new Line2D(new Point2D(H2,H1),new Point2D(1,H2)))
+                .addLine(new Line2D(new Point2D(H2,H2),new Point2D(1,H1))).end();
+        upCross = new Shape2D()
+                .addLine(new Line2D(new Point2D(H1,H2),new Point2D(H2,1)))
+                .addLine(new Line2D(new Point2D(H1,1),new Point2D(H2,H2))).end();
+        downCross = new Shape2D()
+                .addLine(new Line2D(new Point2D(H1,0),new Point2D(H2,H1)))
+                .addLine(new Line2D(new Point2D(H1,H1),new Point2D(H2,0))).end();
         
     }
     public static Quaternionf r90x =new Quaternionf(new AxisAngle4f((float) (Math.PI/2),1,0,0));
@@ -38,6 +50,11 @@ public class RenderUtil {
     public static final Shape2D biCrossMusk;
     //X形
     public static final Shape2D crossMusk;
+    
+    public static final Shape2D upCross;
+    public static final Shape2D downCross;
+    public static final Shape2D leftCross;
+    public static final Shape2D rightCross;
     public static void drawShape(VertexConsumer pConsumer, PoseStack poseStack,Shape2D shape, Direction direction,
                                  double pX, double pY, double pZ,
                                  float r, float g, float b, float a){

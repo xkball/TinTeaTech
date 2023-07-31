@@ -1,9 +1,6 @@
 package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
-import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
-import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
-import com.xkball.tin_tea_tech.api.annotation.I18N;
-import com.xkball.tin_tea_tech.api.annotation.Tag;
+import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
 import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
@@ -27,7 +24,7 @@ import java.util.function.Supplier;
 @CreativeTag(tab = TTCreativeTab.TTMachineTab.class)
 @AutomaticRegistration
 @AutomaticRegistration.MTE(block = PipeMTEBlock.class,renderer = "com.xkball.tin_tea_tech.client.render.PipeRender")
-//@Model(resources = {"flamereaction:block/solid_fuel_burning_box_on","flamereaction:block/solid_fuel_burning_box"})
+@Model(resources = {"tin_tea_tech:block/pipe_default"})
 @I18N(chinese = "测试管道",english = "Test Pipe")
 @Tag.Item({"pipe"})
 public class MTETestPipe extends MTEPipe{

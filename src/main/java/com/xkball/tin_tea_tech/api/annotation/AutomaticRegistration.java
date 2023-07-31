@@ -45,4 +45,10 @@ public @interface AutomaticRegistration {
     @interface Item{
         Class<? extends net.minecraft.world.item.Item> itemClass() default TTCommonItem.class;
     }
+    
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface Cover{
+        int type();
+    }
 }

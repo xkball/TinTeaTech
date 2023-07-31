@@ -64,4 +64,12 @@ public class TTCommonItem extends Item {
     public IItemBehaviour getItemBehaviour() {
         return itemBehaviour;
     }
+    
+    @Nullable
+    public static IItemBehaviour getItemBehaviour(ItemStack itemStack){
+        if(itemStack.getItem() instanceof TTCommonItem t){
+            return t.getItemBehaviour();
+        }
+        return null;
+    }
 }

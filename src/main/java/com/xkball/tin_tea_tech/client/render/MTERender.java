@@ -29,6 +29,10 @@ public class MTERender implements BlockEntityRenderer<TTTileEntityBase> {
         @SuppressWarnings("unchecked")
         BlockEntityRenderer<TTTileEntityBase> renderer = (BlockEntityRenderer<TTTileEntityBase>) rendererCache.get(mte.getRendererClass());
         renderer.render(pBlockEntity,pPartialTick,pPoseStack,pBufferSource,pPackedLight,pPackedOverlay);
+        var coverHandler = mte.getCoverHandler();
+        for(var cover: coverHandler.allCovers()){
+            cover.render(pBlockEntity,pPartialTick,pPoseStack,pBufferSource,pPackedLight,pPackedOverlay);
+        }
     }
     
     @Override

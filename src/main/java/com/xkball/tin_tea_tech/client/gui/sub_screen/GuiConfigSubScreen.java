@@ -30,5 +30,14 @@ public class GuiConfigSubScreen extends ModeSubScreen<HoloGlassScreen> {
         b.setSize(40,20);
         b.pos(15,50);
         this.addComponent(b);
+        
+        this.addComponent(new Label(translatable("display_nbt")).setYCenter(true).pos(70,58+30));
+        var b2 = new EnableButton(() -> {
+            var pd =  getExtendedPlayer().getPlayerData();
+            pd.setDisplayNBT(!pd.displayNBT);
+        },() -> getExtendedPlayer().getPlayerData().displayNBT);
+        b2.setSize(40,20);
+        b2.pos(15,50+30);
+        this.addComponent(b2);
     }
 }

@@ -14,4 +14,8 @@ public interface TTItemHandler extends IItemHandler, INBTSerializable<CompoundTa
     }
     
     void setItem(int slot, ItemStack itemStack);
+    
+    default int countInSlot(int slot){
+        return getStackInSlot(slot).getCount();
+    }
 }

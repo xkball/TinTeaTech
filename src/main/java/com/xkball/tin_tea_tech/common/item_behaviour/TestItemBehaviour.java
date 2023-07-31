@@ -10,12 +10,16 @@ import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.network.packet.SyncGUIDataPacket;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
+import com.xkball.tin_tea_tech.utils.LevelUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 @AutomaticRegistration
 @AutomaticRegistration.Item
@@ -33,12 +37,24 @@ public class TestItemBehaviour implements IItemBehaviour, IHoloGlassPlugin {
         return Component.literal("");
     }
     
+//    @Override
+//    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+//        if(!pLevel.isClientSide){
+//            PlayerData.get(pPlayer).hgPluginMap.clear();
+//            TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(PlayerData.get(pPlayer)),pPlayer);
+//        }
+//        return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
+//    }
+    
+    
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if(!pLevel.isClientSide){
-            PlayerData.get(pPlayer).hgPluginMap.clear();
-            TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(PlayerData.get(pPlayer)),pPlayer);
+    public InteractionResult useOnBlock(UseOnContext pContext) {
+        var te = pContext.getLevel().getBlockEntity(pContext.getClickedPos());
+        if(te != null){
+            var i = te.getCapability(ForgeCapabilities.ITEM_HANDLER);
+            i.ifPresent((ih) -> LevelUtils.dropItem(pContext.getPlayer(),pContext.getLevel(),pContext.getClickedPos(),ih));
+            return InteractionResult.SUCCESS;
         }
-        return InteractionResultHolder.success(pPlayer.getItemInHand(pUsedHand));
+        return IItemBehaviour.super.useOnBlock(pContext);
     }
 }

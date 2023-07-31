@@ -3,6 +3,7 @@ package com.xkball.tin_tea_tech.data;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
+import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import net.minecraft.data.PackOutput;
@@ -27,7 +28,7 @@ public class ModelProvider extends ItemModelProvider {
         }
         for(var entry : AutoRegManager.allEntries()){
             var clazz = entry.getKey();
-            if((IItemBehaviour.class.isAssignableFrom(clazz) || Item.class.isAssignableFrom(clazz) )&& clazz.isAnnotationPresent(Model.class)){
+            if((IItemBehaviour.class.isAssignableFrom(clazz) || Item.class.isAssignableFrom(clazz) || Cover.class.isAssignableFrom(clazz)) && clazz.isAnnotationPresent(Model.class)){
                 //只应执行一次
                 for(var rl : clazz.getAnnotation(Model.class).resources()){
                     simpleItem(clazz,rl);
@@ -39,6 +40,10 @@ public class ModelProvider extends ItemModelProvider {
     }
     
     public void simpleItem(Class<?> clazz,String resourceLocation){
+//        var s ="";
+//        if(MetaTileEntity.class.isAssignableFrom(clazz)){
+//            s = "_item";
+//        }
         this.singleTexture(AutoRegManager.fromClassName(clazz),mcLoc("item/generated"),"layer0",new ResourceLocation(resourceLocation));
         
     }

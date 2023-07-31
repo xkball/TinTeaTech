@@ -4,15 +4,20 @@ import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.item.IHoloGlassPlugin;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
+import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
+import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import javax.annotation.Nullable;
@@ -35,27 +40,29 @@ public class TricorderBehaviour implements IItemBehaviour, IHoloGlassPlugin {
     public InteractionResult useOnBlock(UseOnContext pContext) {
         if(!pContext.getLevel().isClientSide && pContext.getPlayer() != null ) {
             var pos = pContext.getClickedPos();
-            var info = scan(pContext.getLevel(),pos, pContext.getPlayer());
+            var info = scan(pContext.getLevel(),pos, pContext.getPlayer(),true);
             info.forEach((c) -> pContext.getPlayer().sendSystemMessage(c));
         }
         return InteractionResult.SUCCESS;
         
     }
     
-    public static Collection<Component> scan(Level level, BlockPos pos,@Nullable Player scanner){
+    public static Collection<Component> scan(Level level, BlockPos pos,Player scanner,boolean recordTime){
         var state = level.getBlockState(pos);
         var te = level.getBlockEntity(pos);
         var info = DataProvider.blockInfo(state, pos);
         if(te != null){
             te.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(
                     (itemHandler) -> {
-                        info.add(DataProvider.crossLine());
-                        info.add(DataProvider.translatable("inventory").withStyle(ChatFormatting.BOLD));
-                        for(int i=0;i<itemHandler.getSlots();i++){
-                            info.add(DataProvider.translatable("shot")
-                                    .append(Component.literal(i+" "))
-                                    .append(DataProvider.translatable("item"))
-                                    .append(Component.literal(itemHandler.getStackInSlot(i).toString())));
+                        if(itemHandler.getSlots() != 0){
+                            info.add(DataProvider.crossLine());
+                            info.add(DataProvider.translatable("inventory").withStyle(ChatFormatting.BOLD));
+                            for(int i=0;i<itemHandler.getSlots();i++){
+                                info.add(DataProvider.translatable("shot")
+                                        .append(Component.literal(i+" "))
+                                        .append(DataProvider.translatable("item"))
+                                        .append(Component.literal(itemHandler.getStackInSlot(i).toString())));
+                            }
                         }
                     }
             );
@@ -66,10 +73,34 @@ public class TricorderBehaviour implements IItemBehaviour, IHoloGlassPlugin {
                 info.add(DataProvider.crossLine());
                 info.add(DataProvider.translatable("mte_info").withStyle(ChatFormatting.BOLD));
                 info.addAll(((DataProvider)mte).getInfo());
-                if(scanner != null){
-                    mte.addTester(scanner);
+            }
+            var ch = mte.getCoverHandler();
+            var all = ch.allCovers();
+            if(all.size() != 0){
+                info.add(DataProvider.crossLine());
+                info.add(DataProvider.translatable("cover_info").withStyle(ChatFormatting.BOLD));
+                for(var c : all){
+                    info.add(Component.literal("direction:"+ c.getDirection().toString()+" ,name:"+ AutoRegManager.fromClassName(c.getClass())));
                 }
-                
+            }
+            
+            if(recordTime){
+                mte.addTester(scanner);
+            }
+        }
+        if(((IExtendedPlayer)scanner).getPlayerData().displayNBT){
+            if(te != null){
+                info.add(DataProvider.crossLine());
+                info.add(Component.literal("Server Block looking at nbt: "));
+                info.add(Component.literal(te.saveWithFullMetadata().toString()));
+            }
+            
+            var item = scanner.getItemInHand(InteractionHand.MAIN_HAND);
+            if(item.hasTag()){
+                info.add(DataProvider.crossLine());
+                info.add(Component.literal("Server Item in hand nbt: "));
+                assert item.getTag() != null;
+                info.add(Component.literal(item.getTag().toString()));
             }
         }
         return info;

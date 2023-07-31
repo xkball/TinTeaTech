@@ -5,7 +5,9 @@ import com.xkball.tin_tea_tech.api.block.IRotatable;
 import com.xkball.tin_tea_tech.api.facing.RelativeFacing;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
 import com.xkball.tin_tea_tech.client.shape.Point3D;
+import com.xkball.tin_tea_tech.mixin.TTMixinUseOnContext;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
+import com.xkball.tin_tea_tech.utils.LevelUtils;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Rotation;
@@ -31,6 +33,13 @@ public class WrenchBehaviour implements IItemBehaviour {
             var direction = pContext.getClickedFace();
             if(player.isShiftKeyDown()){
                 var pos = pContext.getClickedPos();
+                var mte = LevelUtils.getMTE(level,pos);
+                if(mte != null){
+                    var r =
+                            mte.useByWrench(player,pContext.getHand(),((TTMixinUseOnContext)pContext).invokeGetHitResult());
+                    if(r == InteractionResult.SUCCESS) return InteractionResult.SUCCESS;
+                }
+                
                 var bs = level.getBlockState(pos);
                 if(bs.getBlock() instanceof IRotatable r){
                     r.rotate(level,pos,bs,hitFacing.toDirection(direction));

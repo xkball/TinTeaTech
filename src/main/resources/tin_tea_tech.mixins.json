@@ -6,7 +6,8 @@
   "mixins": [
     "TTMixinFlintAndSteel",
     "TTMixinInventoryMenu",
-    "TTMixinPlayer"
+    "TTMixinPlayer",
+    "TTMixinUseOnContext"
   ],
   "client": [
     "client.TTMixinArmorRender",

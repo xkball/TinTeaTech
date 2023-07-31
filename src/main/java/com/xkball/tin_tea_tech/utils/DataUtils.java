@@ -7,8 +7,16 @@ import net.minecraft.nbt.TagParser;
 import org.apache.commons.lang3.Validate;
 
 import java.nio.charset.StandardCharsets;
+import java.util.BitSet;
 
 public class DataUtils {
+    
+    public static CompoundTag writeIntBitset(CompoundTag tag, BitSet bitSet){
+        tag.putInt("size",bitSet.size());
+        tag.putInt("value",TTUtils.intValueOfBitSet(bitSet));
+        return tag;
+    }
+    
     public static void writeTag(ByteBuf to, CompoundTag tag)
     {
         if(tag == null){

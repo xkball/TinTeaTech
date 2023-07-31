@@ -1,8 +1,12 @@
 package com.xkball.tin_tea_tech.api.facing;
 
 import com.xkball.tin_tea_tech.api.pipe.Connections;
+import com.xkball.tin_tea_tech.client.shape.Shape2D;
+import com.xkball.tin_tea_tech.utils.RenderUtil;
 import net.minecraft.core.Direction;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -30,6 +34,9 @@ public enum RelativeFacing {
     right_up(Direction::getOpposite,true,right,up),
     right_down(Direction::getOpposite,true,right,down);
     
+    
+    public static final Collection<RelativeFacing> coverFacing = List.of(self,up,down,left,right);
+    
     private final UnaryOperator<Direction> toDirection;
     private final Function<Direction,Connections> toConnections;
     
@@ -40,7 +47,7 @@ public enum RelativeFacing {
     RelativeFacing(UnaryOperator<Direction> toDirection,boolean isCombinationFace,RelativeFacing... combined) {
         this.toDirection = toDirection;
         if(!isCombinationFace){
-            this.toConnections = (d) -> Connections.formDirection(toDirection.apply(d));
+            this.toConnections = (d) -> Connections.fromDirection(toDirection.apply(d));
         }
         else {
             this.toConnections = (d) -> toConnection(d,combined[0],combined[1]);
@@ -63,5 +70,25 @@ public enum RelativeFacing {
         var d1 = a.toDirection.apply(d);
         var d2 = b.toDirection.apply(d);
         return Connections.find(d1,d2);
+    }
+    
+    public static Shape2D getMusk(RelativeFacing facing){
+        switch (facing){
+            case left -> {
+                return RenderUtil.leftCross;
+            }
+            case right -> {
+                return RenderUtil.rightCross;
+            }
+            case up -> {
+                return RenderUtil.upCross;
+            }
+            case down -> {
+                return RenderUtil.downCross;
+            }
+            default -> {
+                return RenderUtil.crossMusk;
+            }
+        }
     }
 }

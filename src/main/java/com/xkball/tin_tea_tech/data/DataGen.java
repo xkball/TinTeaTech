@@ -31,11 +31,13 @@ public class DataGen {
             addLangKey("info.tin_tea_tech.block_pos","Block Pos: ","方块位置: ");
             addLangKey("info.tin_tea_tech.tick_used","Last tick used","上一tick消耗了: ");
             addLangKey("info.tin_tea_tech.block_info","Block Info: ","方块信息: ");
-            addLangKey("info.tin_tea_tech.mte_info","MetaTileEntity Info","MTE信息: ");
+            addLangKey("info.tin_tea_tech.mte_info","MetaTileEntity Info: ","MTE信息: ");
+            addLangKey("info.tin_tea_tech.cover_info","Cover Info: ","覆盖版信息: ");
             addLangKey("info.tin_tea_tech.inventory","Machine Inventory: ","机器内部存储: ");
             addLangKey("info.tin_tea_tech.shot","Shot: ","槽位: ");
             addLangKey("info.tin_tea_tech.item","Item: ","物品: ");
             addLangKey("key.tin_tea_tech.open_holo_glass", "Open Holo Glass","打开云钩");
+            addLangKey("key.tin_tea_tech.print_nbt","Print NBT","显示NBT");
             addLangKey("key.category.tin_tea_tech",TinTeaTech.MOD_NAME, TinTeaTech.MOD_NAME_CHINESE);
             addLangKey("gui.title.tin_tea_tech.holo_glass","Holo Glass","云钩界面");
             addLangKey("gui.tin_tea_tech.displayInventory","Display Inventory","显示物品栏");
@@ -43,6 +45,7 @@ public class DataGen {
             addLangKey("gui.tin_tea_tech.gui_setting","GUI Setting","GUI设置");
             addLangKey("gui.tin_tea_tech.plugins_installed","PluginsInstalled: ","已安装插件: ");
             addLangKey("gui.tin_tea_tech.lock_inventory","LockInventory","锁定物品栏位置");
+            addLangKey("gui.tin_tea_tech.display_nbt","Display NBT info on tricorder","三录仪显示NBT");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

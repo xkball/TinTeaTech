@@ -54,6 +54,8 @@ public class TTTileEntityBlock extends BaseEntityBlock {
     }
     
     
+    
+    
     //渲染交给自己解决
 //    @Override
 //    public RenderShape getRenderShape(BlockState p_49232_) {
@@ -63,6 +65,10 @@ public class TTTileEntityBlock extends BaseEntityBlock {
     @OnlyIn(Dist.CLIENT)
     public void rotateBlockModel(BlockState blockState, MetaTileEntity mte, PoseStack pPoseStack){
     
+    }
+    
+    public MetaTileEntity getDefaultMTE(){
+        return MetaTileEntity.mteMap.get(mteName);
     }
     @Nullable
     @Override
@@ -88,8 +94,6 @@ public class TTTileEntityBlock extends BaseEntityBlock {
         super.onBlockExploded(state, level, pos, explosion);
     }
     
-    //在服务端被调用两次的垃圾方法
-    //对于MTE只调用一次
     @Override
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {

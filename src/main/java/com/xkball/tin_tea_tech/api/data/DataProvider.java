@@ -31,7 +31,7 @@ public interface DataProvider {
     
     
     
-    static MutableComponent      translatable(String key){
+    static MutableComponent translatable(String key){
         return Component.translatable("info.tin_tea_tech."+key);
     }
 }

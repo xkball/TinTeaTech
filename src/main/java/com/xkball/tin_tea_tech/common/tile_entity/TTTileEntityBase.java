@@ -143,7 +143,6 @@ public class TTTileEntityBase extends BlockEntity {
             var list = tag.getList("data",tag.getByte("type"));
             for(int i = 0;i < list.size();i++){
                 var tagIn = list.getCompound(i);
-                //实际上不会循环
                 for(String id : tagIn.getAllKeys()){
                     ByteBuf byteBuf = Unpooled.copiedBuffer(tagIn.getByteArray(id));
                     readCustomData(Integer.parseInt(id),byteBuf);
