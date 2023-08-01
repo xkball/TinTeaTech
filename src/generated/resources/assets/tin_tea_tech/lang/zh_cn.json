@@ -1,5 +1,7 @@
 {
   "block.tin_tea_tech.copper_drawer": "铜抽屉",
+  "block.tin_tea_tech.ender_power_item_pipe": "末影物品管道",
+  "block.tin_tea_tech.fluid_tank": "流体储罐",
   "block.tin_tea_tech.item_pipe": "物品管道",
   "block.tin_tea_tech.scaffolding_block": "脚手架",
   "block.tin_tea_tech.solid_combustion_chamber": "固态燃烧室",
@@ -17,6 +19,7 @@
   "info.tin_tea_tech.block_info": "方块信息: ",
   "info.tin_tea_tech.block_name": "方块名称: ",
   "info.tin_tea_tech.block_pos": "方块位置: ",
+  "info.tin_tea_tech.cover_info": "覆盖版信息: ",
   "info.tin_tea_tech.inventory": "机器内部存储: ",
   "info.tin_tea_tech.item": "物品: ",
   "info.tin_tea_tech.mte_info": "MTE信息: ",
@@ -24,6 +27,8 @@
   "info.tin_tea_tech.tick_used": "上一tick消耗了: ",
   "item.tin_tea_tech.bearing_indicator": "方位指示器",
   "item.tin_tea_tech.crowbar": "撬棍",
+  "item.tin_tea_tech.damper": "惯性阻尼器",
+  "item.tin_tea_tech.entity_controller": "实体方向盘",
   "item.tin_tea_tech.holo_glass": "云钩",
   "item.tin_tea_tech.item_input_cover": "物品输入覆盖版",
   "item.tin_tea_tech.player_radar": "玩家雷达",
@@ -33,5 +38,6 @@
   "item.tin_tea_tech.wrench": "扳手",
   "key.category.tin_tea_tech": "锡茶科技",
   "key.tin_tea_tech.open_holo_glass": "打开云钩",
-  "key.tin_tea_tech.print_nbt": "显示NBT"
+  "key.tin_tea_tech.print_nbt": "显示NBT",
+  "tooltip.tin_tea_tech.holo_glass_plugin": "可作为云钩插件"
 }

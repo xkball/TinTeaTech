@@ -1,10 +1,7 @@
 package com.xkball.tin_tea_tech.network;
 
 import com.xkball.tin_tea_tech.TinTeaTech;
-import com.xkball.tin_tea_tech.network.packet.MTEClientToServerDataPacket;
-import com.xkball.tin_tea_tech.network.packet.OpenGUIPacket;
-import com.xkball.tin_tea_tech.network.packet.ScanPacket;
-import com.xkball.tin_tea_tech.network.packet.SyncGUIDataPacket;
+import com.xkball.tin_tea_tech.network.packet.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkRegistry;
@@ -51,6 +48,11 @@ public class TTNetworkHandler {
                 ScanPacket::serialize,
                 ScanPacket::new,
                 ScanPacket::handle);
+        CHANNEL.registerMessage(4,
+                KeyPressToServerPacket.class,
+                KeyPressToServerPacket::serialize,
+                KeyPressToServerPacket::new,
+                KeyPressToServerPacket::handle);
     }
     
 }

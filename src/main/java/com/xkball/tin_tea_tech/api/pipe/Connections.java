@@ -81,6 +81,10 @@ public enum Connections {
         return ConnectionsData.cConnections.get(this).first();
     }
     
+    public Direction nullableToDirection(){
+        return index<6?toDirection():null;
+    }
+    
     public Connections getOpposite(){
         return values()[opposite];
     }

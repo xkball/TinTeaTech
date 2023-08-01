@@ -1,5 +1,7 @@
 package com.xkball.tin_tea_tech.utils;
 
+import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
+import com.xkball.tin_tea_tech.common.item.TTCommonItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -58,6 +60,47 @@ public class ItemUtils {
                 }
             }
             if(exd>=maxStackSize) return true;
+        }
+        return false;
+    }
+    
+    public static int transportItemWithCount(IItemHandler from,IItemHandler to,int maxStackSize){
+        var exd = 0;
+        for(int i=0;i<from.getSlots();i++){
+            var canEx = from.extractItem(i,64,true);
+            for(int j=0;j<to.getSlots();j++){
+                var notIn = to.insertItem(j,canEx,true);
+                if(notIn.isEmpty()){
+                    var ex = from.extractItem(i,canEx.getCount(),false);
+                    to.insertItem(j,ex,false);
+                    exd++;
+                    break;
+                }
+                else {
+                    var exCount = canEx.getCount()-notIn.getCount();
+                    if(exCount>0){
+                        var ex = from.extractItem(i,exCount,false);
+                        to.insertItem(j,ex,false);
+                        exd++;
+                        break;
+                    }
+                }
+            }
+            if(exd>=maxStackSize) return 0;
+        }
+        return maxStackSize-exd;
+    }
+    
+    public static boolean holdingItem(Player player, Class<? extends IItemBehaviour> clazz){
+        var left = player.getItemInHand(InteractionHand.OFF_HAND);
+        if(left.getItem() instanceof TTCommonItem commonItem){
+            if(clazz.isAssignableFrom(commonItem.getItemBehaviour().getClass())) {
+                return true;
+            }
+        }
+        var right = player.getItemInHand(InteractionHand.MAIN_HAND);
+        if(right.getItem() instanceof TTCommonItem commonItem){
+            return clazz.isAssignableFrom(commonItem.getItemBehaviour().getClass());
         }
         return false;
     }

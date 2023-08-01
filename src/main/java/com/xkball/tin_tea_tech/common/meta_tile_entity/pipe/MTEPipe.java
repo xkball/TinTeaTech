@@ -2,10 +2,14 @@ package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.TTValue;
+import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.mte.ColorGetter;
 import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
+import com.xkball.tin_tea_tech.api.pipe.network.EmptyPipeNet;
 import com.xkball.tin_tea_tech.api.pipe.network.PipeNet;
+import com.xkball.tin_tea_tech.api.pipe.network.PipeNetImpl;
+import com.xkball.tin_tea_tech.api.pipe.network.UninitPipeNet;
 import com.xkball.tin_tea_tech.common.item.TTCommonItem;
 import com.xkball.tin_tea_tech.common.item_behaviour.TestItemBehaviour;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -14,9 +18,11 @@ import com.xkball.tin_tea_tech.utils.ColorUtils;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import com.xkball.tin_tea_tech.utils.TTUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,16 +35,23 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
 
-public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, DataProvider {
     
     protected BitSet connections = new BitSet();
     
     protected int color;
     
-    protected PipeNet belongs = null;
+    @Nonnull
+    protected PipeNet belongs;
+    
     //在客户端才有意义 在服务端应该始终是0;
     protected int collision = 0;
     //依然是客户端数据
@@ -48,12 +61,19 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     public boolean b3 = false;
     public boolean b4 = false;
     
+    @Nullable
+    private BlockPos netCenter = null;
+    
     public MTEPipe(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);
         color = defaultColor();
-        if(te != null && havePipeNet()){
-            belongs = PipeNet.create(this);
-        }
+        belongs = new EmptyPipeNet(this);
+    }
+    
+    @Override
+    public void tick() {
+        super.tick();
+        belongs.tick(getPos());
     }
     
     @Override
@@ -62,6 +82,11 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
         tag.putInt("bitsetL",connections.length());
         tag.putLong("bitset", TTUtils.longValueOfBitSet(connections));
         tag.putInt("color",color);
+        var netCenter = belongs.getCenter().getPos();
+        tag.putInt("netCenterX", netCenter.getX());
+        tag.putInt("netCenterY",netCenter.getY());
+        tag.putInt("netCenterZ",netCenter.getZ());
+        tag.put("net",belongs.save(getPos()));
     }
     
     @Override
@@ -71,7 +96,19 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
         TTUtils.forLongToBitSet(tag.getLong("bitset"),bl,connections);
         var c = tag.getInt("color");
         if(c != 0) color = c;
-        
+        if(tag.contains("netCenterX")){
+            var x = tag.getInt("netCenterX");
+            var y = tag.getInt("netCenterY");
+            var z = tag.getInt("netCenterZ");
+            netCenter = new BlockPos(x,y,z);
+        }
+    }
+    
+    @Override
+    public void onRemove() {
+        super.onRemove();
+        belongs.cut(getPos());
+        belongs = new EmptyPipeNet(this);
     }
     
     @Override
@@ -107,6 +144,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     
     public void setBelongs(PipeNet belongs) {
         this.belongs = belongs;
+        markDirty();
     }
     @Override
     public void firstTick() {
@@ -115,8 +153,12 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
             this.setConnection(TinTeaTech.lastPlace.get(pos),true,true);
             TinTeaTech.lastPlace.remove(pos);
         }
+        if(havePipeNet()){
+            belongs = new UninitPipeNet(this,netCenter == null?getPos():netCenter);
+        }
     }
     
+    //blocked = 输入端
     public boolean isBlocked(Connections connection){
         return connections.get(connection.toBID());
     }
@@ -174,6 +216,9 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     
     public void setBlocked(Connections connection){
         connections.set(connection.toBID(),!isBlocked(connection));
+        if(belongs instanceof PipeNetImpl pipeNet){
+            pipeNet.IOChanged = true;
+        }
         this.sentCustomData(TTValue.DATA_UPDATE,(b) -> {
             b.writeLong(TTUtils.longValueOfBitSet(connections));
             b.writeInt(connections.length());
@@ -190,6 +235,12 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
                     pipe.updateConnection(connection.getOpposite());
                 }
             }
+            if (isConnected(connection) && isNeighborConnected(connection)) {
+                belongs.combine(getPos(connection));
+            }
+            else {
+                belongs.checkNet(true);
+            }
             coverHandler.checkCanMaintainCover();
             this.sentCustomData(TTValue.DATA_UPDATE,(b) -> {
                 b.writeLong(TTUtils.longValueOfBitSet(connections));
@@ -202,6 +253,12 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     public void setConnection(Connections connection){
         connections.set(connection.toCID(),!isConnected(connection));
         coverHandler.checkCanMaintainCover();
+        if (isConnected(connection) && isNeighborConnected(connection)) {
+            belongs.combine(getPos(connection));
+        }
+        else {
+            belongs.checkNet(true);
+        }
         this.sentCustomData(TTValue.DATA_UPDATE,(b) -> {
             b.writeLong(TTUtils.longValueOfBitSet(connections));
             b.writeInt(connections.length());
@@ -251,6 +308,10 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
         updateConnection();
     }
     
+    public PipeNet createPipeNet(){
+        return PipeNet.create(this);
+    }
+    
     public boolean havePipeNet(){
         return false;
     }
@@ -289,18 +350,32 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     }
     
     @Nullable
-    public MTEPipe getPipeAt(Level level,BlockPos pos,boolean requireSame){
+    public MTEPipe getPipeAt(@Nullable Level level,BlockPos pos,boolean requireSame){
         if(level!=null){
             var mte = LevelUtils.getMTE(level,pos);
             if(mte instanceof MTEPipe pipe){
                 if(!requireSame) return pipe;
-                if(pipe.getName().equals(this.getName())) return pipe;
+                if(pipe.getClass().equals(this.getClass())) return pipe;
             }
         }
         return null;
     }
     
+    @Nullable
     public MTEPipe getPipeAt(Connections connections,boolean requireSame){
         return getPipeAt(getLevel(),getPos(connections),requireSame);
+    }
+    
+    @Override
+    public Collection<Component> getInfo() {
+        var result = new ArrayList<Component>();
+        if(!havePipeNet()) result.add(Component.literal("no pipe net"));
+        else {
+            result.add(Component.literal("pipe net center: "+belongs.getCenter().getPos().toString()));
+            if(belongs.getCenter().getPos() == this.getPos()){
+                result.add(Component.literal("this is the net center"));
+            }
+        }
+        return result;
     }
 }

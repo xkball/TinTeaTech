@@ -5,6 +5,7 @@ import com.xkball.tin_tea_tech.api.TTValue;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.mte.IMTEBehaviour;
 import com.xkball.tin_tea_tech.api.mte.cover.VerticalCover;
+import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
 import com.xkball.tin_tea_tech.common.cover.CoverHandler;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
@@ -23,6 +24,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +53,7 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     @OnlyIn(Dist.CLIENT)
     protected BakedModel[] models;
     protected final FinalObj<TTItemHandler> itemHandler = new FinalObj<>();
+    protected final FinalObj<IFluidHandler> fluidHandler = new FinalObj<>();
     
     protected final FinalObj<String> name = new FinalObj<>();
     
@@ -56,12 +61,16 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     
     //cap
     protected final LazyOptional<IItemHandler> itemHandlerCap;
+    protected final LazyOptional<IFluidHandler> fluidHandlerCap;
     
     
     public MetaTileEntity(@Nonnull BlockPos pos, @Nullable TTTileEntityBase te){
         this.te = te;
         this.createInventory();
-        itemHandlerCap = LazyOptional.of(this.itemHandler::get);
+        if(this.itemHandler.get() != TTEmptyHandler.INSTANCE) itemHandlerCap = LazyOptional.of(this.itemHandler::get);
+        else itemHandlerCap = LazyOptional.empty();
+        if(this.fluidHandler.get() != EmptyFluidHandler.INSTANCE) fluidHandlerCap = LazyOptional.of(fluidHandler::get);
+        else fluidHandlerCap = LazyOptional.empty();
         coverHandler = new CoverHandler(this);
         if(isClient()){
             if(te != null){
@@ -102,10 +111,14 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     }
     
     abstract protected Supplier<TTItemHandler> getItemHandlerSupplier();
+    protected Supplier<IFluidHandler> getFluidHandlerSupplier(){
+        return () -> EmptyFluidHandler.INSTANCE;
+    }
     
    
     private void createInventory(){
         this.itemHandler.set(getItemHandlerSupplier().get());
+        this.fluidHandler.set(getFluidHandlerSupplier().get());
     }
     
     @Override
@@ -155,6 +168,9 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
         if(cap == ForgeCapabilities.ITEM_HANDLER){
             return itemHandlerCap.cast();
         }
+        if(cap == ForgeCapabilities.FLUID_HANDLER){
+            return fluidHandlerCap.cast();
+        }
         return coverHandler.getCapability(cap,side);
     }
     
@@ -163,6 +179,10 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
         tag.put("ih",itemHandler.get().serializeNBT());
         tag.putBoolean("e",enabled);
         tag.put("cover",coverHandler.serializeNBT());
+        if(fluidHandler.get() instanceof FluidTank fluidTank){
+            tag.put("fh",fluidTank.writeToNBT(new CompoundTag()));
+        }
+        
     }
     
     @Override
@@ -170,6 +190,9 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
         itemHandler.get().deserializeNBT(tag.getCompound("ih"));
         enabled = tag.getBoolean("e");
         coverHandler.deserializeNBT(tag.getCompound("cover"));
+        if(fluidHandler.get() instanceof FluidTank fluidTank){
+            fluidTank.readFromNBT(tag.getCompound("fh"));
+        }
     }
     
     public boolean isClient(){

@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -46,6 +47,7 @@ public class DataGen {
             addLangKey("gui.tin_tea_tech.plugins_installed","PluginsInstalled: ","已安装插件: ");
             addLangKey("gui.tin_tea_tech.lock_inventory","LockInventory","锁定物品栏位置");
             addLangKey("gui.tin_tea_tech.display_nbt","Display NBT info on tricorder","三录仪显示NBT");
+            addLangKey("tooltip.tin_tea_tech.holo_glass_plugin","This is a holo glass plugin","可作为云钩插件");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

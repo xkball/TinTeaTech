@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.mixin;
+package com.xkball.tin_tea_tech.mixin.entity;
 
 import com.xkball.tin_tea_tech.common.player.AdditionalInventory;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
@@ -79,7 +79,7 @@ public abstract class TTMixinPlayer extends LivingEntity implements IExtendedPla
     
     @Inject(method = "getSlot",at = @At("HEAD"),cancellable = true)
     public void onGetSlot(int pSlot, CallbackInfoReturnable<SlotAccess> cir){
-        if(pSlot>10000){
+        if(pSlot>=10000){
             cir.setReturnValue(SlotAccess.forContainer(tin_tea_tech$additionalInventory,pSlot-10000));
             cir.cancel();
         }

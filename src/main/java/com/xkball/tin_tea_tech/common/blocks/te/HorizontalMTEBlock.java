@@ -37,23 +37,9 @@ public class HorizontalMTEBlock extends TTTileEntityBlock implements IRotatable 
     @OnlyIn(Dist.CLIENT)
     public void rotateBlockModel(BlockState blockState, MetaTileEntity mte, PoseStack pPoseStack) {
         switch (blockState.getValue(horizontalFacing)) {
-            case EAST -> {
-//                pPoseStack.mulPose(Axis.YN.rotationDegrees(90));
-//                pPoseStack.translate(0d, 0d, -1d);
-                pPoseStack.rotateAround(Axis.YN.rotationDegrees(90),0.5f,0.5f,0.5f);
-            }
-
-            case SOUTH-> {
-//                pPoseStack.mulPose(Axis.YN.rotationDegrees(180));
-//                pPoseStack.translate(-1d, 0d, -1d);
-                pPoseStack.rotateAround(Axis.YN.rotationDegrees(180),0.5f,0.5f,0.5f);
-                
-            }
-            case WEST -> {
-//                pPoseStack.mulPose(Axis.YP.rotationDegrees(90));
-//                pPoseStack.translate(-1d, 0d, 0d);
-                pPoseStack.rotateAround(Axis.YN.rotationDegrees(270),0.5f,0.5f,0.5f);
-            }
+            case EAST -> pPoseStack.rotateAround(Axis.YN.rotationDegrees(90),0.5f,0.5f,0.5f);
+            case SOUTH-> pPoseStack.rotateAround(Axis.YN.rotationDegrees(180),0.5f,0.5f,0.5f);
+            case WEST -> pPoseStack.rotateAround(Axis.YN.rotationDegrees(270),0.5f,0.5f,0.5f);
         }
     }
     

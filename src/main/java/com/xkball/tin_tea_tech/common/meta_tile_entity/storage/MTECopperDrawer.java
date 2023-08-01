@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.common.meta_tile_entity;
+package com.xkball.tin_tea_tech.common.meta_tile_entity.storage;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xkball.tin_tea_tech.TinTeaTech;
@@ -13,6 +13,7 @@ import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.capability.item.DrawerItemHandler;
 import com.xkball.tin_tea_tech.common.blocks.te.HorizontalMTEBlock;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.ItemUtils;
@@ -48,7 +49,7 @@ import java.util.function.Supplier;
 @AutomaticRegistration.MTE(block = HorizontalMTEBlock.class)
 @Model(resources = {"tin_tea_tech:block/copper_drawer"})
 @I18N(chinese = "铜抽屉",english = "Copper Drawer")
-public class MTECopperDrawer extends MetaTileEntity{
+public class MTECopperDrawer extends MetaTileEntity {
     
     private static final ResourceLocation MODEL = TinTeaTech.ttResource("block/copper_drawer");
     

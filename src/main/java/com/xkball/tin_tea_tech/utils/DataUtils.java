@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.FriendlyByteBuf;
 import org.apache.commons.lang3.Validate;
 
 import java.nio.charset.StandardCharsets;
@@ -41,6 +42,16 @@ public class DataUtils {
            }
        }
        return new CompoundTag();
+    }
+    
+    public static String readUTF8String(FriendlyByteBuf from) {
+        var l = from.readInt();
+        return from.readCharSequence(l,StandardCharsets.UTF_8).toString();
+    }
+    
+    public static void writeUTF8String(FriendlyByteBuf byteBuf,String value){
+        byteBuf.writeInt(value.getBytes(StandardCharsets.UTF_8).length);
+        byteBuf.writeCharSequence(value,StandardCharsets.UTF_8);
     }
     
     public static String readUTF8String(ByteBuf from)

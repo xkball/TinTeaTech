@@ -1,5 +1,6 @@
 package com.xkball.tin_tea_tech.api.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -31,7 +32,9 @@ public interface IItemBehaviour {
     }
     default void tooltip(ItemStack pStack, @Nullable Level pLevel,
                          List<Component> pTooltipComponents, TooltipFlag pIsAdvanced){
-        
+        if(this instanceof IHoloGlassPlugin){
+            pTooltipComponents.add(Component.translatable("tooltip.tin_tea_tech.holo_glass_plugin").withStyle(ChatFormatting.GRAY));
+        }
     }
     
     default  InteractionResult interactLivingEntity(ItemStack pStack, Player pPlayer, LivingEntity pInteractionTarget, InteractionHand pUsedHand){

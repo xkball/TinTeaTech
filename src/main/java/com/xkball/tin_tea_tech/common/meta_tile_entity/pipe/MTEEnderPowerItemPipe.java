@@ -2,9 +2,9 @@ package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
 import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.item.TTItemHandler;
-import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.api.pipe.network.PipeNet;
 import com.xkball.tin_tea_tech.capability.item.TTCommonItemHandler;
+import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
 import com.xkball.tin_tea_tech.common.blocks.te.PipeMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -12,7 +12,6 @@ import com.xkball.tin_tea_tech.common.pipe.net.ItemPipeNet;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.ColorUtils;
-import com.xkball.tin_tea_tech.utils.ItemUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
@@ -27,65 +26,29 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @CreativeTag(tab = TTCreativeTab.TTMachineTab.class)
 @AutomaticRegistration
 @AutomaticRegistration.MTE(block = PipeMTEBlock.class,renderer = "com.xkball.tin_tea_tech.client.render.PipeRender")
 @Model(resources = {"tin_tea_tech:block/pipe_default"})
-@I18N(chinese = "物品管道",english = "Item Pipe")
+@I18N(chinese = "末影物品管道",english = "Ender Power Item Pipe")
 @Tag.Item({"pipe"})
-public class MTEItemPipe extends MTEPipe{
-    
-    
-    protected Connections lastInput = null;
-    public MTEItemPipe(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
+public class MTEEnderPowerItemPipe extends MTEPipe{
+    public MTEEnderPowerItemPipe(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);
     }
     
     @Override
     public int defaultColor() {
-        return ColorUtils.getColor(52,131,244,255);
-    }
-    
-    @Override
-    public void tick() {
-        super.tick();
-        if(getOffsetTick()%5==0 && !itemHandler.get().isEmpty()){
-            AtomicBoolean atomicBoolean = new AtomicBoolean(false);
-            for(var c : Connections.values()){
-                //blocked=不能输出
-                if(isConnected(c) && !isBlocked(c)){
-                    if(c == lastInput) continue;
-                    var pos = getPos(c);
-                    var te = getLevel().getBlockEntity(pos);
-                    if(te != null){
-                        var cap = te.getCapability(ForgeCapabilities.ITEM_HANDLER,c.nullableToDirection());
-                        cap.ifPresent((facing) -> {
-                            var b = ItemUtils.transportItem(itemHandler.get(),facing,1);
-                            atomicBoolean.set(b);
-                        });
-                        if(atomicBoolean.get()){
-                            if(te instanceof TTTileEntityBase){
-                                var mte = ((TTTileEntityBase) te).getMte();
-                                if(mte instanceof MTEItemPipe pipe){
-                                    pipe.lastInput = c;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-            lastInput = null;
-        }
+        return ColorUtils.getColor(106,171,115,255);
     }
     
     @Override
     public MetaTileEntity newMetaTileEntity(BlockPos pos, TTTileEntityBase te) {
-        return new MTEItemPipe(pos,te);
+        return new MTEEnderPowerItemPipe(pos,te);
     }
     
     @Override
@@ -100,10 +63,36 @@ public class MTEItemPipe extends MTEPipe{
     
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ITEM_HANDLER && (side == null || isConnected(Connections.fromDirection(side)))){
-            return itemHandlerCap.cast();
+        if(cap == ForgeCapabilities.ITEM_HANDLER){
+            return LazyOptional.empty();
         }
         return super.getCapability(cap, side);
+    }
+    
+    @Override
+    public Collection<Component> getInfo() {
+        var result = new ArrayList<>(super.getInfo());
+        var b = getBelongs();
+        if(b instanceof ItemPipeNet net){
+            for(var i:net.getInputs().entrySet()){
+                result.add(Component.literal("input:"+i.getKey().toString()+" "+i.getValue().name()));
+            }
+            for(var o:net.getOutputs().entrySet()){
+                result.add(Component.literal("output:"+o.getKey().toString()+" "+o.getValue().name()));
+            }
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public PipeNet createPipeNet() {
+        return new ItemPipeNet(this);
+    }
+    
+    @Override
+    public boolean havePipeNet() {
+        return true;
     }
     
     @Override

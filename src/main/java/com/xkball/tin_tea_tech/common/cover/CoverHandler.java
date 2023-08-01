@@ -137,9 +137,7 @@ public class CoverHandler implements VerticalCover {
     }
     
     public void syncRender(){
-        mte.sentCustomData(TTValue.COVER,(b) ->{
-            b.writeInt(TTUtils.intValueOfBitSet(haveCover));
-        });
+        mte.sentCustomData(TTValue.COVER,(b) -> b.writeInt(TTUtils.intValueOfBitSet(haveCover)));
     }
     
     public void loadRenderData(ByteBuf buf){

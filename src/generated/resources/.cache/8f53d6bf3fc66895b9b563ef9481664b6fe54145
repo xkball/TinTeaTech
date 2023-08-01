@@ -1,7 +1,11 @@
-// 1.20.1	2023-07-31T00:55:39.9667342	Item Models: tin_tea_tech
+// 1.20.1	2023-08-01T20:23:47.6553187	Item Models: tin_tea_tech
 098369e3b39ba8b45bef6b450242fabb674a8ae7 assets/tin_tea_tech/models/item/bearing_indicator.json
 62dcbbb4fd6e6586e09e98548d658c1a1fe84f35 assets/tin_tea_tech/models/item/copper_drawer_item.json
 6b7e55b8c19ebd14dfa6cc93a21bd843ba7b46e5 assets/tin_tea_tech/models/item/crowbar.json
+69a581e55b83c8553cc9c176c1a7cb636f867507 assets/tin_tea_tech/models/item/damper.json
+aec22231711d685c64886ad21454dc8ae2a7ce80 assets/tin_tea_tech/models/item/ender_power_item_pipe_item.json
+84acadb986bba6cbb0da1737c28c765c1da11f16 assets/tin_tea_tech/models/item/entity_controller.json
+cc5ec8b83bae533e18e0a4166d0d7b07914987f6 assets/tin_tea_tech/models/item/fluid_tank_item.json
 1adcf4470c03dec0353a405a6b21a56f8ea28746 assets/tin_tea_tech/models/item/holo_glass.json
 e61f4ff9daf8992fb603450d371213ba399b2ae6 assets/tin_tea_tech/models/item/item_input_cover.json
 aec22231711d685c64886ad21454dc8ae2a7ce80 assets/tin_tea_tech/models/item/item_pipe_item.json

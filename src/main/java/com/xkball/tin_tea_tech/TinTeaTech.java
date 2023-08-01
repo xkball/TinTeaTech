@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.client.key.vanilla.VanillaInputHandler;

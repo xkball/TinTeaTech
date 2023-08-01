@@ -1,5 +1,7 @@
 {
   "block.tin_tea_tech.copper_drawer": "Copper Drawer",
+  "block.tin_tea_tech.ender_power_item_pipe": "Ender Power Item Pipe",
+  "block.tin_tea_tech.fluid_tank": "FluidTank",
   "block.tin_tea_tech.item_pipe": "Item Pipe",
   "block.tin_tea_tech.scaffolding_block": "Scaffolding Block",
   "block.tin_tea_tech.solid_combustion_chamber": "Solid Combustion Chamber",
@@ -17,13 +19,16 @@
   "info.tin_tea_tech.block_info": "Block Info: ",
   "info.tin_tea_tech.block_name": "Block Name: ",
   "info.tin_tea_tech.block_pos": "Block Pos: ",
+  "info.tin_tea_tech.cover_info": "Cover Info: ",
   "info.tin_tea_tech.inventory": "Machine Inventory: ",
   "info.tin_tea_tech.item": "Item: ",
-  "info.tin_tea_tech.mte_info": "MetaTileEntity Info",
+  "info.tin_tea_tech.mte_info": "MetaTileEntity Info: ",
   "info.tin_tea_tech.shot": "Shot: ",
   "info.tin_tea_tech.tick_used": "Last tick used",
   "item.tin_tea_tech.bearing_indicator": "BearingIndicator",
   "item.tin_tea_tech.crowbar": "Crowbar",
+  "item.tin_tea_tech.damper": "Damper",
+  "item.tin_tea_tech.entity_controller": "Entity Controller",
   "item.tin_tea_tech.holo_glass": "Holo Glass",
   "item.tin_tea_tech.item_input_cover": "Item Input Cover",
   "item.tin_tea_tech.player_radar": "PlayerRadar",
@@ -33,5 +38,6 @@
   "item.tin_tea_tech.wrench": "Wrench",
   "key.category.tin_tea_tech": "Tin Tea Tech",
   "key.tin_tea_tech.open_holo_glass": "Open Holo Glass",
-  "key.tin_tea_tech.print_nbt": "Print NBT"
+  "key.tin_tea_tech.print_nbt": "Print NBT",
+  "tooltip.tin_tea_tech.holo_glass_plugin": "This is a holo glass plugin"
 }
