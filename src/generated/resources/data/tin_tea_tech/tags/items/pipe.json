@@ -2,8 +2,12 @@
   "values": [
     "tin_tea_tech:tricorder",
     "tin_tea_tech:wrench",
+    "tin_tea_tech:ender_power_fluid_pipe_item",
     "tin_tea_tech:ender_power_item_pipe_item",
+    "tin_tea_tech:fe_energy_pipe_item",
+    "tin_tea_tech:fluid_pipe_item",
     "tin_tea_tech:item_pipe_item",
+    "tin_tea_tech:steam_pipe_item",
     "tin_tea_tech:test_pipe_item"
   ]
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "tin_tea_tech:item/item_input_cover"
+  }
+}

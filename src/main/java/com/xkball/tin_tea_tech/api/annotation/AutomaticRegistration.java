@@ -17,6 +17,8 @@ public @interface AutomaticRegistration {
     boolean singleton() default true;
     
     boolean needDataGenModel() default false;
+    boolean needSpecialName() default false;
+    String name() default "";
     
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)

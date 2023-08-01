@@ -86,7 +86,6 @@ public class PipeMTEBlock extends TTTileEntityBlock{
     }
     
     @Override
-    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return _getShape(pState,pLevel,pPos,pContext,shape);
     }

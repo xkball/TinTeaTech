@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -34,9 +33,18 @@ public class DataGen {
             addLangKey("info.tin_tea_tech.block_info","Block Info: ","方块信息: ");
             addLangKey("info.tin_tea_tech.mte_info","MetaTileEntity Info: ","MTE信息: ");
             addLangKey("info.tin_tea_tech.cover_info","Cover Info: ","覆盖版信息: ");
-            addLangKey("info.tin_tea_tech.inventory","Machine Inventory: ","机器内部存储: ");
-            addLangKey("info.tin_tea_tech.shot","Shot: ","槽位: ");
+            addLangKey("info.tin_tea_tech.inventory","Machine Inventory: ","机器内部物品存储: ");
+            addLangKey("info.tin_tea_tech.fluids","Machine Fluid Storage: ","机器内部流体存储: ");
+            addLangKey("info.tin_tea_tech.fe","Machine FE Storage: ","机器内部FE存储: ");
+            addLangKey("info.tin_tea_tech.steam","Machine Steam Storage: ","机器内部蒸汽存储: ");
+            addLangKey("info.tin_tea_tech.pressure","Pressure: ","压强: ");
+            addLangKey("info.tin_tea_tech.volume","Volume: ","体积: ");
+            addLangKey("info.tin_tea_tech.storage","Storage: ","已存储: ");
+            addLangKey("info.tin_tea_tech.max_storage","Max Storage: ","最大存储: ");
+            addLangKey("info.tin_tea_tech.storage_percent","Percent","百分比: ");
+            addLangKey("info.tin_tea_tech.slot","Slot: ","槽位: ");
             addLangKey("info.tin_tea_tech.item","Item: ","物品: ");
+            addLangKey("info.tin_tea_tech.fluid","Fluid: ","流体: ");
             addLangKey("key.tin_tea_tech.open_holo_glass", "Open Holo Glass","打开云钩");
             addLangKey("key.tin_tea_tech.print_nbt","Print NBT","显示NBT");
             addLangKey("key.category.tin_tea_tech",TinTeaTech.MOD_NAME, TinTeaTech.MOD_NAME_CHINESE);
@@ -48,6 +56,7 @@ public class DataGen {
             addLangKey("gui.tin_tea_tech.lock_inventory","LockInventory","锁定物品栏位置");
             addLangKey("gui.tin_tea_tech.display_nbt","Display NBT info on tricorder","三录仪显示NBT");
             addLangKey("tooltip.tin_tea_tech.holo_glass_plugin","This is a holo glass plugin","可作为云钩插件");
+            addLangKey("tooltip.tin_tea_tech.not_ti","Definitely Not Titanium !","绝对不是钛制!");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

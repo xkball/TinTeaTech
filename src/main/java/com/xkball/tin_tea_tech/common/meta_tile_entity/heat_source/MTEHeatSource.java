@@ -1,7 +1,7 @@
 package com.xkball.tin_tea_tech.common.meta_tile_entity.heat_source;
 
 import com.xkball.tin_tea_tech.api.TTValue;
-import com.xkball.tin_tea_tech.api.heat.IHeatSource;
+import com.xkball.tin_tea_tech.api.capability.heat.IHeatSource;
 import com.xkball.tin_tea_tech.capability.TTCapability;
 import com.xkball.tin_tea_tech.capability.heat.HeatHandler;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;

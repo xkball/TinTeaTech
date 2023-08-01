@@ -1,6 +1,6 @@
 package com.xkball.tin_tea_tech.capability.heat;
 
-import com.xkball.tin_tea_tech.api.heat.IHeatSource;
+import com.xkball.tin_tea_tech.api.capability.heat.IHeatSource;
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Objects;

@@ -19,7 +19,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.SoundAction;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
@@ -214,12 +213,12 @@ public class LevelUtils {
                     
                 }));
                 if(flag.get()){
-                    item.shrink(1);
+                    if(!player.isCreative()) item.shrink(1);
                     var resultItem = new ItemStack(Items.BUCKET,1);
 //                    if(!player.getInventory().add(resultItem)){
 //                        player.drop(resultItem,false);
 //                    }
-                    dropItem(level,pos,resultItem);
+                    dropItem(player,level,pos,resultItem);
                 }
                 return flag.get();
             }
@@ -237,7 +236,7 @@ public class LevelUtils {
                     if(stimulate.getAmount() == 1000){
                         var result = cap.drain(1000, IFluidHandler.FluidAction.EXECUTE);
                         var resultItem = new ItemStack(result.getFluid().getBucket(),1);
-                        bucket.shrink(1);
+                        if(!player.isCreative()) bucket.shrink(1);
                         SoundEvent soundevent = result.getFluid().getFluidType().getSound(SoundActions.BUCKET_FILL);
                         if (soundevent != null) {
                             player.level().playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), soundevent, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -245,7 +244,7 @@ public class LevelUtils {
 //                        if(!player.getInventory().add(resultItem)){
 //                            player.drop(resultItem,false);
 //                        }
-                        dropItem(level,pos,resultItem);
+                        dropItem(player,level,pos,resultItem);
                         return true;
                     }
                 }

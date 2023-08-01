@@ -1,14 +1,12 @@
 package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
 import com.xkball.tin_tea_tech.api.annotation.*;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.capability.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
-import com.xkball.tin_tea_tech.api.pipe.network.PipeNet;
 import com.xkball.tin_tea_tech.capability.item.TTCommonItemHandler;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
 import com.xkball.tin_tea_tech.common.blocks.te.PipeMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
-import com.xkball.tin_tea_tech.common.pipe.net.ItemPipeNet;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.ColorUtils;
@@ -17,7 +15,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,8 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 @ParametersAreNonnullByDefault

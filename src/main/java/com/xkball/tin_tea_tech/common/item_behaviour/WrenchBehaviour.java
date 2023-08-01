@@ -46,6 +46,12 @@ public class WrenchBehaviour implements IItemBehaviour {
                 } else if (hitFacing == RelativeFacing.self) {
                     bs.rotate(level,pos,Rotation.CLOCKWISE_90);
                 }
+                var item = pContext.getItemInHand();
+                var tag = item.getOrCreateTag();
+                tag.putInt("x",pos.getX());
+                tag.putInt("y",pos.getY());
+                tag.putInt("z",pos.getZ());
+                item.setTag(tag);
             }
 //            else {
 ////                player.sendSystemMessage(Component.literal(hitFacing.toString()));

@@ -7,7 +7,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -35,6 +38,65 @@ public class ItemUtils {
     public static Item fromString(String s){
         var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s));
         return item==null? Items.AIR:item;
+    }
+    
+    public static boolean transportFluid(IFluidHandler from,IFluidHandler to,int maxAmount){
+        if(maxAmount==0) return false;
+        var exd = 0;
+        for(int i=0;i<from.getTanks();i++){
+            maxAmount = maxAmount-exd;
+            var canEx = from.drain(maxAmount, IFluidHandler.FluidAction.SIMULATE);
+            for(int j=0;j<to.getTanks();j++){
+                var notIn = canEx.getAmount()-to.fill(canEx, IFluidHandler.FluidAction.SIMULATE);
+                if(notIn==0){
+                    var ex = from.drain(canEx, IFluidHandler.FluidAction.EXECUTE);
+                    to.fill(ex, IFluidHandler.FluidAction.EXECUTE);
+                    exd+=ex.getAmount();
+                    break;
+                }
+                else {
+                    var exCount = canEx.getAmount()-notIn;
+                    if(exCount>0){
+                        var ex = from.drain(exCount, IFluidHandler.FluidAction.EXECUTE);
+                        to.fill(ex, IFluidHandler.FluidAction.EXECUTE);
+                        exd+=ex.getAmount();
+                        break;
+                    }
+                }
+            }
+            if(exd>=maxAmount) return true;
+        }
+        return false;
+    }
+    
+    public static int transportFluidWithCount(IFluidHandler from,IFluidHandler to,int maxAmount){
+        if(maxAmount==0) return 0;
+        var exd = 0;
+        var maxRaw = maxAmount;
+        for(int i=0;i<from.getTanks();i++){
+            maxAmount = maxAmount-exd;
+            var canEx = from.drain(maxAmount, IFluidHandler.FluidAction.SIMULATE);
+            for(int j=0;j<to.getTanks();j++){
+                var notIn = canEx.getAmount()-to.fill(canEx, IFluidHandler.FluidAction.SIMULATE);
+                if(notIn==0){
+                    var ex = from.drain(canEx, IFluidHandler.FluidAction.EXECUTE);
+                    to.fill(ex, IFluidHandler.FluidAction.EXECUTE);
+                    exd+=ex.getAmount();
+                    break;
+                }
+                else {
+                    var exCount = canEx.getAmount()-notIn;
+                    if(exCount>0){
+                        var ex = from.drain(exCount, IFluidHandler.FluidAction.EXECUTE);
+                        to.fill(ex, IFluidHandler.FluidAction.EXECUTE);
+                        exd+=ex.getAmount();
+                        break;
+                    }
+                }
+            }
+            if(exd>=maxRaw) return 0;
+        }
+        return maxAmount;
     }
     
     public static boolean transportItem(IItemHandler from,IItemHandler to,int maxStackSize){
@@ -103,5 +165,21 @@ public class ItemUtils {
             return clazz.isAssignableFrom(commonItem.getItemBehaviour().getClass());
         }
         return false;
+    }
+    public static boolean itemIs(ItemStack stack,Class<? extends IItemBehaviour> clazz){
+        if(stack.getItem() instanceof TTCommonItem commonItem){
+            return clazz.isAssignableFrom(commonItem.getItemBehaviour().getClass());
+        }
+        return false;
+    }
+    
+    @SuppressWarnings("UnusedReturnValue")
+    public static int transportFE(IEnergyStorage from, IEnergyStorage to){
+        var max = to.getMaxEnergyStored()-to.getEnergyStored();
+        if(max == 0) return 0;
+        var ex = from.extractEnergy(max,true);
+        ex = to.receiveEnergy(ex,true);
+        from.extractEnergy(ex,false);
+        return to.receiveEnergy(ex,false);
     }
 }

@@ -8,7 +8,6 @@ import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.client.shape.*;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
@@ -65,7 +64,9 @@ public class RenderUtil {
                         .setLightmapState(LIGHTMAP)
                         .setShaderState(POSITION_COLOR_TEX_LIGHTMAP_SHADER)
                         .setTextureState(BLOCK_SHEET_MIPPED)
+                        //.setDepthTestState(NO_DEPTH_TEST)
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setCullState(NO_CULL)
                         .createCompositeState(false));
         
         public FluidRenderType(String pName, VertexFormat pFormat, VertexFormat.Mode pMode, int pBufferSize, boolean pAffectsCrumbling, boolean pSortOnUpload, Runnable pSetupState, Runnable pClearState) {

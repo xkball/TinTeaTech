@@ -8,7 +8,7 @@ import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.api.facing.FacingType;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.capability.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.mte.cover.Cover;
 import com.xkball.tin_tea_tech.capability.item.DrawerItemHandler;
 import com.xkball.tin_tea_tech.common.blocks.te.HorizontalMTEBlock;

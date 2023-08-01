@@ -54,6 +54,7 @@ public class PipeNetImpl implements PipeNet{
     }
     
     public void firstTick(){
+        load(getCenter().getToLoadNet());
         checkNet(true);
     }
     
@@ -195,7 +196,7 @@ public class PipeNetImpl implements PipeNet{
     }
     
     @Override
-    public CompoundTag save(BlockPos pos) {
+    public final CompoundTag save(BlockPos pos) {
         if(pos != center) return new CompoundTag();
         return _save();
     }

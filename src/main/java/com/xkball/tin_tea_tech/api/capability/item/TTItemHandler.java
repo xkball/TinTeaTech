@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.api.item;
+package com.xkball.tin_tea_tech.api.capability.item;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;

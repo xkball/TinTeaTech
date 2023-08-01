@@ -3,7 +3,6 @@ package com.xkball.tin_tea_tech.network.packet;
 import com.xkball.tin_tea_tech.api.network.ITTPacket;
 import com.xkball.tin_tea_tech.utils.DataUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 

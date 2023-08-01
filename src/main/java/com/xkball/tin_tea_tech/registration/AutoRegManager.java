@@ -381,23 +381,24 @@ public class AutoRegManager {
     private static RegistryObject<Item> genItemBlock(String name,Class<?> clazz,String blockKey){
         return TTRegistration.ITEMS.register(name,
                 () -> {
-                    if(clazz == BlockItem.class){
+                    if(clazz.equals(BlockItem.class)){
                         try {
                             var constructor = clazz.getDeclaredConstructor(Block.class,Item.Properties.class);
                             //noinspection RedundantCast
-                            constructor.newInstance((Block)getRegistryObject(blockKey).get(),TTRegistration.getItemProperty());
+                            return (Item) constructor.newInstance((Block)getRegistryObject(blockKey).get(),TTRegistration.getItemProperty());
                         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
                                  InvocationTargetException e){
                             throw new RuntimeException(e);
                         }
                     }
-                    try {
-                        return  (Item) clazz.getDeclaredConstructor().newInstance();
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                             NoSuchMethodException e) {
-                        throw new RuntimeException(e);
+                    else {
+                        try {
+                            return  (Item) clazz.getDeclaredConstructor().newInstance();
+                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                                 NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                    
                 }
         );
     }
@@ -422,6 +423,9 @@ public class AutoRegManager {
     }
     
     public static String fromClassName(Class<?> clazz){
+        if(clazz.isAnnotationPresent(AutomaticRegistration.class) && clazz.getAnnotation(AutomaticRegistration.class).needSpecialName()){
+            return clazz.getAnnotation(AutomaticRegistration.class).name();
+        }
         return fromClassName(clazz.getSimpleName());
     }
     

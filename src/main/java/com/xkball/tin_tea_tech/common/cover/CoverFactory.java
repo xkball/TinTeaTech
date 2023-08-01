@@ -10,6 +10,9 @@ public class CoverFactory {
         if(type == 1){
             return new ItemInputCover(mte,direction);
         }
+        if(type == 2){
+            return new FluidInputCover(mte,direction);
+        }
         throw new RuntimeException("not support cover type");
     }
 }

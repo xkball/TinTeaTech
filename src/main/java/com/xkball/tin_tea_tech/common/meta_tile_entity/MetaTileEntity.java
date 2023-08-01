@@ -2,7 +2,7 @@ package com.xkball.tin_tea_tech.common.meta_tile_entity;
 
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.TTValue;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.capability.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.mte.IMTEBehaviour;
 import com.xkball.tin_tea_tech.api.mte.cover.VerticalCover;
 import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
@@ -24,6 +24,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.EmptyEnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -54,6 +56,7 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     protected BakedModel[] models;
     protected final FinalObj<TTItemHandler> itemHandler = new FinalObj<>();
     protected final FinalObj<IFluidHandler> fluidHandler = new FinalObj<>();
+    protected final FinalObj<IEnergyStorage> feEnergyHandler = new FinalObj<>();
     
     protected final FinalObj<String> name = new FinalObj<>();
     
@@ -62,15 +65,20 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
     //cap
     protected final LazyOptional<IItemHandler> itemHandlerCap;
     protected final LazyOptional<IFluidHandler> fluidHandlerCap;
+    protected final LazyOptional<IEnergyStorage> feEnergyHandlerCap;
     
     
     public MetaTileEntity(@Nonnull BlockPos pos, @Nullable TTTileEntityBase te){
         this.te = te;
         this.createInventory();
+        
         if(this.itemHandler.get() != TTEmptyHandler.INSTANCE) itemHandlerCap = LazyOptional.of(this.itemHandler::get);
         else itemHandlerCap = LazyOptional.empty();
         if(this.fluidHandler.get() != EmptyFluidHandler.INSTANCE) fluidHandlerCap = LazyOptional.of(fluidHandler::get);
         else fluidHandlerCap = LazyOptional.empty();
+        if(this.feEnergyHandler.get() != EmptyEnergyStorage.INSTANCE) feEnergyHandlerCap = LazyOptional.of(feEnergyHandler::get);
+        else feEnergyHandlerCap = LazyOptional.empty();
+        
         coverHandler = new CoverHandler(this);
         if(isClient()){
             if(te != null){
@@ -110,15 +118,21 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
         return name.get();
     }
     
-    abstract protected Supplier<TTItemHandler> getItemHandlerSupplier();
+    protected Supplier<TTItemHandler> getItemHandlerSupplier(){
+        return TTEmptyHandler.get;
+    }
     protected Supplier<IFluidHandler> getFluidHandlerSupplier(){
         return () -> EmptyFluidHandler.INSTANCE;
     }
+    protected Supplier<IEnergyStorage> getEnergyHandlerSupplier(){
+        return () -> EmptyEnergyStorage.INSTANCE;
+    }
     
    
-    private void createInventory(){
+    public void createInventory(){
         this.itemHandler.set(getItemHandlerSupplier().get());
         this.fluidHandler.set(getFluidHandlerSupplier().get());
+        this.feEnergyHandler.set(getEnergyHandlerSupplier().get());
     }
     
     @Override
@@ -170,6 +184,9 @@ public abstract class MetaTileEntity implements IMTEBehaviour {
         }
         if(cap == ForgeCapabilities.FLUID_HANDLER){
             return fluidHandlerCap.cast();
+        }
+        if(cap == ForgeCapabilities.ENERGY){
+            return feEnergyHandlerCap.cast();
         }
         return coverHandler.getCapability(cap,side);
     }

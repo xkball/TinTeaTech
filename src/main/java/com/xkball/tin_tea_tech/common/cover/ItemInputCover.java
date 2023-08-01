@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech.common.cover;
 
-import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;

@@ -1,6 +1,6 @@
 package com.xkball.tin_tea_tech.capability.item;
 
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.capability.item.TTItemHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

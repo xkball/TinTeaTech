@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.api.heat;
+package com.xkball.tin_tea_tech.api.capability.heat;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;

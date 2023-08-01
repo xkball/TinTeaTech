@@ -2,7 +2,7 @@ package com.xkball.tin_tea_tech.capability.item;
 
 import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.TinTeaTech;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
+import com.xkball.tin_tea_tech.api.capability.item.TTItemHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;

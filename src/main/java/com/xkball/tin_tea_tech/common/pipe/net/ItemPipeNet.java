@@ -41,7 +41,7 @@ public class ItemPipeNet extends PipeNetImpl {
                 return LazyOptional.empty();
             }).filter(LazyOptional::isPresent).map((o) -> o.orElseThrow(TTUtils.exceptionSupplier)).toArray(IItemHandler[]::new);
             
-            int max = size()/3;
+            int max = Math.max(size()/3,1);
             for(var o : output){
                 for(var i : input){
                     max = ItemUtils.transportItemWithCount(i,o,max);

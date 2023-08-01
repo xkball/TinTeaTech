@@ -35,6 +35,12 @@ public class ModelProvider extends ItemModelProvider {
                     break;
                 }
             }
+//            else if(MetaTileEntity.class.isAssignableFrom(clazz) && clazz.isAnnotationPresent(Model.class)){
+//                for(var rl : clazz.getAnnotation(Model.class).resources()){
+//
+//                    break;
+//                }
+//            }
         }
         
     }

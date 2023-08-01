@@ -4,6 +4,7 @@ import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.data.DataProvider;
 import com.xkball.tin_tea_tech.api.item.IHoloGlassPlugin;
 import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
+import com.xkball.tin_tea_tech.capability.TTCapability;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
@@ -61,6 +62,42 @@ public class TricorderBehaviour implements IItemBehaviour, IHoloGlassPlugin {
                                         .append(Component.literal(itemHandler.getStackInSlot(i).toString())));
                             }
                         }
+                    }
+            );
+            te.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(
+                    (fluidHandler) ->{
+                        if(fluidHandler.getTanks() != 0){
+                            info.add(DataProvider.crossLine());
+                            info.add(DataProvider.translatable("fluids").withStyle(ChatFormatting.BOLD));
+                            for(int i=0;i<fluidHandler.getTanks();i++){
+                                info.add(DataProvider.translatable("slot")
+                                        .append(Component.literal(i+" "))
+                                        .append(DataProvider.translatable("fluid"))
+                                        .append(Component.literal(
+                                                        fluidHandler.getFluidInTank(i).getFluid().getFluidType() +" "+fluidHandler.getFluidInTank(i).getAmount())));
+                            }
+                        }
+                    }
+            );
+            te.getCapability(ForgeCapabilities.ENERGY).ifPresent(
+                    (energyHandler) ->{
+                        info.add(DataProvider.crossLine());
+                        info.add(DataProvider.translatable("fe").withStyle(ChatFormatting.BOLD));
+                        info.add(DataProvider.translatable("storage")
+                                .append(Component.literal(energyHandler.getEnergyStored()+" "))
+                                .append(DataProvider.translatable("max_storage"))
+                                .append(Component.literal(String.valueOf(energyHandler.getMaxEnergyStored()))));
+                        info.add(DataProvider.translatable("storage_percent").append(Component.literal(((double)energyHandler.getEnergyStored()/(double)energyHandler.getMaxEnergyStored())*100+"%")));
+                    }
+            );
+            te.getCapability(TTCapability.STEAM).ifPresent(
+                    (steamHandler) -> {
+                        info.add(DataProvider.crossLine());
+                        info.add(DataProvider.translatable("steam").withStyle(ChatFormatting.BOLD));
+                        info.add(DataProvider.translatable("pressure")
+                                .append(Component.literal(steamHandler.getPressure()+" kPa")));
+                        info.add(DataProvider.translatable("volume")
+                                .append(Component.literal(steamHandler.getVolume()+" L")));
                     }
             );
         }

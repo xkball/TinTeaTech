@@ -7,9 +7,7 @@ import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
 import com.xkball.tin_tea_tech.api.annotation.I18N;
 import com.xkball.tin_tea_tech.api.annotation.Model;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
 import com.xkball.tin_tea_tech.api.mte.cover.Cover;
-import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
 import com.xkball.tin_tea_tech.client.shape.Box3D;
 import com.xkball.tin_tea_tech.client.shape.Point3D;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -60,11 +58,13 @@ public class MTEFluidTank extends MetaTileEntity {
     
     private static final ResourceLocation MODEL = TinTeaTech.ttResource("block/fluid_tank");
     private static final VoxelShape SHAPE = Block.box(2,0,2,14,16,14);
-    private static final Point3D startPoint = new Point3D((1d/16d)*3,0,(1d/16d)*3);
+    private static final Point3D startPoint = new Point3D((1d/16d)*3,0.009,(1d/16d)*3);
+    
+    private static final Direction[] directions = new Direction[]{Direction.SOUTH,Direction.NORTH,Direction.EAST,Direction.WEST,Direction.DOWN,Direction.UP};
     
     //for render
-    private int filled = 0;
-    private String fluidName = "";
+    protected int filled = 0;
+    protected String fluidName = "";
     
     public MTEFluidTank(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);
@@ -97,11 +97,13 @@ public class MTEFluidTank extends MetaTileEntity {
                 var b = new Box3D(startPoint,new Point3D((1d/16d)*13,h,(1d/16d)*13));
                 var l = RenderUtil.getLight(this);
                 var buff = pBufferSource.getBuffer(RenderUtil.FluidRenderType.FLUID);
-                for(var d : Direction.values()){
+                
+                for(var d : directions){
                     pPoseStack.pushPose();
                     RenderUtil.renderFace(pPoseStack.last().pose(),pPoseStack.last().normal(),buff,p.getTintColor(),l,b.toRender(d),d,texture);
                     pPoseStack.popPose();
                 }
+                
             }
         }
     }
@@ -140,10 +142,6 @@ public class MTEFluidTank extends MetaTileEntity {
         return new MTEFluidTank(pos,te);
     }
     
-    @Override
-    protected Supplier<TTItemHandler> getItemHandlerSupplier() {
-        return () -> TTEmptyHandler.INSTANCE;
-    }
     
     @Override
     @OnlyIn(Dist.CLIENT)
@@ -165,9 +163,10 @@ public class MTEFluidTank extends MetaTileEntity {
     }
     
     @Override
+    @OnlyIn(Dist.CLIENT)
     protected Supplier<BakedModel[]> getModels() {
         return () -> new BakedModel[]{
-                //getModel(MODEL)
+                getModel(MODEL)
         };
     }
 }

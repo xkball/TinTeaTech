@@ -10,7 +10,6 @@ import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.network.packet.KeyPressToServerPacket;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +28,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class VanillaInputHandler {
@@ -48,7 +46,11 @@ public class VanillaInputHandler {
             GLFW.GLFW_KEY_C,
             "key.category." + TinTeaTech.MODID);
     
-    private static final Collection<KeyMapping> moveKeys = List.of(Minecraft.getInstance().options.keyUp,Minecraft.getInstance().options.keyDown,Minecraft.getInstance().options.keyLeft,Minecraft.getInstance().options.keyRight);
+    public static class KeyContainer{
+        private static final Collection<KeyMapping> moveKeys = List.of(Minecraft.getInstance().options.keyUp,Minecraft.getInstance().options.keyDown,Minecraft.getInstance().options.keyLeft,Minecraft.getInstance().options.keyRight);
+        
+    }
+   
     @SubscribeEvent
     public static void onKeyboardInput(InputEvent.Key event) {
         var player = Minecraft.getInstance().player;
@@ -90,7 +92,7 @@ public class VanillaInputHandler {
             }
             var action = event.getAction();
             if(action == 0 && player.getPose() != Pose.FALL_FLYING
-                    && PlayerData.get().modeAvailable(4) && moveKeys.stream().noneMatch(KeyMapping::isDown)){
+                    && PlayerData.get().modeAvailable(4) && KeyContainer.moveKeys.stream().noneMatch(KeyMapping::isDown)){
                 var options = Minecraft.getInstance().options;
                 var key = event.getKey();
                 var sc = event.getScanCode();

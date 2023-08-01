@@ -1,8 +1,6 @@
 package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
 import com.xkball.tin_tea_tech.api.annotation.*;
-import com.xkball.tin_tea_tech.api.item.TTItemHandler;
-import com.xkball.tin_tea_tech.capability.item.TTEmptyHandler;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
 import com.xkball.tin_tea_tech.common.blocks.te.PipeMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -17,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -35,11 +32,6 @@ public class MTETestPipe extends MTEPipe{
     @Override
     public MetaTileEntity newMetaTileEntity(BlockPos pos, TTTileEntityBase te) {
         return new MTETestPipe(pos,te);
-    }
-    
-    @Override
-    protected Supplier<TTItemHandler> getItemHandlerSupplier() {
-        return ()-> TTEmptyHandler.INSTANCE;
     }
     
     @Override

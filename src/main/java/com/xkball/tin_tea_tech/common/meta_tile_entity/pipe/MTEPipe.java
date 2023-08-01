@@ -11,10 +11,12 @@ import com.xkball.tin_tea_tech.api.pipe.network.PipeNet;
 import com.xkball.tin_tea_tech.api.pipe.network.PipeNetImpl;
 import com.xkball.tin_tea_tech.api.pipe.network.UninitPipeNet;
 import com.xkball.tin_tea_tech.common.item.TTCommonItem;
+import com.xkball.tin_tea_tech.common.item_behaviour.ColorApplicatorBehaviour;
 import com.xkball.tin_tea_tech.common.item_behaviour.TestItemBehaviour;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.utils.ColorUtils;
+import com.xkball.tin_tea_tech.utils.ItemUtils;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import com.xkball.tin_tea_tech.utils.TTUtils;
 import io.netty.buffer.ByteBuf;
@@ -63,6 +65,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
     
     @Nullable
     private BlockPos netCenter = null;
+    private CompoundTag toLoadNet = new CompoundTag();
     
     public MTEPipe(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);
@@ -102,6 +105,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
             var z = tag.getInt("netCenterZ");
             netCenter = new BlockPos(x,y,z);
         }
+        toLoadNet = tag.getCompound("net");
     }
     
     @Override
@@ -184,6 +188,12 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
             var con = LevelUtils.useConnection(pHit);
             setConnection(con);
             return InteractionResult.SUCCESS;
+        }
+        else if(ItemUtils.itemIs(pPlayer.getItemInHand(pHand), ColorApplicatorBehaviour.class)){
+            var tag = pPlayer.getItemInHand(pHand).getOrCreateTag();
+            if(tag.contains("color")){
+                setColor(tag.getInt("color"));
+            }
         }
         return InteractionResult.PASS;
     }
@@ -347,6 +357,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
     
     public void setColor(int color) {
         this.color = color;
+        this.sentCustomData(TTValue.COLOR,(b) -> b.writeInt(color));
     }
     
     @Nullable
@@ -377,5 +388,9 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
             }
         }
         return result;
+    }
+    
+    public CompoundTag getToLoadNet() {
+        return toLoadNet;
     }
 }
