@@ -3,10 +3,7 @@ package com.xkball.tin_tea_tech.mixin.entity;
 import com.xkball.tin_tea_tech.common.player.AdditionalInventory;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
-import com.xkball.tin_tea_tech.network.TTNetworkHandler;
-import com.xkball.tin_tea_tech.network.packet.SyncGUIDataPacket;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,9 +33,6 @@ public abstract class TTMixinPlayer extends LivingEntity implements IExtendedPla
     @Unique
     public final PlayerData tin_tea_tech$playerData = new PlayerData();
     
-    //仅服务端用到
-    @Unique
-    private boolean tin_tea_tech$needUpdate = true;
     
     protected TTMixinPlayer(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -82,26 +76,6 @@ public abstract class TTMixinPlayer extends LivingEntity implements IExtendedPla
         if(pSlot>=10000){
             cir.setReturnValue(SlotAccess.forContainer(tin_tea_tech$additionalInventory,pSlot-10000));
             cir.cancel();
-        }
-    }
-    
-    @Inject(method = "tick",at = @At("HEAD"))
-    public void onTick(CallbackInfo ci){
-        if(tin_tea_tech$needUpdate){
-            if(!this.level().isClientSide){
-                tin_tea_tech$playerData.hgPluginMap.clear();
-                var i1 = getHeadItem();
-                tin_tea_tech$playerData.loadHGPDataFromItem(i1);
-                var i2 = getItemBySlot(EquipmentSlot.HEAD);
-                tin_tea_tech$playerData.loadHGPDataFromItem(i2);
-                //noinspection DataFlowIssue
-                TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(tin_tea_tech$playerData),
-                        (ServerPlayer)(Object)this);
-                //noinspection DataFlowIssue
-                TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(0,tin_tea_tech$additionalInventory.getItem(0)),
-                        (ServerPlayer)(Object)this);
-            }
-            tin_tea_tech$needUpdate = false;
         }
     }
     

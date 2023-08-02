@@ -1,8 +1,12 @@
 package com.xkball.tin_tea_tech.utils;
 
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.NonNullSupplier;
+import net.minecraftforge.fml.DistExecutor;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.BitSet;
 import java.util.Map;
@@ -82,4 +86,13 @@ public class TTUtils {
         var b = Math.abs(target);
         return sign>0?b:-b;
     }
+    
+    @Nullable
+    public static Player getPlayer(){
+        return DistExecutor.safeCallWhenOn(Dist.CLIENT,() -> Helper::getLocalPlayer);
+    }
+    
+    
+  
+    
  }

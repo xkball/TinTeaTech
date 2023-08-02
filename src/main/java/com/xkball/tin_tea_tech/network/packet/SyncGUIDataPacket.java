@@ -2,7 +2,7 @@ package com.xkball.tin_tea_tech.network.packet;
 
 import com.xkball.tin_tea_tech.api.network.ITTPacket;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
-import net.minecraft.client.Minecraft;
+import com.xkball.tin_tea_tech.utils.TTUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,7 +16,10 @@ import java.util.function.Supplier;
 
 public class SyncGUIDataPacket implements ITTPacket {
     
-    private final Type type;
+    
+    //private static HandlePacket handler = new HandlePacket();
+    
+    final Type type;
     private final CompoundTag data;
     
     private Object[] typeData = new Object[1];
@@ -63,16 +66,8 @@ public class SyncGUIDataPacket implements ITTPacket {
     @Override
     public void handle(Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(
-                () -> {
-                    if(context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT){
-                        type.handle.accept(Minecraft.getInstance().player,this);
-                        return;
-                    }
-                    var player = context.get().getSender();
-                    if(player != null){
-                        type.handle.accept(player,this);
-                    }
-                }
+                () -> HandlePacket.handle(context.get(),this)
+                
         );
         context.get().setPacketHandled(true);
     }
@@ -120,4 +115,19 @@ public class SyncGUIDataPacket implements ITTPacket {
             return NULL;
         }
     }
+    
+    public static class HandlePacket {
+        public static void handle(NetworkEvent.Context context, SyncGUIDataPacket packet) {
+                if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                    packet.type.handle.accept(TTUtils.getPlayer(), packet);
+                    return;
+                }
+                var player = context.getSender();
+                if (player != null) {
+                    packet.type.handle.accept(player, packet);
+                }
+        }
+        
+    }
 }
+

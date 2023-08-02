@@ -6,6 +6,7 @@
   "mixins": [
     "TTMixinFlintAndSteel",
     "TTMixinInventoryMenu",
+    "TTMixinServerPlayer",
     "TTMixinUseOnContext",
     "entity.TTMixinLivingEntity",
     "entity.TTMixinMob",

@@ -12,6 +12,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -103,6 +105,7 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         return ((IExtendedPlayer)player).getPlayerData();
     }
     
+    @OnlyIn(Dist.CLIENT)
     public static PlayerData get(){
         return get(Minecraft.getInstance().player);
     }
