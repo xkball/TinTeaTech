@@ -4,11 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.xkball.tin_tea_tech.common.blocks.te.TTTileEntityBlock;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
 
@@ -23,7 +21,7 @@ public class DefaultMTERender implements BlockEntityRenderer<TTTileEntityBase> {
         var blockState = pBlockEntity.getBlockState();
         var level = mte.getLevel();
         if(level != null){
-            var light = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, mte.getPos().above()), level.getBrightness(LightLayer.SKY, mte.getPos().above()));
+            var light = mte.getLight();
             for(var model : mte.needToRender()){
                 pPoseStack.pushPose();
                 //旋转|预处理

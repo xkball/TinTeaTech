@@ -115,22 +115,22 @@ public class PipeRender implements BlockEntityRenderer<TTTileEntityBase> {
                 var buffer3 = pBuffer.getBuffer(RenderType.cutout());
                 if(b1){
                     for(var vc:Connections.verticalConnections){
-                        if(mte.isBlocked(vc)) renderVerticalConnection(vc,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
+                        if(mte.isBlocked(vc) && mte.isConnected(vc)) renderVerticalConnection(vc,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
                     }
                 }
                 if(b2){
                     for(var vc:Connections.XRoundConnections){
-                        if(mte.isBlocked(vc)) renderCommonConnection(vc, Direction.Axis.X,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
+                        if(mte.isBlocked(vc) && mte.isConnected(vc)) renderCommonConnection(vc, Direction.Axis.X,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
                     }
                 }
                 if(b3){
                     for(var vc:Connections.YRoundConnections){
-                        if(mte.isBlocked(vc)) renderCommonConnection(vc, Direction.Axis.Y,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
+                        if(mte.isBlocked(vc) && mte.isConnected(vc)) renderCommonConnection(vc, Direction.Axis.Y,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
                     }
                 }
                 if(b4){
                     for(var vc:Connections.ZRoundConnections){
-                        if(mte.isBlocked(vc)) renderCommonConnection(vc, Direction.Axis.Z,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
+                        if(mte.isBlocked(vc) && mte.isConnected(vc)) renderCommonConnection(vc, Direction.Axis.Z,pPoseStack,buffer3,color,light,t.getU0(),t.getV0(),t.getU1(),t.getV1(),true);
                     }
                 }
                 

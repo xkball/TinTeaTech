@@ -2,6 +2,7 @@ package com.xkball.tin_tea_tech.common.blocks;
 
 import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
 import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
+import com.xkball.tin_tea_tech.api.annotation.I18N;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
@@ -17,6 +18,7 @@ public class TTCommonBlock extends Block {
     @AutomaticRegistration
     @AutomaticRegistration.Block
     @CreativeTag
+    @I18N(chinese = "铜框架",english = "CopperFrame")
     public static class CopperFrame extends TTCommonBlock{
         public CopperFrame(){
             super(BlockBehaviour.Properties.of().noOcclusion());
@@ -26,9 +28,11 @@ public class TTCommonBlock extends Block {
     @AutomaticRegistration
     @AutomaticRegistration.Block
     @CreativeTag
+    @I18N(chinese = "铜砖块",english = "CopperWallBlock")
     public static class CopperWall extends TTCommonBlock{}
     @AutomaticRegistration
     @AutomaticRegistration.Block
     @CreativeTag
+    @I18N(chinese = "铜线圈",english = "CopperCoil")
     public static class CopperCoil extends TTCommonBlock{}
 }

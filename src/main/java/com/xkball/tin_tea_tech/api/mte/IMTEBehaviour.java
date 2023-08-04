@@ -14,6 +14,7 @@ import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.network.packet.MTEClientToServerDataPacket;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.BakedModel;
@@ -31,6 +32,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -190,6 +192,11 @@ public interface IMTEBehaviour {
             }
         }
         return DefaultMTERender.class;
+    }
+    
+    @OnlyIn(Dist.CLIENT)
+    default int getLight(){
+        return LightTexture.pack(getLevel().getBrightness(LightLayer.BLOCK, getPos().above()), getLevel().getBrightness(LightLayer.SKY, getPos().above()));
     }
     
     @OnlyIn(Dist.CLIENT)

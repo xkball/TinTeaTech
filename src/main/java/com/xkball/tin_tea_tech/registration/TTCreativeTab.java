@@ -58,7 +58,7 @@ public class TTCreativeTab {
         
         public TTBuildingBlockTab() {
             super(CreativeModeTab.builder()
-                    .withTabsBefore(CreativeModeTabs.REDSTONE_BLOCKS)
+                    .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .icon(() ->
                             ((Item)AutoRegManager.getRegistryObject(ScaffoldingBlockItem.class).get()).getDefaultInstance())
                     .displayItems((parameters, output) -> {

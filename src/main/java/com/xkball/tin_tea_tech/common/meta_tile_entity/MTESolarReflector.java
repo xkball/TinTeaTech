@@ -4,7 +4,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.TTValue;
-import com.xkball.tin_tea_tech.api.annotation.*;
+import com.xkball.tin_tea_tech.api.annotation.AutomaticRegistration;
+import com.xkball.tin_tea_tech.api.annotation.CreativeTag;
+import com.xkball.tin_tea_tech.api.annotation.I18N;
+import com.xkball.tin_tea_tech.api.annotation.Model;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import io.netty.buffer.ByteBuf;
@@ -20,8 +23,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.RenderTypeHelper;
@@ -43,6 +52,8 @@ public class MTESolarReflector extends MetaTileEntity{
     
     private static final ResourceLocation ITEM_MODEL = TinTeaTech.ttResource("block/reflector");
     private static final ResourceLocation BLOCK_MODEL = TinTeaTech.ttResource("block/iron_column");
+    
+    private static final VoxelShape SHAPE = Block.box(5,0,5,11,24,11);
     
     private int x;
     private int y;
@@ -71,6 +82,7 @@ public class MTESolarReflector extends MetaTileEntity{
             if(tag.contains("x")) setX(tag.getInt("x"));
             if(tag.contains("y")) setY(tag.getInt("y"));
             if(tag.contains("z")) setZ(tag.getInt("z"));
+            markDirty();
             syncRenderData();
         }
         return super.useByWrench(pPlayer, pHand, pHit);
@@ -93,23 +105,36 @@ public class MTESolarReflector extends MetaTileEntity{
         float dy = y1-y2;
         float dz = z1-z2;
         
+        var toBlock = new Vec3(dx,dy,dz).normalize();
+        double time = Math.toRadians(((level.getDayTime()%24000)/24000D)*360D);
+        var toSky = new Vec3(Math.cos(time),Math.sin(time),0).normalize();
+        var ro = toSky.add(toBlock).normalize();
+        //var ro = toSky;
+        //var rr = new Quaternionf(ro.x(),ro.y(),ro.z,1f).normalize();
+        
+        dx = (float) ro.x(); dy = (float) ro.y(); dz = (float) ro.z();
+        
         double fy = dx/dz;
         double dis = Math.sqrt(dx*dx+dz*dz);
         double fx = dy/dis;
         
         pPoseStack.pushPose();
-        pPoseStack.translate(0.5,1.4,0.5);
-        pPoseStack.scale(2.2F,2.2F,2.2F);
+        pPoseStack.translate(0.5,0.7,-0.5);
+        pPoseStack.scale(2F,2F,2F);
+        pPoseStack.translate(-0.5F,0f,0f);
+        
+        
         if(x1 != 0 && y1 !=0 && z1 != 0){
+            //pPoseStack.rotateAround(rr,0.5f,0.5f,0.5f);
             if(dz<0){
-                pPoseStack.mulPose(Axis.YP.rotationDegrees((float) Math.toDegrees(Math.atan(fy))));
+                pPoseStack.rotateAround(Axis.YP.rotation((float) Math.atan(fy)),0.5F,0.5F,0.5F);
             }
             else {
-                pPoseStack.mulPose(Axis.YP.rotationDegrees((float) Math.toDegrees(Math.atan(fy))+180));
+                pPoseStack.rotateAround(Axis.YP.rotation((float) (Math.atan(fy)+Math.toRadians(180))),0.5F,0.5F,0.5F);
             }
-            pPoseStack.mulPose(Axis.XP.rotationDegrees((float) Math.toDegrees(Math.atan(fx))));
+            pPoseStack.rotateAround(Axis.XP.rotation((float) Math.atan(fx)),0.5F,0.5F,0.5F);
         }
-        var l = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, getPos().above()), level.getBrightness(LightLayer.SKY, getPos().above()));
+        //var l = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, getPos().above()), level.getBrightness(LightLayer.SKY, getPos().above()));
         var model = getModel(ITEM_MODEL);
         var render = Minecraft.getInstance().getBlockRenderer().getModelRenderer();
         var blockColor = Minecraft.getInstance().getBlockColors();
@@ -130,9 +155,20 @@ public class MTESolarReflector extends MetaTileEntity{
     }
     
     @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return SHAPE;
+    }
+    
+    @Override
     @OnlyIn(Dist.CLIENT)
     protected Supplier<BakedModel[]> getModels() {
         return () -> new BakedModel[]{getModel(BLOCK_MODEL)};
+    }
+    
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public int getLight() {
+        return LightTexture.pack(getLevel().getBrightness(LightLayer.BLOCK, getPos().above(20)), getLevel().getBrightness(LightLayer.SKY, getPos().above(2)));
     }
     
     @Override

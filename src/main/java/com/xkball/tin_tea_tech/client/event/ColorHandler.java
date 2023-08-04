@@ -29,9 +29,10 @@ public class ColorHandler {
         var item = (Item)AutoRegManager.getRegistryObject(ColorApplicatorBehaviour.class).get();
         event.register((s,t) ->{
             if(t == 1 && s.hasTag()){
+                assert s.getTag() != null;
                 return s.getTag().getInt("color");
             }
-            return 0;
+            return -1;
         },item);
     }
 }

@@ -10,6 +10,7 @@ import com.xkball.tin_tea_tech.common.pipe.net.FEEnergyPipeNet;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.ColorUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
@@ -81,7 +82,7 @@ public class MTEFEEnergyPipe extends MTEPipe{
     
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-        pTooltip.add(Component.translatable("tooltip.tin_tea_tech.not_ti"));
+        pTooltip.add(Component.translatable("tooltip.tin_tea_tech.not_ti").withStyle(ChatFormatting.GRAY));
     }
     
     @Override
