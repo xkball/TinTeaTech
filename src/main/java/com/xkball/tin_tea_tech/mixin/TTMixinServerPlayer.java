@@ -1,6 +1,7 @@
 package com.xkball.tin_tea_tech.mixin;
 
 import com.mojang.authlib.GameProfile;
+import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
@@ -46,6 +47,15 @@ public abstract class TTMixinServerPlayer extends Player {
                         (ServerPlayer)(Object)this);
             }
             tin_tea_tech$needUpdate = false;
+        }
+        if(TinTeaTech.ticks%10==0){
+            var tin_tea_tech$playerData = PlayerData.get(this);
+            var b = getControlledVehicle() instanceof Player;
+            if(b != tin_tea_tech$playerData.controlled) {
+                tin_tea_tech$playerData.controlled = b;
+                TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(tin_tea_tech$playerData),
+                        (ServerPlayer) (Object) this);
+            }
         }
     }
 }
