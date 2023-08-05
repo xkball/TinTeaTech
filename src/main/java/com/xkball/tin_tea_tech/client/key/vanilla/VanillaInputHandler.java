@@ -4,12 +4,15 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.client.gui.screen.HoloGlassScreen;
 import com.xkball.tin_tea_tech.common.item.armor.HoloGlass;
+import com.xkball.tin_tea_tech.common.item_behaviour.EntityControllerBehaviour;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
-import com.xkball.tin_tea_tech.network.packet.KeyPressToServerPacket;
+import com.xkball.tin_tea_tech.network.packet.ControlPlayerPacket;
+import com.xkball.tin_tea_tech.utils.ItemUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -97,27 +100,32 @@ public class VanillaInputHandler {
                 var key = event.getKey();
                 var sc = event.getScanCode();
                 if(options.keyUp.matches(key,sc)){
-                    TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyUp.getName(),action,sc));
+                   // TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyUp.getName(),action,sc));
                     player.setDeltaMovement(Vec3.ZERO);
                     player.setPosRaw(player.getX(),player.getY(),player.getZ());
                 }
                 else if(options.keyDown.matches(key,sc)){
-                    TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyDown.getName(),action,sc));
+                   // TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyDown.getName(),action,sc));
                     player.setDeltaMovement(Vec3.ZERO);
                     player.setPosRaw(player.getX(),player.getY(),player.getZ());
                 }
                 else if(options.keyLeft.matches(key,sc)){
-                    TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyLeft.getName(),action,sc));
+                  //  TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyLeft.getName(),action,sc));
                     player.setDeltaMovement(Vec3.ZERO);
                     player.setPosRaw(player.getX(),player.getY(),player.getZ());
                 }
                 else if(options.keyRight.matches(key,sc)){
-                    TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyRight.getName(),action,sc));
+                   // TTNetworkHandler.CHANNEL.sendToServer(new KeyPressToServerPacket(options.keyRight.getName(),action,sc));
                     player.setDeltaMovement(Vec3.ZERO);
                     player.setPosRaw(player.getX(),player.getY(),player.getZ());
                 }
             }
-            
+            if(ItemUtils.holdingItem(player, EntityControllerBehaviour.class)){
+                var options = Minecraft.getInstance().options;
+                TTNetworkHandler.CHANNEL.sendToServer(new ControlPlayerPacket(
+                        KeyboardInput.calculateImpulse(options.keyLeft.isDown(),options.keyRight.isDown()),
+                        KeyboardInput.calculateImpulse(options.keyUp.isDown(),options.keyDown.isDown())));
+            }
         }
        
         

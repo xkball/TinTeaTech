@@ -208,9 +208,9 @@ public class MTESolarReflector extends MetaTileEntity{
         z = tag.getInt("pz");
     }
     
-    public BlockPos getPos(){
-        return new BlockPos(x,y,z);
-    }
+//    public BlockPos getPos(){
+//        return new BlockPos(x,y,z);
+//    }
     
     public void setZ(int z) {
         this.z = z;

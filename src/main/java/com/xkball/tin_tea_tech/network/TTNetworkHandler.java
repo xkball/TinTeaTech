@@ -53,6 +53,11 @@ public class TTNetworkHandler {
                 KeyPressToServerPacket::serialize,
                 KeyPressToServerPacket::new,
                 KeyPressToServerPacket::handle);
+        CHANNEL.registerMessage(5,
+                ControlPlayerPacket.class,
+                ControlPlayerPacket::serialize,
+                ControlPlayerPacket::new,
+                ControlPlayerPacket::handle);
     }
     
 }

@@ -16,6 +16,7 @@
     "client.TTMixinArmorRender",
     "client.TTMixinCreativeInventoryScreen",
     "client.TTMixinCustomHeadRender",
+    "client.TTMixinKeyboardInput",
     "client.TTMixinMinecraft"
   ],
   "minVersion": "0.8"

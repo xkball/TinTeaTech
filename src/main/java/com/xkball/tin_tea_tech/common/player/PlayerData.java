@@ -23,6 +23,11 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     
     public boolean displayNBT = true;
     
+    public boolean controlled = false;
+    
+    public float leftImpulse = 0f;
+    public float forwardImpulse = 0f;
+    
     public Int2IntMap hgPluginMap = new Int2IntLinkedOpenHashMap();
     
     public void setDisplayInventoryInGUI(boolean displayInventoryInGUI) {
@@ -74,6 +79,7 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         var result = new CompoundTag();
         result.putBoolean("displayInventoryInGUI",displayInventoryInGUI);
         result.putBoolean("displayNBT",displayNBT);
+        result.putBoolean("controlled",controlled);
         var list = new ListTag();
         hgPluginMap.int2IntEntrySet().forEach((entry) -> {
             var tag = new CompoundTag();
@@ -91,6 +97,9 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
             displayInventoryInGUI = nbt.getBoolean("displayInventoryInGUI");
         if(nbt.contains("displayNBT")){
             displayNBT = nbt.getBoolean("displayNBT");
+        }
+        if(nbt.contains("controlled")){
+            controlled = nbt.getBoolean("controlled");
         }
         if(nbt.contains("modeData")){
             var list = nbt.getList("modeData",10);
