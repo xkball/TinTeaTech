@@ -54,12 +54,12 @@ public class ControlPlayerPacket implements ITTPacket {
                                 break;
                             }
                         }
-                        if(vehicle instanceof Player){
+                        if(vehicle instanceof Player v){
                             var pd = PlayerData.get(player);
                             if(!pd.controlled) return;
                             pd.leftImpulse = this.leftImpulse;
                             pd.forwardImpulse = this.forwardImpulse;
-                            TTNetworkHandler.sentToClientPlayer(new ControlPlayerPacket(this.leftImpulse,this.forwardImpulse), player);
+                            TTNetworkHandler.sentToClientPlayer(new ControlPlayerPacket(this.leftImpulse,this.forwardImpulse), v);
                         }
                     }
                 }

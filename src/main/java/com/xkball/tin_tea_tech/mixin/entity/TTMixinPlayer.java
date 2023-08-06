@@ -3,6 +3,7 @@ package com.xkball.tin_tea_tech.mixin.entity;
 import com.xkball.tin_tea_tech.common.player.AdditionalInventory;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,12 +20,18 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @Mixin(Player.class)
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @SuppressWarnings("AddedMixinMembersNamePattern")
 public abstract class TTMixinPlayer extends LivingEntity implements IExtendedPlayer {
     
+    @Override
     @Shadow public abstract boolean canBeSeenAsEnemy();
     
+    @Override
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot pSlot);
     
     @Unique
