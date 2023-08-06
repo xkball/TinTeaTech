@@ -1,5 +1,8 @@
 {
+  "block.tin_tea_tech.copper_coil": "CopperCoil",
   "block.tin_tea_tech.copper_drawer": "Copper Drawer",
+  "block.tin_tea_tech.copper_frame": "CopperFrame",
+  "block.tin_tea_tech.copper_wall": "CopperWallBlock",
   "block.tin_tea_tech.ender_power_fluid_pipe": "Ender Power Fluid Pipe",
   "block.tin_tea_tech.ender_power_item_pipe": "Ender Power Item Pipe",
   "block.tin_tea_tech.fe_energy_pipe": "FE Energy Pipe",
@@ -7,6 +10,7 @@
   "block.tin_tea_tech.fluid_input_hatch": "Fluid Input Hatch",
   "block.tin_tea_tech.fluid_pipe": "Fluid Pipe",
   "block.tin_tea_tech.fluid_tank": "FluidTank",
+  "block.tin_tea_tech.generator_center": "Generator Center",
   "block.tin_tea_tech.inf_water_tank": "InfinityWaterTank",
   "block.tin_tea_tech.item_pipe": "Item Pipe",
   "block.tin_tea_tech.scaffolding_block": "Scaffolding Block",

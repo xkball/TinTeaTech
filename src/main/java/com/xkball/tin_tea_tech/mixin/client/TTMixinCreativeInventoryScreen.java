@@ -43,8 +43,7 @@ public abstract class TTMixinCreativeInventoryScreen extends EffectRenderingInve
     
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Redirect(method = "selectTab",
-            at = @At(value = "INVOKE",target = "Lnet/minecraft/core/NonNullList;add(Ljava/lang/Object;)Z"),
-            remap = false)
+            at = @At(value = "INVOKE",target = "Lnet/minecraft/core/NonNullList;add(Ljava/lang/Object;)Z",remap = false))
     public boolean tryAdd(NonNullList instance, Object o){
         if(o instanceof CreativeModeInventoryScreen.SlotWrapper wrapper){
             try{
