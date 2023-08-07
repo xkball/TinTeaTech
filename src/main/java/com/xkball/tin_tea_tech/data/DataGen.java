@@ -55,8 +55,11 @@ public class DataGen {
             addLangKey("gui.tin_tea_tech.plugins_installed","PluginsInstalled: ","已安装插件: ");
             addLangKey("gui.tin_tea_tech.lock_inventory","LockInventory","锁定物品栏位置");
             addLangKey("gui.tin_tea_tech.display_nbt","Display NBT info on tricorder","三录仪显示NBT");
+            addLangKey("gui.tin_tea_tech.building_mode","Buliding Mode","斜向建筑模式");
+            addLangKey("gui.tin_tea_tech.allow_riding_by_player","Allow Riding By Player","允许被控制");
             addLangKey("tooltip.tin_tea_tech.holo_glass_plugin","This is a holo glass plugin","可作为云钩插件");
             addLangKey("tooltip.tin_tea_tech.not_ti","Definitely Not Titanium !","绝对不是钛制!");
+            
         }
         private static final Map<String, Pair<String,String>> localizations;
         

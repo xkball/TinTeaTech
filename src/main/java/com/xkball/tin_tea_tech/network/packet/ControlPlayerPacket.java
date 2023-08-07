@@ -55,7 +55,7 @@ public class ControlPlayerPacket implements ITTPacket {
                             }
                         }
                         if(vehicle instanceof Player v){
-                            var pd = PlayerData.get(player);
+                            var pd = PlayerData.get(v);
                             if(!pd.controlled) return;
                             pd.leftImpulse = this.leftImpulse;
                             pd.forwardImpulse = this.forwardImpulse;

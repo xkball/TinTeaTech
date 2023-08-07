@@ -6,6 +6,7 @@ import com.xkball.tin_tea_tech.api.facing.FacingType;
 import com.xkball.tin_tea_tech.api.facing.RelativeFacing;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.data.tag.TTItemTags;
 import com.xkball.tin_tea_tech.utils.ColorUtils;
 import com.xkball.tin_tea_tech.utils.ItemUtils;
@@ -40,7 +41,7 @@ public class RenderHighlight {
         if(entity instanceof Player player){
 //            //DONE 改为用tag识别物品
 //            Item itemC = (Item) AutoRegManager.getRegistryObject(TricorderBehaviour.class).get();
-            if(ItemUtils.hasTagInHand(player,TTItemTags.get("tool"),TTItemTags.get("pipe"),TTItemTags.get("cover"))){
+            if(PlayerData.get().buildingMode || ItemUtils.hasTagInHand(player,TTItemTags.get("tool"),TTItemTags.get("pipe"),TTItemTags.get("cover"))){
                 var hitResult = event.getTarget();
                 var pos = hitResult.getBlockPos();
                 var direction = hitResult.getDirection();

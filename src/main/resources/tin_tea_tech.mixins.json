@@ -6,11 +6,12 @@
   "mixins": [
     "TTMixinFlintAndSteel",
     "TTMixinInventoryMenu",
-    "TTMixinServerPlayer",
+    "TTMixinItemBlock",
     "TTMixinUseOnContext",
     "entity.TTMixinLivingEntity",
     "entity.TTMixinMob",
-    "entity.TTMixinPlayer"
+    "entity.TTMixinPlayer",
+    "entity.TTMixinServerPlayer"
   ],
   "client": [
     "client.TTMixinArmorRender",

@@ -23,6 +23,8 @@
   "creative_tab.tin_tea_tech.building_block_tab": "锡茶科技: 建筑方块",
   "creative_tab.tin_tea_tech.machine_tab": "锡茶科技: 机器",
   "creative_tab.tin_tea_tech.misc_tab": "锡茶科技: 杂项",
+  "gui.tin_tea_tech.allow_riding_by_player": "允许被控制",
+  "gui.tin_tea_tech.building_mode": "斜向建筑模式",
   "gui.tin_tea_tech.displayInventory": "显示物品栏",
   "gui.tin_tea_tech.display_nbt": "三录仪显示NBT",
   "gui.tin_tea_tech.gui_setting": "GUI设置",

@@ -25,6 +25,10 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     
     public boolean controlled = false;
     
+    public boolean buildingMode = false;
+    
+    public boolean allowRidingByPlayer = false;
+    
     public float leftImpulse = 0f;
     public float forwardImpulse = 0f;
     
@@ -80,6 +84,8 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         result.putBoolean("displayInventoryInGUI",displayInventoryInGUI);
         result.putBoolean("displayNBT",displayNBT);
         result.putBoolean("controlled",controlled);
+        result.putBoolean("buildingMode",buildingMode);
+        result.putBoolean("allowRidingByPlayer",allowRidingByPlayer);
         var list = new ListTag();
         hgPluginMap.int2IntEntrySet().forEach((entry) -> {
             var tag = new CompoundTag();
@@ -100,6 +106,12 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
         }
         if(nbt.contains("controlled")){
             controlled = nbt.getBoolean("controlled");
+        }
+        if(nbt.contains("buildingMode")){
+            buildingMode = nbt.getBoolean("buildingMode");
+        }
+        if(nbt.contains("allowRidingByPlayer")){
+            allowRidingByPlayer = nbt.getBoolean("allowRidingByPlayer");
         }
         if(nbt.contains("modeData")){
             var list = nbt.getList("modeData",10);

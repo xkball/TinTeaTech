@@ -316,6 +316,9 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter, Dat
     @Override
     public void onNeighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         updateConnection();
+        if(havePipeNet() && belongs instanceof PipeNetImpl net){
+            net.IOChanged = true;
+        }
     }
     
     public PipeNet createPipeNet(){

@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.mixin;
+package com.xkball.tin_tea_tech.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
 import com.xkball.tin_tea_tech.TinTeaTech;
@@ -50,7 +50,7 @@ public abstract class TTMixinServerPlayer extends Player {
         }
         if(TinTeaTech.ticks%10==0){
             var tin_tea_tech$playerData = PlayerData.get(this);
-            var b = getControlledVehicle() instanceof Player;
+            var b = getControlledVehicle() instanceof Player && tin_tea_tech$playerData.allowRidingByPlayer;
             if(b != tin_tea_tech$playerData.controlled) {
                 tin_tea_tech$playerData.controlled = b;
                 TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(tin_tea_tech$playerData),
