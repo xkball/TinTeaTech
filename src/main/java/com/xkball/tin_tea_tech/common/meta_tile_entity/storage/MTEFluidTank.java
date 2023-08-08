@@ -90,6 +90,7 @@ public class MTEFluidTank extends MetaTileEntity {
             if(fluid != null){
                 var p = IClientFluidTypeExtensions.of(fluid);
                 var rl = p.getStillTexture();
+                if(rl == null) return;
                 @SuppressWarnings("deprecation")
                 var texture = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(rl);
                 var h = (filled/64000d);
