@@ -1,6 +1,6 @@
 package com.xkball.tin_tea_tech.api.pipe.network;
 
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import net.minecraft.core.BlockPos;
 
 import java.util.Collection;
@@ -10,9 +10,9 @@ import java.util.Map;
 @SuppressWarnings("ClassCanBeRecord")
 public class EmptyPipeNet implements PipeNet{
     
-    protected final MTEPipe center;
+    protected final MTEPipeWithNet center;
     
-    public EmptyPipeNet(MTEPipe center) {
+    public EmptyPipeNet(MTEPipeWithNet center) {
         this.center = center;
     }
     
@@ -27,17 +27,17 @@ public class EmptyPipeNet implements PipeNet{
     }
     
     @Override
-    public Collection<MTEPipe> getConnected() {
+    public Collection<MTEPipeWithNet> getConnected() {
         return Collections.emptySet();
     }
     
     @Override
-    public Map<BlockPos, MTEPipe> getConnectedRaw() {
+    public Map<BlockPos, MTEPipeWithNet> getConnectedRaw() {
         return Collections.emptyMap();
     }
     
     @Override
-    public MTEPipe getCenter() {
+    public MTEPipeWithNet getCenter() {
         return center;
     }
     

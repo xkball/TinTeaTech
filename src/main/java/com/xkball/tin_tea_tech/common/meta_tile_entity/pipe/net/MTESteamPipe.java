@@ -1,4 +1,4 @@
-package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
+package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net;
 
 import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
@@ -7,7 +7,6 @@ import com.xkball.tin_tea_tech.capability.TTCapability;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
 import com.xkball.tin_tea_tech.common.blocks.te.PipeMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
-import com.xkball.tin_tea_tech.common.pipe.net.FluidPipeNet;
 import com.xkball.tin_tea_tech.common.pipe.net.SteamPipeNet;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
@@ -34,7 +33,7 @@ import java.util.Collection;
 @Model(resources = {"tin_tea_tech:block/pipe_default"})
 @I18N(chinese = "蒸汽管道",english = "Steam Pipe")
 @Tag.Item({"pipe"})
-public class MTESteamPipe extends MTEPipe{
+public class MTESteamPipe extends MTEPipeWithNet {
     
     public MTESteamPipe(@NotNull BlockPos pos, @Nullable TTTileEntityBase te) {
         super(pos, te);

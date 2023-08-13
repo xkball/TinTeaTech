@@ -1,6 +1,7 @@
 package com.xkball.tin_tea_tech.mixin.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.common.item.armor.HoloGlass;
 import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import net.minecraft.client.model.HumanoidModel;
@@ -37,7 +38,7 @@ public abstract class TTMixinArmorRender <T extends LivingEntity, M extends Huma
     
     @Shadow protected abstract A getArmorModel(EquipmentSlot pSlot);
     
-    @Shadow(remap = false) protected abstract void renderTrim(ArmorMaterial pArmorMaterial, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorTrim pTrim, Model pModel, boolean pInnerTexture);
+    @Shadow protected abstract void renderTrim(ArmorMaterial pArmorMaterial, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorTrim pTrim, A pModel, boolean pInnerTexture);
     
     
     @Shadow(remap = false) protected abstract void renderModel(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorItem pArmorItem, Model pModel, boolean pWithGlint, float pRed, float pGreen, float pBlue, ResourceLocation armorResource);
@@ -54,17 +55,22 @@ public abstract class TTMixinArmorRender <T extends LivingEntity, M extends Huma
             var item = is.getItem();
             if(item instanceof HoloGlass holoGlass){
                 var pSlot = EquipmentSlot.HEAD;
-                var pModel = this.getArmorModel(EquipmentSlot.HEAD);
+                A pModel = this.getArmorModel(EquipmentSlot.HEAD);
                 this.getParentModel().copyPropertiesTo(pModel);
                 this.setPartVisibility(pModel, pSlot);
                 net.minecraft.client.model.Model model = getArmorModelHook(pLivingEntity, is, pSlot, pModel);
                 boolean flag = this.usesInnerModel(pSlot);
                 this.renderModel(pMatrixStack, pBuffer, pPackedLight, holoGlass, model, flag, 1.0F, 1.0F, 1.0F, this.getArmorResource(pLivingEntity, is, pSlot, null));
                 
-                
-                ArmorTrim.getTrim(pLivingEntity.level().registryAccess(), is).ifPresent((p_289638_) ->
-                        this.renderTrim(holoGlass.getMaterial(), pMatrixStack, pBuffer, pPackedLight, p_289638_, model, flag));
-               
+                try {
+                    //noinspection unchecked
+                    ArmorTrim.getTrim(pLivingEntity.level().registryAccess(), is).ifPresent((p_289638_) ->
+                            this.renderTrim(holoGlass.getMaterial(), pMatrixStack, pBuffer, pPackedLight, p_289638_, (A) model, flag));
+                    
+                }catch (Exception e){
+                    LogUtils.getLogger().error("tin_tea_tech occurred an error,may caused by optifine ",e);
+                }
+              
             }
         }
         

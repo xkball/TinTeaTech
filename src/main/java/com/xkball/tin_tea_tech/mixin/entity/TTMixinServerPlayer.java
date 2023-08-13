@@ -43,7 +43,7 @@ public abstract class TTMixinServerPlayer extends Player {
                 TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(tin_tea_tech$playerData),
                         (ServerPlayer)(Object)this);
                 //noinspection DataFlowIssue
-                TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(0,tin_tea_tech$additionalInventory.getItem(0)),
+                TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(10000,tin_tea_tech$additionalInventory.getItem(0)),
                         (ServerPlayer)(Object)this);
             }
             tin_tea_tech$needUpdate = false;

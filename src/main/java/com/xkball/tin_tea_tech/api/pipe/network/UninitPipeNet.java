@@ -1,6 +1,6 @@
 package com.xkball.tin_tea_tech.api.pipe.network;
 
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import net.minecraft.core.BlockPos;
 
@@ -12,11 +12,11 @@ import java.util.Map;
 //只应该存在最多2tick
 public class UninitPipeNet implements PipeNet{
     
-    protected final MTEPipe center;
+    protected final MTEPipeWithNet center;
     protected final BlockPos centerPos;
     protected boolean firstTicked = false;
     
-    public UninitPipeNet(MTEPipe center,BlockPos centerPos) {
+    public UninitPipeNet(MTEPipeWithNet center,BlockPos centerPos) {
         this.center = center;
         this.centerPos = centerPos;
     }
@@ -53,7 +53,7 @@ public class UninitPipeNet implements PipeNet{
         else {
             //将MTE的Net设置为已经存在的网络
             var mte = LevelUtils.getMTE(center.getLevel(),centerPos);
-            if(mte instanceof MTEPipe pipe && !center.getPos().equals(centerPos)){
+            if(mte instanceof MTEPipeWithNet pipe && !center.getPos().equals(centerPos)){
                 pipe.getBelongs().combine(center.getPos());
             }
             //不应该执行?
@@ -69,17 +69,17 @@ public class UninitPipeNet implements PipeNet{
     }
     
     @Override
-    public Collection<MTEPipe> getConnected() {
+    public Collection<MTEPipeWithNet> getConnected() {
         return List.of(center);
     }
     
     @Override
-    public Map<BlockPos, MTEPipe> getConnectedRaw() {
+    public Map<BlockPos, MTEPipeWithNet> getConnectedRaw() {
         return Collections.emptyMap();
     }
     
     @Override
-    public MTEPipe getCenter() {
+    public MTEPipeWithNet getCenter() {
         return center;
     }
     

@@ -5,15 +5,13 @@ import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.api.pipe.network.PipeNetImpl;
 import com.xkball.tin_tea_tech.capability.TTCapability;
 import com.xkball.tin_tea_tech.capability.steam.SteamHolder;
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +32,7 @@ public class SteamPipeNet extends PipeNetImpl {
     
     public final LazyOptional<ISteamHolder> storageCap = LazyOptional.of(() -> storage);
     
-    public SteamPipeNet(MTEPipe mte) {
+    public SteamPipeNet(MTEPipeWithNet mte) {
         super(mte);
     }
     

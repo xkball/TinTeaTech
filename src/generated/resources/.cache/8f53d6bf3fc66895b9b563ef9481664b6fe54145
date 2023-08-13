@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-02T04:08:17.3442944	Item Models: tin_tea_tech
+// 1.20.1	2023-08-11T23:10:27.5169521	Item Models: tin_tea_tech
 098369e3b39ba8b45bef6b450242fabb674a8ae7 assets/tin_tea_tech/models/item/bearing_indicator.json
 62dcbbb4fd6e6586e09e98548d658c1a1fe84f35 assets/tin_tea_tech/models/item/copper_drawer_item.json
 6b7e55b8c19ebd14dfa6cc93a21bd843ba7b46e5 assets/tin_tea_tech/models/item/crowbar.json
@@ -22,6 +22,7 @@ aec22231711d685c64886ad21454dc8ae2a7ce80 assets/tin_tea_tech/models/item/item_pi
 df176eaa021cce9ef9a5d03793e718413d83ae99 assets/tin_tea_tech/models/item/steam_input_hatch_item.json
 4623f3d785a0db241a9c46e47b76886369f377c3 assets/tin_tea_tech/models/item/steam_output_hatch_item.json
 aec22231711d685c64886ad21454dc8ae2a7ce80 assets/tin_tea_tech/models/item/steam_pipe_item.json
+44380193e7cf36650c61afe1fb92c47a333ba1de assets/tin_tea_tech/models/item/sun_glass.json
 d3cc06a842e327a0445822cd067e87a7afafbf25 assets/tin_tea_tech/models/item/test_item.json
 aec22231711d685c64886ad21454dc8ae2a7ce80 assets/tin_tea_tech/models/item/test_pipe_item.json
 78a51558dd8b894e14133cf884ea79fb1ce3c03e assets/tin_tea_tech/models/item/tricorder.json

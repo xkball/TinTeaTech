@@ -4,7 +4,7 @@ import com.xkball.tin_tea_tech.api.facing.RelativeFacing;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.client.shape.Point3D;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -128,16 +128,16 @@ public class LevelUtils {
                 .toConnection(direction);
     }
     
-    public static Collection<MTEPipe> getConnected(Level level,BlockPos pos,boolean withSelf){
+    public static Collection<MTEPipeWithNet> getConnected(Level level, BlockPos pos, boolean withSelf){
         var self = getMTE(level,pos);
-        if(self instanceof MTEPipe pipe){
-            var result = new LinkedList<MTEPipe>();
+        if(self instanceof MTEPipeWithNet pipe){
+            var result = new LinkedList<MTEPipeWithNet>();
             if(withSelf){
                 result.add(pipe);
             }
             for(Connections connection : Connections.values()){
                 if(pipe.isConnected(connection) && pipe.isNeighborConnected(connection)){
-                    result.add(pipe.getPipeAt(connection,true));
+                    result.add(pipe.getPipeWithNetAt(connection,true));
                 }
             }
             return Collections.unmodifiableList(result);
@@ -146,9 +146,9 @@ public class LevelUtils {
     }
     
     @Nullable
-    public static MTEPipe getPipe(Level level,BlockPos pos){
+    public static MTEPipeWithNet getPipe(Level level,BlockPos pos){
         var mte = getMTE(level,pos);
-        if(mte instanceof MTEPipe pipe){
+        if(mte instanceof MTEPipeWithNet pipe){
             return pipe;
         }
         return null;

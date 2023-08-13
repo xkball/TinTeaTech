@@ -2,7 +2,7 @@ package com.xkball.tin_tea_tech.common.pipe.net;
 
 import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.api.pipe.network.PipeNetImpl;
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import com.xkball.tin_tea_tech.utils.ItemUtils;
 import com.xkball.tin_tea_tech.utils.TTUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -19,7 +19,7 @@ public class ItemPipeNet extends PipeNetImpl {
     protected final Map<BlockPos, Connections> inputs = new Object2ObjectOpenHashMap<>();
     protected final Map<BlockPos, Connections> outputs = new Object2ObjectOpenHashMap<>();
     
-    public ItemPipeNet(MTEPipe mte) {
+    public ItemPipeNet(MTEPipeWithNet mte) {
         super(mte);
     }
     

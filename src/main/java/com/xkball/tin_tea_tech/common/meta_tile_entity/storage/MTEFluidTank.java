@@ -31,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -87,7 +88,7 @@ public class MTEFluidTank extends MetaTileEntity {
     public void renderAdditional(TTTileEntityBase pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int light, int pPackedOverlay) {
         if(filled>0){
             var fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidName));
-            if(fluid != null){
+            if(fluid != null && fluid != Fluids.EMPTY){
                 var p = IClientFluidTypeExtensions.of(fluid);
                 var rl = p.getStillTexture();
                 if(rl == null) return;

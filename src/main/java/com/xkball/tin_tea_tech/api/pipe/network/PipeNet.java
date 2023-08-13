@@ -1,6 +1,6 @@
 package com.xkball.tin_tea_tech.api.pipe.network;
 
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,11 +18,11 @@ public interface PipeNet {
     
     int size();
     
-    Collection<MTEPipe> getConnected();
+    Collection<MTEPipeWithNet> getConnected();
     
-    Map<BlockPos,MTEPipe> getConnectedRaw();
+    Map<BlockPos,MTEPipeWithNet> getConnectedRaw();
     
-    MTEPipe getCenter();
+    MTEPipeWithNet getCenter();
     
     //实在不知道用不用的到
     @SuppressWarnings("UnusedReturnValue")
@@ -52,7 +52,7 @@ public interface PipeNet {
         return true;
     }
     
-    static PipeNet create(MTEPipe mte){
+    static PipeNet create(MTEPipeWithNet mte){
         return new PipeNetImpl(mte);
     }
     

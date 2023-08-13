@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
-import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.MTEPipe;
+import com.xkball.tin_tea_tech.common.meta_tile_entity.pipe.net.MTEPipeWithNet;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -17,9 +17,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PipeNetImpl implements PipeNet{
     
-    protected final MTEPipe centerMTE;
+    protected final MTEPipeWithNet centerMTE;
     protected final Level level;
-    protected final Map<BlockPos,MTEPipe> connected = new Object2ObjectLinkedOpenHashMap<>();
+    protected final Map<BlockPos,MTEPipeWithNet> connected = new Object2ObjectLinkedOpenHashMap<>();
     protected BlockPos center;
     protected int lastTick = 0;
     protected boolean changed = false;
@@ -29,7 +29,7 @@ public class PipeNetImpl implements PipeNet{
     private final int offset;
     
     
-    public PipeNetImpl(MTEPipe mte) {
+    public PipeNetImpl(MTEPipeWithNet mte) {
         this.centerMTE = mte;
         this.level = mte.getLevel();
         this.center = mte.getPos();
@@ -76,7 +76,7 @@ public class PipeNetImpl implements PipeNet{
                 s.next();
             }
             var result = new HashSet<>(s.getSearched());
-            Map<BlockPos,MTEPipe> buff = new Object2ObjectLinkedOpenHashMap<>();
+            Map<BlockPos,MTEPipeWithNet> buff = new Object2ObjectLinkedOpenHashMap<>();
             for(var pos : connected.keySet()){
                 var pipe = LevelUtils.getPipe(level,pos);
                 if (result.contains(pos)) {
@@ -114,12 +114,11 @@ public class PipeNetImpl implements PipeNet{
                     if(pipe.isConnected(c) && !pipe.isNeighborConnected(c)){
                         if(pipe.isBlocked(c)){
                             newInput(pipe.getPos(c),c);
-                            needMarkDirty = true;
                         }
                         else {
                             newOutput(pipe.getPos(c),c);
-                            needMarkDirty = true;
                         }
+                        needMarkDirty = true;
                     }
                 }
             }
@@ -146,12 +145,12 @@ public class PipeNetImpl implements PipeNet{
     }
     
     @Override
-    public Collection<MTEPipe> getConnected() {
+    public Collection<MTEPipeWithNet> getConnected() {
         return connected.values();
     }
     
     @Override
-    public MTEPipe getCenter() {
+    public MTEPipeWithNet getCenter() {
         return centerMTE;
     }
     
@@ -159,7 +158,7 @@ public class PipeNetImpl implements PipeNet{
     public PipeNet combine(BlockPos other) {
         if(connected.containsKey(other)) return this;
         var mte = LevelUtils.getMTE(getCenter().getLevel(),other);
-        if(mte instanceof MTEPipe pipe){
+        if(mte instanceof MTEPipeWithNet pipe){
             tryLink(pipe.getPos());
         }
         return this;
@@ -206,7 +205,7 @@ public class PipeNetImpl implements PipeNet{
     }
     
     @Override
-    public Map<BlockPos,MTEPipe> getConnectedRaw(){
+    public Map<BlockPos,MTEPipeWithNet> getConnectedRaw(){
         return connected;
     }
     
