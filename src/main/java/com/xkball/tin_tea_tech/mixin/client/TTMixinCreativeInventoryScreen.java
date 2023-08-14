@@ -3,15 +3,20 @@ package com.xkball.tin_tea_tech.mixin.client;
 
 import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.common.player.AdditionalInventory;
+import com.xkball.tin_tea_tech.network.TTNetworkHandler;
+import com.xkball.tin_tea_tech.network.packet.SyncGUIDataPacket;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class TTMixinCreativeInventoryScreen extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu> {
@@ -51,6 +56,7 @@ public abstract class TTMixinCreativeInventoryScreen extends EffectRenderingInve
                 if(slot.container instanceof AdditionalInventory && slot.y != 6){
                     var i = wrapper.target.index;
                     this.menu.slots.add(new CreativeModeInventoryScreen.SlotWrapper(wrapper.target,i,54+18,6));
+                    
                     return false;
                 }
             }catch (Exception e){
@@ -58,5 +64,14 @@ public abstract class TTMixinCreativeInventoryScreen extends EffectRenderingInve
             }
         }
         return instance.add(o);
+    }
+    
+    @Inject(method = "slotClicked",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/inventory/InventoryMenu;broadcastChanges()V"))
+    public void onBroadcastChange(Slot pSlot, int pSlotId, int pMouseButton, ClickType pType, CallbackInfo ci){
+        if(pSlot != null && pSlot.container instanceof AdditionalInventory){
+            TTNetworkHandler.CHANNEL.sendToServer(new SyncGUIDataPacket(pSlot.getSlotIndex()+10000,pSlot.getItem()));
+        }
     }
 }
