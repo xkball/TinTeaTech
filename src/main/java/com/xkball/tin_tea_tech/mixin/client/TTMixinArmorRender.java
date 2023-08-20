@@ -41,7 +41,7 @@ public abstract class TTMixinArmorRender <T extends LivingEntity, M extends Huma
     @Shadow protected abstract void renderTrim(ArmorMaterial pArmorMaterial, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorTrim pTrim, A pModel, boolean pInnerTexture);
     
     
-    @Shadow(remap = false) protected abstract void renderModel(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorItem pArmorItem, Model pModel, boolean pWithGlint, float pRed, float pGreen, float pBlue, ResourceLocation armorResource);
+    @Shadow protected abstract void renderModel(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorItem pArmorItem, A pModel, boolean pWithGlint, float pRed, float pGreen, float pBlue,@Nullable String f);
     
     public TTMixinArmorRender(RenderLayerParent<T, M> pRenderer) {
         super(pRenderer);
@@ -60,9 +60,8 @@ public abstract class TTMixinArmorRender <T extends LivingEntity, M extends Huma
                 this.setPartVisibility(pModel, pSlot);
                 net.minecraft.client.model.Model model = getArmorModelHook(pLivingEntity, is, pSlot, pModel);
                 boolean flag = this.usesInnerModel(pSlot);
-                this.renderModel(pMatrixStack, pBuffer, pPackedLight, holoGlass, model, flag, 1.0F, 1.0F, 1.0F, this.getArmorResource(pLivingEntity, is, pSlot, null));
-                
                 try {
+                    this.renderModel(pMatrixStack, pBuffer, pPackedLight, holoGlass, (A) model, false, 1.0F, 1.0F, 1.0F, null);
                     //noinspection unchecked
                     ArmorTrim.getTrim(pLivingEntity.level().registryAccess(), is).ifPresent((p_289638_) ->
                             this.renderTrim(holoGlass.getMaterial(), pMatrixStack, pBuffer, pPackedLight, p_289638_, (A) model, flag));
