@@ -55,6 +55,7 @@ public enum Connections {
         this.opposite = opposite;
         this.relativePos = relativePos;
         this.slice = slice;
+        slice.append(this);
         if(contains.length == 1){
             var d = contains[0];
             ConnectionsData.dConnections.put(d,new Pair<>(this,d));
@@ -115,21 +116,5 @@ public enum Connections {
         return slice;
     }
     
-    public enum Slice{
-        Vertical(verticalConnections),
-        X(XRoundConnections),
-        Y(YRoundConnections),
-        Z(ZRoundConnections);
-        
-        final Collection<Connections> connections;
-        
-        Slice(Collection<Connections> connections) {
-            this.connections = connections;
-        }
-        
-        public Collection<Connections> getAll(){
-            return connections;
-        }
-    }
     
 }

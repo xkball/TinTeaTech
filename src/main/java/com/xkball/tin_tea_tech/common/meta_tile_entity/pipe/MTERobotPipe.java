@@ -2,6 +2,7 @@ package com.xkball.tin_tea_tech.common.meta_tile_entity.pipe;
 
 import com.xkball.tin_tea_tech.api.annotation.*;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
+import com.xkball.tin_tea_tech.api.pipe.Slice;
 import com.xkball.tin_tea_tech.client.render.PipeRender;
 import com.xkball.tin_tea_tech.common.blocks.te.PipeMTEBlock;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
@@ -81,7 +82,7 @@ public class MTERobotPipe extends MTEPipe{
         return result;
     }
     
-    public int connectionCount(Connections.Slice slice){
+    public int connectionCount(Slice slice){
         var result = 0;
         for(Connections c : slice.getAll()) {
             if (isConnected(c)) result++;

@@ -11,8 +11,10 @@
   "block.tin_tea_tech.fluid_pipe": "流体管道",
   "block.tin_tea_tech.fluid_tank": "流体储罐",
   "block.tin_tea_tech.generator_center": "发电机核心",
+  "block.tin_tea_tech.high_power_casing": "高能机器外壳",
   "block.tin_tea_tech.inf_water_tank": "无限水储罐",
   "block.tin_tea_tech.item_pipe": "物品管道",
+  "block.tin_tea_tech.robot_pipe": "物流机器人管道",
   "block.tin_tea_tech.scaffolding_block": "脚手架",
   "block.tin_tea_tech.solar_reflector": "太阳能反射镜",
   "block.tin_tea_tech.solid_combustion_chamber": "固态燃烧室",
@@ -67,6 +69,7 @@
   "key.category.tin_tea_tech": "锡茶科技",
   "key.tin_tea_tech.open_holo_glass": "打开云钩",
   "key.tin_tea_tech.print_nbt": "显示NBT",
+  "tooltip.tin_tea_tech.from_tectech": "来自Tec Tech!",
   "tooltip.tin_tea_tech.holo_glass_plugin": "可作为云钩插件",
   "tooltip.tin_tea_tech.not_ti": "绝对不是钛制!",
   "tooltip.tin_tea_tech.sun_glass": "黑夜给了我一双黑色的眼睛,从此我只能看到黑夜"
