@@ -60,6 +60,7 @@ public class DataGen {
             addLangKey("tooltip.tin_tea_tech.holo_glass_plugin","This is a holo glass plugin","可作为云钩插件");
             addLangKey("tooltip.tin_tea_tech.not_ti","Definitely Not Titanium !","绝对不是钛制!");
             addLangKey("tooltip.tin_tea_tech.sun_glass","Welcome to NIGHT CITY!" ,"黑夜给了我一双黑色的眼睛,从此我只能看到黑夜");
+            addLangKey("tooltip.tin_tea_tech.sunnn_glass","Forever Burning...","太阳炙烤着你...");
             addLangKey("tooltip.tin_tea_tech.from_tectech","Comes From Tec Tech!","来自Tec Tech!");
         }
         private static final Map<String, Pair<String,String>> localizations;

@@ -3,8 +3,6 @@ package com.xkball.tin_tea_tech.api.pipe;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.xkball.tin_tea_tech.api.pipe.Connections.*;
-
 public enum Slice {
     Vertical(),
     X(),
