@@ -1,5 +1,7 @@
 # 锡茶科技 TinTeaTech
 
+![sample image](https://github.com/xkball/TinTeaTech/blob/master/display_20230909.png "本模组部分方块和物品. Some blocks and items in this mod.")
+
 ## 简介 Introduction
 
 锡茶科技是一个Minecraft模组,目前支持的环境包括 Minecraft 1.20.1 Forge.
