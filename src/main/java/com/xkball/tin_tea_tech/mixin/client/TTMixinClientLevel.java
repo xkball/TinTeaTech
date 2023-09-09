@@ -29,7 +29,8 @@ public abstract class TTMixinClientLevel extends Level {
     
     @Override
     public float getTimeOfDay(float pPartialTick) {
-        return minecraft.level != null && PlayerData.get().modeAvailable(5)
+        if(minecraft.level == null) return super.getTimeOfDay(pPartialTick);
+        return PlayerData.get().modeAvailable(5)
                 ? this.dimensionType().timeOfDay(20000) :
                 PlayerData.get().modeAvailable(6) ? this.dimensionType().timeOfDay(4000) :
                         super.getTimeOfDay(pPartialTick);
