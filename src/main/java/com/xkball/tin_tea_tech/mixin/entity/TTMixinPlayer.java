@@ -35,10 +35,10 @@ public abstract class TTMixinPlayer extends LivingEntity implements IExtendedPla
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot pSlot);
     
     @Unique
-    public final AdditionalInventory tin_tea_tech$additionalInventory = new AdditionalInventory();
+    public final AdditionalInventory tin_tea_tech$additionalInventory = new AdditionalInventory((Player)(Object)this);
     
     @Unique
-    public final PlayerData tin_tea_tech$playerData = new PlayerData();
+    public final PlayerData tin_tea_tech$playerData = new PlayerData((Player)(Object)this);
     
     
     protected TTMixinPlayer(EntityType<? extends LivingEntity> pEntityType, Level pLevel) {

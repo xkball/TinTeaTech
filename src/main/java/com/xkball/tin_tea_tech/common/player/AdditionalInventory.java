@@ -4,6 +4,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -12,10 +13,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class AdditionalInventory extends SimpleContainer {
     
+    private final Player owner;
+    
     //0为头后栏
     //1-9暂未决定用处 大概是给放工具的
-    public AdditionalInventory() {
+    public AdditionalInventory(Player owner) {
         super(10);
+        this.owner = owner;
     }
     
 //    @Override
@@ -30,6 +34,22 @@ public class AdditionalInventory extends SimpleContainer {
 //
 //    }
     
+    
+    @Override
+    public void setItem(int pIndex, ItemStack pStack) {
+        setItem(false,pIndex,pStack);
+    }
+    
+    public void setItem(boolean isLoading,int pIndex,ItemStack pStack){
+        if(isLoading){
+            super.setItem(pIndex,pStack);
+            return;
+        }
+        var from = getItem(pIndex);
+        super.setItem(pIndex, pStack);
+        PlayerData.get(owner).updateDateFromItem(from,pStack);
+    }
+    
     @Override
     public void fromTag(ListTag pContainerNbt) {
         this.clearContent();
@@ -37,10 +57,10 @@ public class AdditionalInventory extends SimpleContainer {
         for(int i = 0; i < pContainerNbt.size(); ++i) {
             ItemStack itemstack = ItemStack.of(pContainerNbt.getCompound(i));
             if (!itemstack.isEmpty()) {
-                this.setItem(i,itemstack);
+                this.setItem(true,i,itemstack);
             }
             else {
-                this.setItem(i,ItemStack.EMPTY);
+                this.setItem(true,i,ItemStack.EMPTY);
             }
         }
         

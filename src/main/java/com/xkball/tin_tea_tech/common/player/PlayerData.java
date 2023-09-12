@@ -34,6 +34,13 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     
     public Int2IntMap hgPluginMap = new Int2IntLinkedOpenHashMap();
     
+    private final Player owner;
+    
+    public PlayerData(Player owner) {
+        this.owner = owner;
+    }
+    
+    
     public void setDisplayInventoryInGUI(boolean displayInventoryInGUI) {
         if(this.displayInventoryInGUI != displayInventoryInGUI){
             this.displayInventoryInGUI = displayInventoryInGUI;
@@ -56,6 +63,10 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     }
     
     public void loadHGPDataFromItem(ItemStack itemStack){
+        loadHGPDataFromItem(itemStack,false);
+    }
+    
+    public void loadHGPDataFromItem(ItemStack itemStack,boolean isUnload){
         if(itemStack.getItem() instanceof HoloGlass && itemStack.hasTag()){
             var tag = itemStack.getTag();
             assert tag != null;
@@ -65,7 +76,7 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
                 for(int i=0;i<9;i++){
                     var m = IHoloGlassPlugin.getMode(container.getStackInSlot(i));
                     if(m!=-1){
-                        this.modeChange(true,m);
+                        this.modeChange(!isUnload,m);
                     }
                 }
             }
@@ -134,6 +145,20 @@ public class PlayerData implements INBTSerializable<CompoundTag> {
     public void sync(){
         if(TinTeaTech.isClient()){
             TTNetworkHandler.sentToServer(new SyncGUIDataPacket(this));
+        }
+    }
+    
+    
+    public void updateDateFromItem(ItemStack from,ItemStack to){
+        if(from.equals(to,false)) return;
+        if(from.getItem() instanceof HoloGlass){
+            loadHGPDataFromItem(from,true);
+        }
+        if(to.getItem() instanceof HoloGlass){
+            loadHGPDataFromItem(to,false);
+        }
+        if(!owner.isLocalPlayer()){
+            TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(this),owner);
         }
     }
   
