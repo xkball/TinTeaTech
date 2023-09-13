@@ -20,6 +20,7 @@ import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
 import com.xkball.tin_tea_tech.common.tile_entity.TTTileEntityBase;
 import com.xkball.tin_tea_tech.data.tag.TTBlockTags;
 import com.xkball.tin_tea_tech.data.tag.TTItemTags;
+import com.xkball.tin_tea_tech.utils.Cache;
 import com.xkball.tin_tea_tech.utils.Timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -65,6 +66,17 @@ public class AutoRegManager {
     public static RegistryObject<BlockEntityType<TTTileEntityBase>> TILE_ENTITY_BASE;
     
     public static ModFileScanData re;
+    
+    public static final Cache<List<Block>> ttBlocks = new Cache<>(() -> {
+        var result = new LinkedList<Block>();
+        for(var ro : allRegistryObjects()){
+            var obj = ro.get();
+            if(obj instanceof Block block){
+                result.add(block);
+            }
+        }
+        return result;
+    });
     
     
     public static void init(){

@@ -61,6 +61,7 @@
   "item.tin_tea_tech.holo_glass": "云钩",
   "item.tin_tea_tech.item_input_cover": "物品输入覆盖版",
   "item.tin_tea_tech.player_radar": "玩家雷达",
+  "item.tin_tea_tech.s_u_n_n_n_n_n_glass": "墨镜",
   "item.tin_tea_tech.sun_glass": "墨镜",
   "item.tin_tea_tech.test_item": "测试物品",
   "item.tin_tea_tech.tricorder": "三录仪",
@@ -72,5 +73,6 @@
   "tooltip.tin_tea_tech.from_tectech": "来自Tec Tech!",
   "tooltip.tin_tea_tech.holo_glass_plugin": "可作为云钩插件",
   "tooltip.tin_tea_tech.not_ti": "绝对不是钛制!",
-  "tooltip.tin_tea_tech.sun_glass": "黑夜给了我一双黑色的眼睛,从此我只能看到黑夜"
+  "tooltip.tin_tea_tech.sun_glass": "黑夜给了我一双黑色的眼睛,从此我只能看到黑夜",
+  "tooltip.tin_tea_tech.sunnn_glass": "太阳炙烤着你..."
 }

@@ -61,6 +61,7 @@
   "item.tin_tea_tech.holo_glass": "Holo Glass",
   "item.tin_tea_tech.item_input_cover": "Item Input Cover",
   "item.tin_tea_tech.player_radar": "PlayerRadar",
+  "item.tin_tea_tech.s_u_n_n_n_n_n_glass": "SUNNNNNGlass",
   "item.tin_tea_tech.sun_glass": "MoonGlass",
   "item.tin_tea_tech.test_item": "TestItem",
   "item.tin_tea_tech.tricorder": "Tricorder",
@@ -72,5 +73,6 @@
   "tooltip.tin_tea_tech.from_tectech": "Comes From Tec Tech!",
   "tooltip.tin_tea_tech.holo_glass_plugin": "This is a holo glass plugin",
   "tooltip.tin_tea_tech.not_ti": "Definitely Not Titanium !",
-  "tooltip.tin_tea_tech.sun_glass": "Welcome to NIGHT CITY!"
+  "tooltip.tin_tea_tech.sun_glass": "Welcome to NIGHT CITY!",
+  "tooltip.tin_tea_tech.sunnn_glass": "Forever Burning..."
 }

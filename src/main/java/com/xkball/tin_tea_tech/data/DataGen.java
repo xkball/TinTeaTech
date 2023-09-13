@@ -22,6 +22,7 @@ public class DataGen {
         var blockTagProvider = new TagProviders.BlockTagProvider(packOutput,lookupProvider);
         gen.addProvider(event.includeClient(),blockTagProvider);
         gen.addProvider(event.includeClient(),new TagProviders.ItemTagProvider(packOutput,lookupProvider,blockTagProvider.contentsGetter()));
+        gen.addProvider(event.includeServer(),new BlockLootProvider(packOutput));
     }
     
     public static class LangUtils{
