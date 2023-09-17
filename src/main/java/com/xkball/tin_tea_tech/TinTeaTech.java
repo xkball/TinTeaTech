@@ -4,12 +4,14 @@ import com.mojang.logging.LogUtils;
 import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.client.key.vanilla.VanillaInputHandler;
 import com.xkball.tin_tea_tech.client.render.MTERender;
+import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.config.TTConfig;
 import com.xkball.tin_tea_tech.data.DataGen;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.registration.AutoRegManager;
 import com.xkball.tin_tea_tech.registration.TTRegistration;
 import com.xkball.tin_tea_tech.utils.Timer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -165,10 +167,22 @@ public class TinTeaTech
     }
     @Mod.EventBusSubscriber(value = Dist.CLIENT)
     public static class ClientForgeEvents{
+        
+        public static float speedFactor = 1;
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event){
             if(event.phase == TickEvent.Phase.START){
                 clientTicks++;
+                if(Minecraft.getInstance().options.keyShift.isDown()){
+                    if(PlayerData.get().modeAvailable(7)){
+                        speedFactor += 0.01;
+                        speedFactor = Math.min(speedFactor,5f);
+                    }
+                }
+                else if(speedFactor>1){
+                    speedFactor = Math.max(speedFactor-0.01f,1f);
+                }
+                
             }
         }
         

@@ -14,12 +14,14 @@
     "entity.TTMixinServerPlayer"
   ],
   "client": [
+    "client.TTMixinMPGameMode",
     "client.TTMixinArmorRender",
     "client.TTMixinClientLevel",
     "client.TTMixinCreativeInventoryScreen",
     "client.TTMixinCustomHeadRender",
     "client.TTMixinKeyboardInput",
-    "client.TTMixinMinecraft"
+    "client.TTMixinMinecraft",
+    "client.TTMixinLocalPlayer"
   ],
   "minVersion": "0.8"
 }

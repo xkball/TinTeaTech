@@ -63,6 +63,7 @@ public class DataGen {
             addLangKey("tooltip.tin_tea_tech.sun_glass","Welcome to NIGHT CITY!" ,"黑夜给了我一双黑色的眼睛,从此我只能看到黑夜");
             addLangKey("tooltip.tin_tea_tech.sunnn_glass","Forever Burning...","太阳炙烤着你...");
             addLangKey("tooltip.tin_tea_tech.from_tectech","Comes From Tec Tech!","来自Tec Tech!");
+            addLangKey("tooltip.tin_tea_tech.warn.ec","DO NOT USE, WIP","未完成,不要使用 如果使用你会发现这其实是--超电磁炮");
         }
         private static final Map<String, Pair<String,String>> localizations;
         

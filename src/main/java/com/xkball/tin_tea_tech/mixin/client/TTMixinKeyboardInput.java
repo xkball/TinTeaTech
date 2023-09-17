@@ -21,6 +21,14 @@ public abstract class TTMixinKeyboardInput extends Input {
                 this.forwardImpulse *= pSneakingSpeedMultiplier;
             }
         }
+//        else if(PlayerData.get().modeAvailable(7)){
+//            if(pIsSneaking){
+//                this.leftImpulse /= pSneakingSpeedMultiplier;
+//                this.forwardImpulse /= pSneakingSpeedMultiplier;
+//            }
+//            this.leftImpulse = this.leftImpulse * TinTeaTech.ClientForgeEvents.speedFactor;
+//            this.forwardImpulse = this.forwardImpulse * TinTeaTech.ClientForgeEvents.speedFactor;
+//        }
     }
     
 }

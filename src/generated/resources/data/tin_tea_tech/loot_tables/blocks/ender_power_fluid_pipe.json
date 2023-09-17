@@ -1,0 +1,20 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tin_tea_tech:ender_power_fluid_pipe_item"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tin_tea_tech:blocks/ender_power_fluid_pipe"
+}
