@@ -99,7 +99,7 @@ catch反射异常一类的就不写了
         return Class.forName(className);
     }
 
-这里有个莫名其妙的小坑 不知道如果目标类是个类的目标类 Class.forName(className)会报错 但是把那个类去getName又和输入的className一致
+这里有个莫名其妙的小坑 如果目标类是个类的内部类 Class.forName(className)会报错 但是把那个类去getName又和输入的className一致
 不管原理如何 经过一点点绕行(拿到所有内部类一个个去试,这里没有考虑内部类套内部类) 我们终于拿到了使用了@AutomaticRegistration注解的类的Class对象 这为接下来反射等操作提供了空间
 
 ### todo
