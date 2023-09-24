@@ -29,11 +29,11 @@ public class TTUtils {
         return result;
     }
     
-    public static BitSet forLongToBitSet(long i,int length){
-        return forLongToBitSet(i,length,new BitSet(length));
+    public static BitSet fromLongToBitSet(long i, int length){
+        return fromLongToBitSet(i,length,new BitSet(length));
     }
     
-    public static BitSet forLongToBitSet(long i,int length,BitSet result){
+    public static BitSet fromLongToBitSet(long i, int length, BitSet result){
         result.clear();
         for(int j = 0;j<length;j++){
             if(((i & (0b1L << j)) / (0b1L << j)) == 1){

@@ -38,7 +38,7 @@ block information display (similar to top or jade), forced display of eternal ni
 
 本模组参与了TeaCon2023 https://www.teacon.cn/2023/
 
-本模组"言传身教"奖项内容: https://github.com/xkball/TinTeaTech/blob/master/technical_details
+本模组参与"言传身教"奖项内容: https://github.com/xkball/TinTeaTech/tree/master/tecnical_details
 
 ## 许可证 License
 

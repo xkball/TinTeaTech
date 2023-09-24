@@ -71,7 +71,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     public void readInitData(CompoundTag tag) {
         super.readInitData(tag);
         var bl = tag.getInt("bitsetL");
-        TTUtils.forLongToBitSet(tag.getLong("bitset"),bl,connections);
+        TTUtils.fromLongToBitSet(tag.getLong("bitset"),bl,connections);
         var c = tag.getInt("color");
         if(c != 0) color = c;
      
@@ -230,7 +230,7 @@ public abstract class MTEPipe extends MetaTileEntity implements ColorGetter {
     public void readCustomData(int id, ByteBuf byteBuf) {
         super.readCustomData(id, byteBuf);
         if(id == TTValue.DATA_UPDATE){
-            TTUtils.forLongToBitSet(byteBuf.readLong(),byteBuf.readInt(),connections);
+            TTUtils.fromLongToBitSet(byteBuf.readLong(),byteBuf.readInt(),connections);
             var bit = new BitSet();
             for(var c : Connections.verticalConnections){
                 if(isConnected(c)) bit.set(c.ordinal());

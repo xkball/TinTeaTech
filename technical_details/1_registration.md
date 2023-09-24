@@ -44,7 +44,7 @@
 ### 目标功能
  AutomaticRegistration注解类和其中的所有内部注解类都是用于标识一个类需要被自动注册的
  内部注解类主要为注册目标提供额外信息
- 可以被这个注解注册的类包括<? extend Block>,<? extend Item>,<? extend CreativeModeTab>,<? extend MetaTileEntity>,<? extend IItemBehaviour>,<? extend IGuiOverlay>
+ 可以被这个注解注册的类包括<? extend Block>,<? extend Item>,<? extend CreativeModeTab>,<? extend MetaTileEntity>,<? extend IItemBehaviour>,<? extend IGuiOverlay>,<? extend
 
  CreativeTag注解用于表示一个 会产生物品 的注册对象注册出的物品放进什么CreativeTag,注意参数是类,因为本模组的CreativeTag也是自动注册的 不是很方便拿到它自己
 
@@ -102,5 +102,88 @@ catch反射异常一类的就不写了
 这里有个莫名其妙的小坑 如果目标类是个类的内部类 Class.forName(className)会报错 但是把那个类去getName又和输入的className一致
 不管原理如何 经过一点点绕行(拿到所有内部类一个个去试,这里没有考虑内部类套内部类) 我们终于拿到了使用了@AutomaticRegistration注解的类的Class对象 这为接下来反射等操作提供了空间
 
-### todo
- 
+然后用XX(将产生的对象类型).class.isAssignableFrom(clazz)就可以判断你拿到的类是不是继承自某个类
+从而可以区分方块物品等 然后可以创建对应一个或者多个RegistryObject
+
+这里存在数个问题 暂时的解决方案如下(我都不是觉得很好):
+- 创建真正的目标对象只能用反射 这里节选一段
+     
+        TTRegistration.BLOCKS.register(name,
+                    () -> {
+                try {
+                    return (Block) clazz.getDeclaredConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+                );
+非常丑陋 还不能给构造器任意传参 这基本意味着一个类只能对应一个对象
+
+- 很难拿到目标对象 我们并没有对其的直接引用(我觉得这是最大的问题)
+暂时解决方案是
+
+       //仅在单例时使用
+       private static final Map<Class<?>, RegistryObject<?>> classRegMap = new HashMap<>();
+
+       //所有自动注册的玩意都放进去
+       private static final Map<String,RegistryObject<?>> nameRegMap = new HashMap<>();
+
+然后拿对象的时候对RegistryObject get后的东西进行一个强制转型(谔谔)
+
+- 没有地方定义了目标对象的ID 现在解决方案是从类名生成 生成规则如下
+
+        private static final Pattern pattern = Pattern.compile("[A-Z][a-z]*");
+
+        public static String fromClassName(Class<?> clazz){
+            if(clazz.isAnnotationPresent(AutomaticRegistration.class) && clazz.getAnnotation(AutomaticRegistration.class).needSpecialName()){
+                return clazz.getAnnotation(AutomaticRegistration.class).name();
+            }
+            return fromClassName(clazz.getSimpleName());
+        }
+        
+        public static String fromClassName(String className){
+            var result = className;
+            if(className.startsWith("TTT")){
+                result = className.substring(3);
+            }
+            else if(className.startsWith("TT")){
+                result = className.substring(2);
+            }
+            else if(className.startsWith("MTE")){
+                result = className.substring(3);
+            }
+            else if(className.endsWith("Behaviour")){
+                result = className.substring(0,className.lastIndexOf("B"));
+            }
+            StringBuilder builder = new StringBuilder();
+            for(MatchResult s : pattern.matcher(result).results().toList()){
+                builder.append(s.group().toLowerCase());
+                builder.append("_");
+            }
+            builder.deleteCharAt(builder.length()-1);
+            return builder.toString();
+        }
+
+存在实在不能生成名字的情况(见能量管道) 所以也给了不生成名字的途径 剩下则对类名掐头去尾后把大写全变成小写 然后单词之间插入"_"
+
+剩下的注解和这个的实现差不多 就不详细介绍了
+
+## 总结
+
+使用例
+       
+       @CreativeTag(tab = TTCreativeTab.TTMachineTab.class)
+       @AutomaticRegistration
+       @AutomaticRegistration.MTE(block = PipeMTEBlock.class,renderer = "com.xkball.tin_tea_tech.client.render.PipeRender")
+       @Model(resources = {"tin_tea_tech:block/pipe_default"})
+       @I18N(chinese = "末影物品管道",english = "Ender Power Item Pipe")
+       @Tag.Item({"pipe"})
+       public class MTEEnderPowerItemPipe extends MTEPipeWithNet{...}
+
+现在的方案的确实现了打注解就能注册 的确让我能把大部分精力放在核心功能开发而不用把一堆类翻来覆去去注册
+
+但是现在方案自由度较低 思路有些混乱 多次遇到需要不足半路加功能(不自动生成名称的功能就是一例) 导致类里面存在大量复杂还带重复性的代码
+面目可憎 急需重写 (可惜也没什么重写的动力,毕竟能跑)
+
+

@@ -1,4 +1,3 @@
-import com.xkball.tin_tea_tech.capability.heat.HeatHandler;
 import com.xkball.tin_tea_tech.utils.TTUtils;
 
 import java.util.BitSet;
@@ -33,7 +32,7 @@ public class Main {
         bitSet.set(1);
         bitSet.set(0);
         long l = TTUtils.longValueOfBitSet(bitSet);
-        BitSet r = TTUtils.forLongToBitSet(l,61);
+        BitSet r = TTUtils.fromLongToBitSet(l,61);
         System.out.println(Long.toString(l,2));
         System.out.println(r);
         

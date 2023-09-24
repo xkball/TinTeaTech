@@ -131,7 +131,7 @@ public class RenderHighlight {
         
     }
     
-    //Todo Fix Normal
+    //todo Fix Normal
     public static void renderCommonConnection(Connections connection, Direction.Axis axis,PoseStack pPoseStack,VertexConsumer buffer,int color,int light,float u0,float v0,float u1,float v1,boolean needUV,double x,double y,double z){
         var direction = connection.toDirection();
         pPoseStack.pushPose();

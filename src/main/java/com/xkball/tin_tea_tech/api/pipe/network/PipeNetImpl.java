@@ -43,11 +43,7 @@ public class PipeNetImpl implements PipeNet{
             firstTick();
             firstTick = true;
         }
-        if(!(pos == center)){
-            if (!(lastTick != TinTeaTech.ticks && !level.isLoaded(center))){
-                return;
-            }
-        }
+        if(lastTick == TinTeaTech.ticks) return;
         lastTick = TinTeaTech.ticks;
         doTick();
         checkNet(false);
