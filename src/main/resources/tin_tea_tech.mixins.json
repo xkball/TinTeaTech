@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.xkball.tin_tea_tech.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "powertool.refmap.json",
+  "mixins": [
+
+  ],
+  "client": [
+
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
