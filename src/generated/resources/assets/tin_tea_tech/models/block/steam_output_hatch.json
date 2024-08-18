@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "tin_tea_tech:block/steam_output_hatch"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "parent": "block/block",
-  "textures": {
-    "particle": "minecraft:block/cracked_stone_bricks"
-  }
-}
