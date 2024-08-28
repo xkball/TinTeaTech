@@ -5,6 +5,7 @@ import com.xkball.tin_tea_tech.api.pipe.Connections;
 import com.xkball.tin_tea_tech.client.key.vanilla.VanillaInputHandler;
 import com.xkball.tin_tea_tech.client.render.MTERender;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
+import com.xkball.tin_tea_tech.common.worldgen.vein.Veins;
 import com.xkball.tin_tea_tech.config.TTConfig;
 import com.xkball.tin_tea_tech.data.DataGen;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -37,6 +39,7 @@ import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(TinTeaTech.MODID)
@@ -91,7 +94,8 @@ public class TinTeaTech
     public static void onServerStarting(ServerStartingEvent event) {
         var timer = new Timer();
         
-        LOGGER.debug(MOD_NAME + " setup on server starting completed in "+timer.timeNS()+" ns.");
+        Veins.init(Objects.requireNonNull(event.getServer().getLevel(Level.OVERWORLD)).getSeed());
+        LOGGER.debug(MOD_NAME + " setup on server starting completed in "+timer.timeMS()+" ms.");
     }
     
     @SubscribeEvent

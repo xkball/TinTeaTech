@@ -27,6 +27,10 @@ public class TTNetworkHandler {
         instance().send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),packet);
     }
     
+    public static void sentToAllClient(Object packet){
+        instance().send(PacketDistributor.ALL.noArg(), packet);
+    }
+    
     public static void init(){
         CHANNEL.registerMessage(0,
                 MTEClientToServerDataPacket.class,
@@ -58,6 +62,11 @@ public class TTNetworkHandler {
                 ControlPlayerPacket::serialize,
                 ControlPlayerPacket::new,
                 ControlPlayerPacket::handle);
+        CHANNEL.registerMessage(6,
+                SyncLatitudeAndLongitudePacket.class,
+                SyncLatitudeAndLongitudePacket::serialize,
+                SyncLatitudeAndLongitudePacket::new,
+                SyncLatitudeAndLongitudePacket::handle);
     }
     
 }

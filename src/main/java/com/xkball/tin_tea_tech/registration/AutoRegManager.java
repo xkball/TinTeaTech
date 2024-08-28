@@ -45,6 +45,8 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+//todo 重构
+//以后让无功能的方块物品才走自动注册
 public class AutoRegManager {
     
     private static final Pattern pattern = Pattern.compile("[A-Z][a-z]*");

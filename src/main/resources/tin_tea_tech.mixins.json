@@ -4,24 +4,31 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "tin_tea_tech.refmap.json",
   "mixins": [
+    "TTMixinDimensionType",
     "TTMixinFlintAndSteel",
     "TTMixinInventoryMenu",
     "TTMixinItemBlock",
+    "TTMixinServerLevel",
     "TTMixinUseOnContext",
     "entity.TTMixinLivingEntity",
     "entity.TTMixinMob",
     "entity.TTMixinPlayer",
-    "entity.TTMixinServerPlayer"
+    "entity.TTMixinServerPlayer",
+    "worldgen.TTMixinNoiseChunk",
+    "worldgen.TTMixinNoiseGenSettings",
+    "worldgen.TTMixinOreVein"
   ],
   "client": [
-    "client.TTMixinMPGameMode",
     "client.TTMixinArmorRender",
     "client.TTMixinClientLevel",
     "client.TTMixinCreativeInventoryScreen",
     "client.TTMixinCustomHeadRender",
+    "client.TTMixinFogRenderer",
     "client.TTMixinKeyboardInput",
+    "client.TTMixinLocalPlayer",
     "client.TTMixinMinecraft",
-    "client.TTMixinLocalPlayer"
+    "client.TTMixinMPGameMode",
+    "client.TTMixinRenderSky"
   ],
   "minVersion": "0.8"
 }

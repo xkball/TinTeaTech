@@ -69,4 +69,9 @@ public record Point2D(double x, double y) {
             else return RelativeFacing.self;
         }
     }
+    
+    @Override
+    public String toString() {
+        return String.format("( %.8f,%.8f)",x,y);
+    }
 }

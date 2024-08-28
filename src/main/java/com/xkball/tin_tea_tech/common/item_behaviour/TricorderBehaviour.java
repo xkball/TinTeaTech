@@ -38,14 +38,14 @@ public class TricorderBehaviour implements IItemBehaviour, IHoloGlassPlugin {
     public InteractionResult useOnBlock(UseOnContext pContext) {
         if(!pContext.getLevel().isClientSide && pContext.getPlayer() != null ) {
             var pos = pContext.getClickedPos();
-            var info = scan(pContext.getLevel(),pos, pContext.getPlayer(),true);
+            var info = scanBlock(pContext.getLevel(),pos, pContext.getPlayer(),true);
             info.forEach((c) -> pContext.getPlayer().sendSystemMessage(c));
         }
         return InteractionResult.SUCCESS;
         
     }
     
-    public static Collection<Component> scan(Level level, BlockPos pos,Player scanner,boolean recordTime){
+    public static Collection<Component> scanBlock(Level level, BlockPos pos, Player scanner, boolean recordTime){
         var state = level.getBlockState(pos);
         var te = level.getBlockEntity(pos);
         var info = DataProvider.blockInfo(state, pos);
@@ -56,7 +56,7 @@ public class TricorderBehaviour implements IItemBehaviour, IHoloGlassPlugin {
                             info.add(DataProvider.crossLine());
                             info.add(DataProvider.translatable("inventory").withStyle(ChatFormatting.BOLD));
                             for(int i=0;i<itemHandler.getSlots();i++){
-                                info.add(DataProvider.translatable("shot")
+                                info.add(DataProvider.translatable("slot")
                                         .append(Component.literal(i+" "))
                                         .append(DataProvider.translatable("item"))
                                         .append(Component.literal(itemHandler.getStackInSlot(i).toString())));

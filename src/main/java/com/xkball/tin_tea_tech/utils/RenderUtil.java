@@ -1,29 +1,36 @@
 package com.xkball.tin_tea_tech.utils;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import ca.weblite.objc.Client;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Axis;
 import com.xkball.tin_tea_tech.TinTeaTech;
 import com.xkball.tin_tea_tech.client.shape.*;
 import com.xkball.tin_tea_tech.common.meta_tile_entity.MetaTileEntity;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import org.joml.AxisAngle4f;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
+import net.minecraft.world.phys.Vec3;
+import org.joml.*;
+
+import java.lang.Math;
 
 public class RenderUtil {
     public static final double H01;
     public static final double H1;
     public static final double H2;
+    
+    private static final Vector3f YP = new Vector3f(0f,1f,0f);
+    
+    private static final ResourceLocation SUN_LOCATION = new ResourceLocation("textures/environment/sun.png");
     
     static {
         H01 = 1d/16d;
@@ -155,5 +162,77 @@ public class RenderUtil {
         bufferBuilder.vertex(pPose, pX1, pY1, pZ2).color(color).uv(u1,v1).uv2(light).normal(fn,nx,ny,nz).endVertex();
         bufferBuilder.vertex(pPose, pX0, pY1, pZ3).color(color).uv(u1,v0).uv2(light).normal(fn,nx,ny,nz).endVertex();
         
+    }
+    
+    //还需要调整:fog的红雾
+    //time of day曲线
+    //star brightness曲线
+    // 重写太阳高度
+    public static void renderSky(LevelRenderer levelRenderer, ClientLevel level,PoseStack pPoseStack, Matrix4f pProjectionMatrix,float pPartialTick,VertexBuffer skyBuffer,VertexBuffer starBuffer,Runnable pSkyFogSetup){
+        //light sky
+        Vec3 vec3 = level.getSkyColor(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition(), pPartialTick);
+        float f = (float)vec3.x;
+        float f1 = (float)vec3.y;
+        float f2 = (float)vec3.z;
+        pPoseStack.pushPose();
+        var skyDarken = level.getSkyDarken(pPartialTick);
+        pPoseStack.translate(0,(1-skyDarken)*10,0);
+        RenderSystem.depthMask(false);
+        RenderSystem.setShaderColor(f, f1, f2, Mth.clamp(skyDarken*2,0f,1f));
+        ShaderInstance shaderinstance = RenderSystem.getShader();
+        skyBuffer.bind();
+        skyBuffer.drawWithShader(pPoseStack.last().pose(), pProjectionMatrix, shaderinstance);
+        pPoseStack.popPose();
+        VertexBuffer.unbind();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.depthMask(true);
+        var ll = ClientUtils.getLatitudeAndLongitude();
+        //star
+        RenderSystem.enableBlend();
+        float brightness = level.getStarBrightness(pPartialTick)*(1.0F - level.getRainLevel(pPartialTick));
+        if(brightness>0F){
+            
+            pPoseStack.pushPose();
+            pPoseStack.mulPose(Axis.XP.rotationDegrees((float) ll.y()));
+            pPoseStack.mulPose(Axis.ZP.rotationDegrees((level.getDayTime()%24000f)/24000f * 360.0F));
+            brightness = Mth.clamp(brightness*2,0f,1f);
+            RenderSystem.setShaderColor(1f,1f,1f,brightness);
+            FogRenderer.setupNoFog();
+            //FogRenderer.setupNoFog();
+            starBuffer.bind();
+            starBuffer.drawWithShader(pPoseStack.last().pose(), pProjectionMatrix, GameRenderer.getPositionShader());
+            VertexBuffer.unbind();
+            pSkyFogSetup.run();
+            
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            pPoseStack.popPose();
+        }
+        //sun
+        //RenderSystem.enableBlend();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        pPoseStack.pushPose();
+        float f11 = 1.0F - level.getRainLevel(pPartialTick);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, f11);
+        var sun = ClientUtils.getLevelModel().getSunVec();
+        //var axis = sun.cross(YP,new Vector3f());
+        //var theta = sun.angle(YP);
+        var axis = sun.cross(YP,new Vector3f());
+        var theta = sun.angle(YP);
+        pPoseStack.mulPose(Axis.of(axis).rotation(theta));
+        Matrix4f matrix4f1 = pPoseStack.last().pose();
+        float f12 = 30.0F;
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, SUN_LOCATION);
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrix4f1, -f12, 100.0F, -f12).uv(0.0F, 0.0F).endVertex();
+        bufferbuilder.vertex(matrix4f1, f12, 100.0F, -f12).uv(1.0F, 0.0F).endVertex();
+        bufferbuilder.vertex(matrix4f1, f12, 100.0F, f12).uv(1.0F, 1.0F).endVertex();
+        bufferbuilder.vertex(matrix4f1, -f12, 100.0F, f12).uv(0.0F, 1.0F).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
+        pPoseStack.popPose();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.disableBlend();
+        RenderSystem.defaultBlendFunc();
     }
 }

@@ -6,12 +6,15 @@ import com.xkball.tin_tea_tech.common.player.IExtendedPlayer;
 import com.xkball.tin_tea_tech.common.player.PlayerData;
 import com.xkball.tin_tea_tech.network.TTNetworkHandler;
 import com.xkball.tin_tea_tech.network.packet.SyncGUIDataPacket;
+import com.xkball.tin_tea_tech.network.packet.SyncLatitudeAndLongitudePacket;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,6 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
 public abstract class TTMixinServerPlayer extends Player {
+    
+    @Shadow public abstract ServerLevel serverLevel();
     
     //仅服务端用到
     @Unique
@@ -45,6 +50,7 @@ public abstract class TTMixinServerPlayer extends Player {
                 //noinspection DataFlowIssue
                 TTNetworkHandler.sentToClientPlayer(new SyncGUIDataPacket(10000,tin_tea_tech$additionalInventory.getItem(0)),
                         (ServerPlayer)(Object)this);
+                TTNetworkHandler.sentToClientPlayer(new SyncLatitudeAndLongitudePacket(this.serverLevel()),(ServerPlayer)(Object)this);
             }
             tin_tea_tech$needUpdate = false;
         }

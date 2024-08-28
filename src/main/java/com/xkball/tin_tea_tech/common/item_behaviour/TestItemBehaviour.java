@@ -9,8 +9,15 @@ import com.xkball.tin_tea_tech.api.item.IItemBehaviour;
 import com.xkball.tin_tea_tech.registration.TTCreativeTab;
 import com.xkball.tin_tea_tech.utils.LevelUtils;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 @AutomaticRegistration
@@ -48,5 +55,23 @@ public class TestItemBehaviour implements IItemBehaviour, IHoloGlassPlugin {
             return InteractionResult.SUCCESS;
         }
         return IItemBehaviour.super.useOnBlock(pContext);
+    }
+    
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        var pos = pPlayer.getOnPos();
+        for(int i=0;i<400;i++){
+            for(int j=0;j<400;j++){
+                for(int k=0;k<400;k++){
+                    var toSet = pos.offset(i-200,j-200,k-200);
+                    if(toSet.getY()<=-64 || toSet.getY()>=384) continue;
+                    if(pLevel.getBlockState(toSet).getBlock() == Blocks.AIR) continue;
+                    if(!pLevel.getBlockState(toSet).is(BlockTags.IMPERMEABLE)){
+                        pLevel.setBlock(toSet, Blocks.AIR.defaultBlockState(),3);
+                    }
+                }
+            }
+        }
+        return IItemBehaviour.super.use(pLevel, pPlayer, pUsedHand);
     }
 }
