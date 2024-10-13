@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "flamereaction:block/iron_column",
+		"particle": "flamereaction:block/iron_column"
+	},
+	"elements": [
+		{
+			"from": [7, 6, 7],
+			"to": [9, 24, 9],
+			"faces": {
+				"north": {"uv": [0, 0, 1, 9], "texture": "#0"},
+				"east": {"uv": [1, 0, 2, 9], "texture": "#0"},
+				"south": {"uv": [2, 0, 3, 9], "texture": "#0"},
+				"west": {"uv": [3, 0, 4, 9], "texture": "#0"},
+				"up": {"uv": [9, 1, 8, 0], "texture": "#0"},
+				"down": {"uv": [9, 1, 8, 2], "texture": "#0"}
+			}
+		},
+		{
+			"from": [6, 0, 6],
+			"to": [10, 6, 10],
+			"faces": {
+				"north": {"uv": [4, 0, 6, 3], "texture": "#0"},
+				"east": {"uv": [4, 3, 6, 6], "texture": "#0"},
+				"south": {"uv": [6, 0, 8, 3], "texture": "#0"},
+				"west": {"uv": [6, 3, 8, 6], "texture": "#0"},
+				"up": {"uv": [6, 8, 4, 6], "texture": "#0"},
+				"down": {"uv": [8, 6, 6, 8], "texture": "#0"}
+			}
+		}
+	]
+}

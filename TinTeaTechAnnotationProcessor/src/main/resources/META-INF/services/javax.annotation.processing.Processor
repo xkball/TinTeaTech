@@ -1,0 +1,3 @@
+com.xkball.tin_tea_tech.annotation_processor.CodecProviderProcessor
+com.xkball.tin_tea_tech.annotation_processor.DataFieldProcessor
+com.xkball.tin_tea_tech.annotation_processor.NetworkPackProcessor

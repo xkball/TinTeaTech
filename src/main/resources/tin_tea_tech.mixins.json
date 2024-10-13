@@ -5,10 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "powertool.refmap.json",
   "mixins": [
-
+    "TTMixinLevelChunk"
   ],
   "client": [
-
   ],
   "injectors": {
     "defaultRequire": 1

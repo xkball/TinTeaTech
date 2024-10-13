@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "tin_tea_tech:item/tools/color_applicator",
+    "layer1": "tin_tea_tech:item/tools/color_applicator_tip"
+  }
+}

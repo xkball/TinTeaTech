@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+tasks.register('generateAnnotationProcessorServicesFile'){
+
+    var target = file("src/main/resources/META-INF/services/javax.annotation.processing.Processor")
+    target.parentFile.mkdirs()
+    target.createNewFile()
+    target.text = ""
+
+    var classesDir = fileTree("src/main/java/com/xkball/tin_tea_tech/annotation_processor")
+    var classFiles = classesDir.getFiles().findAll { it.name.endsWith('.java') }
+    classFiles.each {
+        var path = it.path
+        var offset = path.indexOf("com\\xkball\\")
+        if(offset >= 0) target.text += path.substring(offset,path.length()-5).replace('\\','.') + '\n'
+    }
+
+    inputs.dir file("src/main/java")
+    outputs.file target
+}
+
+
+
+tasks.named("processResources") {
+    dependsOn generateAnnotationProcessorServicesFile
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.named("build"){
+    jar {
+        archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
+        archiveVersion.set(localAnnotationProcessorVersion)
+       // destinationDirectory = file("../build/local_annotation_processor/lib")
+    }
+
+}
+
+tasks.named("shadowJar"){
+    archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
+    archiveVersion.set(localAnnotationProcessorVersion)
+}
+
+tasks.withType(JavaCompile).configureEach {
+    getSource().files
+//    outputs.upToDateWhen { false }
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+//    options.fork = true
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
+//    options.forkOptions.jvmArgs.add('-ea')
+
+
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm:9.6'
+    implementation 'org.ow2.asm:asm-tree:9.6'
+    implementation 'org.ow2.asm:asm-util:9.6'
+    implementation 'com.github.javaparser:javaparser-core:3.26.2'
+    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.26.2'
+}
+
+tasks.register("runTest", JavaExec) {
+    mainClass = "dev.vfyjxf.cumulonimbus.test.SampleJavacPluginTest"
+    classpath = sourceSets.main.runtimeClasspath
+}

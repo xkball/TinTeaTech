@@ -53,3 +53,18 @@ The contents of this repository are licensed as follows:
 - in the case of original source code from tin_tea_tech or compiled artifacts generated from it, under LGPL-3.0.
 - in the case of original art assets from tin_tea_tech, under CC BY-NC 4.0.
 - Special case: The art assets under the namespace tectech come from https://github.com/GTNewHorizons/TecTech/tree/master, using the MIT license
+
+
+## 构建 Build
+
+ 请添加如下jvm参数,或者解除build.gradle文件181行到189行注释.
+
+ Please add the following jvm args or uncomment lines 181 to 189 of build.gradle.
+
+```
+--add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+--add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+--add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+--add-exports jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+```
