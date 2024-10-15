@@ -39,8 +39,15 @@ tasks.named("build"){
 }
 
 tasks.named("shadowJar"){
-    archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
-    archiveVersion.set(localAnnotationProcessorVersion)
+    shadowJar.archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
+    shadowJar.archiveVersion.set(localAnnotationProcessorVersion)
+    println shadowJar.archiveFile.get().asFile.path
+}
+
+tasks.register("buildAndCopyAnnotationProcessor",Copy){
+    dependsOn shadowJar
+    from shadowJar.archiveFile.get().asFile
+    into "../lib/annotation_processor"
 }
 
 tasks.withType(JavaCompile).configureEach {
