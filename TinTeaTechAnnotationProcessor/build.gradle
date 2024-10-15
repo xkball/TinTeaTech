@@ -48,6 +48,7 @@ tasks.register("buildAndCopyAnnotationProcessor",Copy){
     dependsOn shadowJar
     from shadowJar.archiveFile.get().asFile
     into "../lib/annotation_processor"
+    println destinationDir.path
 }
 
 tasks.withType(JavaCompile).configureEach {
