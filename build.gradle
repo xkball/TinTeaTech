@@ -219,7 +219,7 @@ jar {
     }
     doLast {
         if (System.env.GITHUB_ACTIONS) {
-            File theFile = jar.archiveFile.get().getAsFile()
+            File theFile = archiveFile.get().getAsFile()
 
             def outputFile = new File(System.env.GITHUB_OUTPUT)
             // Use the env-specific line separator for maximally possible compatibility
@@ -227,7 +227,7 @@ jar {
 
             // Write out new env variable for later usage
             outputFile << newLine << "artifact_name=${theFile.getName()}"
-            outputFile << newLine << "artifact_publish_name=${jar.archiveBaseName.get()}.jar"
+            outputFile << newLine << "artifact_publish_name=${archiveBaseName.get()}.jar"
             outputFile << newLine << "artifact_path=${theFile.absolutePath}"
         }
     }
