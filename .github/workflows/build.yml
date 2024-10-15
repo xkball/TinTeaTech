@@ -17,6 +17,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Apply Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: $${{ runner.os }}-gradle
 
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@v3

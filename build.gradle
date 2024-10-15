@@ -179,33 +179,8 @@ publishing {
     }
 }
 
-def generateSourceFilesFile(String sourceName_,Set<File> useSources){
-    var dir = System.getenv("TEMP")
-    if(dir.isEmpty()) return
-    var file1 = file(dir+"/com.xkball/tin_tea_tech.annotation_processor/"+sourceName_+".temp.source_classes")
-    var file2 = file(dir+"/com.xkball/tin_tea_tech.annotation_processor/temp.source_classes")
-    if(file1.exists()) file1.delete()
-    if(file2.exists()) file2.delete()
-    file1.getParentFile().mkdirs()
-    file1.createNewFile()
-    file2.createNewFile()
-    useSources.each {
-        var path = it.path
-        file1.text += path + '\n'
-        file2.text += path + '\n'
-    }
-}
-
 tasks.withType(JavaCompile).configureEach {
-    doFirst {
-        var dir = System.getenv("TEMP")
-        if(dir.isEmpty()) return
-        var s = dir+"/com.xkball/tin_tea_tech.annotation_processor/"+name+".temp.source_classes"
-        var t = dir+"/com.xkball/tin_tea_tech.annotation_processor/temp.source_classes"
-        if(!new File(s).exists() || !new File(t).exists()) return
-        Files.copy(java.nio.file.Path.of(s),java.nio.file.Path.of(t), StandardCopyOption.REPLACE_EXISTING)
-    }
-    generateSourceFilesFile(getName(),getSource().files)
+
     outputs.upToDateWhen { false }
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 //    options.fork = true
@@ -222,6 +197,7 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED')
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED')
+    options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED')
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
 
 }
