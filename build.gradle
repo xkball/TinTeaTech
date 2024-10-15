@@ -1,3 +1,7 @@
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -32,7 +36,8 @@ tasks.register("githubActionOutput", TeaConDumpPathToGitHub) { task ->
     task.onlyIf {
         System.env.GITHUB_ACTIONS
     }
-    task.getPublishName().set("${jar.archiveBaseName.get()}-${version}.jar")
+    var endfix = System.env.VERSION_IDENTIFIER +"-"+  LocalDateTime.now(ZoneOffset.ofHours(8)).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    task.getPublishName().set("${jar.archiveBaseName.get()}-${version}-${endfix}-nightly.jar")
     task.getTargetFile().set(jar.archiveFile)
 }
 

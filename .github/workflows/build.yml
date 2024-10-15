@@ -29,8 +29,14 @@ jobs:
             ~/.gradle/wrapper
           key: $${{ runner.os }}-gradle
 
+      - name: Get Short Identifier
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+
       - name: Build
         id: build
+        env:
+          VERSION_IDENTIFIER: SNAPSHOT+${{ steps.short-sha.outputs.sha }}
         run: ./gradlew :build :githubActionOutput --stacktrace
 
       - name: GitHub Action Artifact
