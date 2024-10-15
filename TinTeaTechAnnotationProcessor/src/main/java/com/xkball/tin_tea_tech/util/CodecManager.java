@@ -1,5 +1,6 @@
 package com.xkball.tin_tea_tech.util;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Symtab;
@@ -112,6 +113,7 @@ public class CodecManager {
     }
     
     public static void readFromSources() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_21);
         for (var env : enter.getEnvs()) {
             var tree = env.tree;
             if (!(tree instanceof JCTree.JCClassDecl classTree)) return;
