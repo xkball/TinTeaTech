@@ -19,6 +19,7 @@ tasks.register('generateAnnotationProcessorServicesFile'){
         var path = it.path
         var offset = path.indexOf("com\\xkball\\")
         if(offset >= 0) target.text += path.substring(offset,path.length()-5).replace('\\','.') + '\n'
+        println path
     }
     println target.path
     println target.text
