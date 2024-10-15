@@ -23,7 +23,8 @@ abstract class TeaConDumpPathToGitHub extends DefaultTask {
             def outputFile = new File(System.env.GITHUB_OUTPUT)
             // Use the env-specific line separator for maximally possible compatibility
             def newLine = System.getProperty('line.separator')
-
+            println outputFile.name
+            println theFile.name
             // Write out new env variable for later usage
             outputFile << newLine << "artifact_name=${theFile.getName()}"
             outputFile << newLine << "artifact_publish_name=${publishName.get()}"
@@ -241,6 +242,11 @@ jar {
         include '**/*'
         into "com/xkball/tin_tea_tech/api"
     }
+    from("build/classes/java/main/META-INF"){
+        include '**/*'
+        into 'META-INF'
+    }
+
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
