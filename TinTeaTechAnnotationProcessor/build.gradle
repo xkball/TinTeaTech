@@ -1,5 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+import java.nio.file.Files
+
 plugins {
     id 'java'
     id 'maven-publish'
@@ -17,8 +19,8 @@ tasks.register('generateAnnotationProcessorServicesFile'){
     var classFiles = classesDir.getFiles().findAll { it.name.endsWith('.java') }
     classFiles.each {
         var path = it.path
-        var offset = path.indexOf("com\\xkball\\")
-        if(offset >= 0) target.text += path.substring(offset,path.length()-5).replace('\\','.') + '\n'
+        var offset = path.indexOf("xkball")
+        if(offset >= 0) target.text += path.substring(offset-4,path.length()-5).replace("\\",".").replace("/",".") + '\n'
         println path
     }
     println target.path
