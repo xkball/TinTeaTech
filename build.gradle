@@ -135,7 +135,7 @@ dependencies {
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
     //implementation(annotationProcessor(files("TinTeaTechAnnotationProcessor/build/libs/TinTeaTech-LocalAnnotationProcessor-"+localAnnotationProcessorVersion+"-all.jar")))
-    implementation(annotationProcessor(fileTree("lib/annotation_processor")))
+    implementation(annotationProcessor(fileTree("libs/annotation_processor")))
     localAnnotationProcessorCompile "org.ow2.asm:asm:9.5"
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -184,17 +184,24 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     dependsOn ':TinTeaTechAnnotationProcessor:buildAndCopyAnnotationProcessor'
+    fileTree("libs/annotation_processor").forEach {
+        println it.path
+    }
     outputs.upToDateWhen { false }
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-//    options.fork = true
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
-//    options.forkOptions.jvmArgs.add('-ea')
+    if(System.env.GITHUB_ACTIONS){
+        options.fork = true
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED')
+        options.forkOptions.jvmArgs.add('-ea')
+    }
+
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED')
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED')
     options.compilerArgs.add('--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED')
