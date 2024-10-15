@@ -225,6 +225,7 @@ jar {
             // Use the env-specific line separator for maximally possible compatibility
             def newLine = System.getProperty('line.separator')
 
+            println outputFile.text
             // Write out new env variable for later usage
             outputFile << newLine << "artifact_name=${theFile.getName()}"
             outputFile << newLine << "artifact_publish_name=${archiveBaseName.get()}.jar"
