@@ -1,12 +1,41 @@
-import java.nio.file.CopyOption
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.16-beta'
 }
+
+
+//from https://github.com/teaconmc/PowerTool/blob/1.21-neoforge/build.gradle
+abstract class TeaConDumpPathToGitHub extends DefaultTask {
+    @Input
+    abstract Property<String> getPublishName()
+    @InputFile
+    abstract RegularFileProperty getTargetFile()
+    @TaskAction
+    void dump() {
+        if (System.env.GITHUB_ACTIONS) {
+            File theFile = targetFile.getAsFile().get()
+
+            def outputFile = new File(System.env.GITHUB_OUTPUT)
+            // Use the env-specific line separator for maximally possible compatibility
+            def newLine = System.getProperty('line.separator')
+
+            // Write out new env variable for later usage
+            outputFile << newLine << "artifact_name=${theFile.getName()}"
+            outputFile << newLine << "artifact_publish_name=${publishName.get()}"
+            outputFile << newLine << "artifact_path=${theFile.absolutePath}"
+        }
+    }
+}
+
+tasks.register("githubActionOutput", TeaConDumpPathToGitHub) { task ->
+    task.onlyIf {
+        System.env.GITHUB_ACTIONS
+    }
+    task.getPublishName().set("${jar.archiveBaseName.get()}-${version}.jar")
+    task.getTargetFile().set(jar.archiveFile)
+}
+
 
 tasks.named('wrapper', Wrapper).configure {
     // Define wrapper values here so as to not have to always do so when updating gradlew.properties.

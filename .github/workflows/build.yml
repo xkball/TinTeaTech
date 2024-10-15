@@ -17,6 +17,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+
       - name: Apply Cache
         uses: actions/cache@v4
         with:
@@ -25,10 +26,15 @@ jobs:
             ~/.gradle/wrapper
           key: $${{ runner.os }}-gradle
 
-      - name: Build with Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: build
+      - name: Get Short Identifier
+        uses: benjlevesque/short-sha@v3.0
+        id: short-sha
+
+      - name: Build
+        id: build
+        env:
+          VERSION_IDENTIFIER: SNAPSHOT+${{ steps.short-sha.outputs.sha }}
+        run: ./gradlew :build :githubActionOutput --stacktrace
 
       - name: GitHub Action Artifact
         uses: actions/upload-artifact@v4
