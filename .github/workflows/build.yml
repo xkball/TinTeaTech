@@ -33,6 +33,10 @@ jobs:
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
 
+      - name: Build AnnotationProcessor
+        id: build-annotation-processor
+        run: cd TinTeaTechAnnotationProcessor && chmod +x gradlew && ./gradlew publishToMavenLocal
+
       - name: Build
         id: build
         env:

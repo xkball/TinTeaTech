@@ -1,5 +1,8 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'java'
+    id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
@@ -38,16 +41,16 @@ tasks.named("build"){
 
 }
 
-tasks.named("shadowJar"){
+tasks.named("shadowJar", ShadowJar){
     shadowJar.archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
     shadowJar.archiveVersion.set(localAnnotationProcessorVersion)
+    //relocate 'com.google.guava', 'com.github.javaparser.com.google.guava'
+
 }
 
-tasks.register("buildAndCopyAnnotationProcessor",Copy){
-    dependsOn shadowJar
-    delete fileTree("../libs/annotation_processor")
-    from shadowJar.archiveFile.get().asFile
-    into "../libs/annotation_processor"
+jar {
+    archiveBaseName = "TinTeaTech-LocalAnnotationProcessor"
+    archiveVersion.set(localAnnotationProcessorVersion)
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -81,11 +84,43 @@ dependencies {
     implementation 'org.ow2.asm:asm:9.6'
     implementation 'org.ow2.asm:asm-tree:9.6'
     implementation 'org.ow2.asm:asm-util:9.6'
+    implementation 'org.jetbrains:annotations:24.1.0'
+//    implementation 'com.google.guava:guava:33.3.0-jre'
     implementation 'com.github.javaparser:javaparser-core:3.26.2'
-    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.26.2'
+//    implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.26.2'
 }
 
 tasks.register("runTest", JavaExec) {
     mainClass = "dev.vfyjxf.cumulonimbus.test.SampleJavacPluginTest"
     classpath = sourceSets.main.runtimeClasspath
+}
+
+publishing { PublishingExtension it ->
+    publications {
+        // noinspection GroovyAssignabilityCheck
+        release(MavenPublication) {
+            // noinspection GroovyAssignabilityCheck
+            from components.java
+            // noinspection GroovyAssignabilityCheck
+            groupId = "com.xkball"
+            // noinspection GroovyAssignabilityCheck
+            artifactId = 'TinTeaTech-LocalAnnotationProcessor'
+            // noinspection GroovyAssignabilityCheck
+            version = localAnnotationProcessorVersion
+            pom {
+                // noinspection GroovyAssignabilityCheck
+                name = 'TinTeaTech-LocalAnnotationProcessor'
+                // noinspection GroovyAssignabilityCheck
+                url = "https://github.com/xkball/TinTeaTech"
+                developers {
+                    developer {
+                        //noinspection GroovyAssignabilityCheck
+                        id = 'xkball'
+                        //noinspection GroovyAssignabilityCheck
+                        name = 'xkball'
+                    }
+                }
+            }
+        }
+    }
 }

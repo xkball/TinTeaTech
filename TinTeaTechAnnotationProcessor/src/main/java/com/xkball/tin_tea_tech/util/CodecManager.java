@@ -10,8 +10,9 @@ import com.sun.tools.javac.util.Pair;
 import com.xkball.tin_tea_tech.annotation_processor.CodecProviderProcessor;
 import com.xkball.tin_tea_tech.util.jctree.DataJCTreeUtils;
 import com.xkball.tin_tea_tech.util.jctree.JCTreeUtils;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.util.Elements;
@@ -143,7 +144,7 @@ public class CodecManager {
                     out.write(data.toString() + '\n');
                 }
             }
-            System.out.println("Writing Codec Providers to: "+file.toUri().toURL());
+            //System.out.println("Writing Codec Providers to: "+file.toUri().toURL());
             //throw new RuntimeException("Writing Codec Providers to: "+file.toUri().toURL());
         } catch (IOException e) {
             throw new RuntimeException(e);
