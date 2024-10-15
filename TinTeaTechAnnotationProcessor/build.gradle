@@ -20,7 +20,8 @@ tasks.register('generateAnnotationProcessorServicesFile'){
         var offset = path.indexOf("com\\xkball\\")
         if(offset >= 0) target.text += path.substring(offset,path.length()-5).replace('\\','.') + '\n'
     }
-
+    println target.path
+    println target.text
     inputs.dir file("src/main/java")
     outputs.file target
 }
