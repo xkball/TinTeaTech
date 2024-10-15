@@ -29,13 +29,16 @@ jobs:
             ~/.gradle/wrapper
           key: $${{ runner.os }}-gradle
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
       - name: Get Short Identifier
         uses: benjlevesque/short-sha@v3.0
         id: short-sha
 
       - name: Build AnnotationProcessor
         id: build-annotation-processor
-        run: cd TinTeaTechAnnotationProcessor && chmod +x gradlew && ./gradlew publishToMavenLocal
+        run: ./gradlew :TinTeaTechAnnotationProcessor:publishToMavenLocal --stacktrace --scan
 
       - name: Build
         id: build
