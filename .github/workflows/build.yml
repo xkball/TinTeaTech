@@ -29,3 +29,9 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           arguments: build
+
+      - name: GitHub Action Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.artifact_name }}
+          path: ${{ steps.build.outputs.artifact_path }}
