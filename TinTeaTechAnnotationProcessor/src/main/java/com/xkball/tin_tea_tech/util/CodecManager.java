@@ -1,7 +1,6 @@
 package com.xkball.tin_tea_tech.util;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Symtab;
 import com.sun.tools.javac.comp.Enter;
@@ -25,23 +24,21 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-import static com.xkball.tin_tea_tech.util.JavaParserUtils.*;
-
 public class CodecManager {
     
     private static boolean init = false;
-    public static final Map<String,Map<String, Pair<Integer,String>>> CODECS = new HashMap<>();
-    public static final Map<String,Map<String, Pair<Integer,String>>> MAP_CODECS = new HashMap<>();
+    public static final Map<String, Map<String, Pair<Integer, String>>> CODECS = new HashMap<>();
+    public static final Map<String, Map<String, Pair<Integer, String>>> MAP_CODECS = new HashMap<>();
     public static final Set<CodecProviderData> NEW_CODEC_PROVIDERS = new HashSet<>();
     public static final TypeNameFixer FIXER = new TypeNameFixer();
     private static JavacTrees trees;
     private static Enter enter;
     private static Elements elementUtils;
     private static Filer filer;
-
     
-    public static void init(ProcessingEnvironment processingEnv){
-        if(init) return;
+    
+    public static void init(ProcessingEnvironment processingEnv) {
+        if (init) return;
         init = true;
         
         var symTab = Symtab.instance(JCTreeUtils.getContext(processingEnv));
@@ -56,26 +53,26 @@ public class CodecManager {
     }
     
     @Nullable
-    public static DataJCTreeUtils.ICodecRefGetter findCodecRef(String codecName, String typeName){
+    public static DataJCTreeUtils.ICodecRefGetter findCodecRef(String codecName, String typeName) {
         var map1 = CODECS.get(typeName);
-        if(map1 != null){
+        if (map1 != null) {
             var temp = map1.get(codecName);
-            if(temp != null) return () -> JCTreeUtils.makeIdent(temp.snd);
+            if (temp != null) return () -> JCTreeUtils.makeIdent(temp.snd);
         }
         var map2 = MAP_CODECS.get(typeName);
-        if(map2 != null){
+        if (map2 != null) {
             var temp = map2.get(codecName);
-            return () -> JCTreeUtils.treeMaker.App(JCTreeUtils.treeMaker.Select(JCTreeUtils.makeIdent(temp.snd),JCTreeUtils.name("codec")));
+            return () -> JCTreeUtils.treeMaker.App(JCTreeUtils.treeMaker.Select(JCTreeUtils.makeIdent(temp.snd), JCTreeUtils.name("codec")));
         }
         return null;
     }
     
-    public static void readFromMETA_INF(){
+    public static void readFromMETA_INF() {
         //格式: 类型,,codec目标类名,,引用,,名称,,优先级
-        for(var str : FileUtils.readResourcesAllLines("META-INF/com.xkball.codec_provider")){
+        for (var str : FileUtils.readResourcesAllLines("META-INF/com.xkball.codec_provider")) {
             var args = str.split(",,");
-            if(args.length != 5){
-                System.out.printf("invaild codec : %s%n",str);
+            if (args.length != 5) {
+                System.out.printf("invaild codec : %s%n", str);
                 continue;
             }
             var type = args[0];
@@ -85,8 +82,8 @@ public class CodecManager {
             var order = args[4].trim();
             try {
                 Integer.parseInt(order);
-            }catch(NumberFormatException e){
-                System.out.printf("invaild codec : %s%n",str);
+            } catch (NumberFormatException e) {
+                System.out.printf("invaild codec : %s%n", str);
                 continue;
             }
             var codecOrder = Integer.parseInt(order);
@@ -95,55 +92,53 @@ public class CodecManager {
         }
     }
     
-    public static void addCodec(String type, String codecTypeName, String codecRef, String codecName, int order){
-        BiFunction<String,Map<String, Pair<Integer,String>>,Map<String, Pair<Integer,String>>> remappingFunc = (k,v) -> {
+    public static void addCodec(String type, String codecTypeName, String codecRef, String codecName, int order) {
+        BiFunction<String, Map<String, Pair<Integer, String>>, Map<String, Pair<Integer, String>>> remappingFunc = (k, v) -> {
             var pair = Pair.of(order, codecRef);
-            if(v == null){
-                var result = new HashMap<String, Pair<Integer,String>>();
+            if (v == null) {
+                var result = new HashMap<String, Pair<Integer, String>>();
                 result.put(codecName.isEmpty() ? "" : codecName, pair);
                 return result;
-            }
-            else{
-                v.compute(codecName, (kn,vn) -> vn == null ? pair : vn.fst < order ? vn : pair);
+            } else {
+                v.compute(codecName, (kn, vn) -> vn == null ? pair : vn.fst < order ? vn : pair);
                 return v;
             }
         };
-        if("Codec".equals(type)){
-            CODECS.compute(codecTypeName,remappingFunc);
-        }
-        else if("MapCodec".equals(type)){
-            MAP_CODECS.compute(codecTypeName,remappingFunc);
+        if ("Codec".equals(type)) {
+            CODECS.compute(codecTypeName, remappingFunc);
+        } else if ("MapCodec".equals(type)) {
+            MAP_CODECS.compute(codecTypeName, remappingFunc);
         }
     }
     
-    public static void readFromSources(){
-        for(var env : enter.getEnvs()){
+    public static void readFromSources() {
+        for (var env : enter.getEnvs()) {
             var tree = env.tree;
-            if(!(tree instanceof JCTree.JCClassDecl classTree)) return;
+            if (!(tree instanceof JCTree.JCClassDecl classTree)) return;
             var classSymbol = classTree.sym;
             var className = classSymbol.flatName().toString();
             getImportsFromJavaSourceFile(classSymbol.sourcefile);
-            CodecProviderProcessor.handleJCTree(className,classTree,false);
+            CodecProviderProcessor.handleJCTree(className, classTree, false);
         }
         writeToMETA_INF();
     }
     
-    public static void getImportsFromJavaSourceFile(JavaFileObject source){
+    public static void getImportsFromJavaSourceFile(JavaFileObject source) {
         try (var in = source.openInputStream()) {
             var unit = StaticJavaParser.parse(in);
             FIXER.setContextClass(unit);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Failed parse java source: " + e.getMessage());
         }
     }
     
-    public static void writeToMETA_INF(){
+    public static void writeToMETA_INF() {
         var path = "META-INF/com.xkball.codec_provider";
         try {
             var file = filer.createResource(StandardLocation.CLASS_OUTPUT, "", path);
-            try(var out = file.openWriter()){
-                for(var data: NEW_CODEC_PROVIDERS){
-                    out.write(data.toString()+'\n');
+            try (var out = file.openWriter()) {
+                for (var data : NEW_CODEC_PROVIDERS) {
+                    out.write(data.toString() + '\n');
                 }
             }
         } catch (IOException e) {
@@ -152,7 +147,7 @@ public class CodecManager {
     }
     
     
-    public record CodecProviderData(String type,String typeName,String ref,String insName,int insOrder){
+    public record CodecProviderData(String type, String typeName, String ref, String insName, int insOrder) {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -171,5 +166,5 @@ public class CodecManager {
             return type + ",," + typeName + ",," + ref + ",," + insName + ",," + insOrder;
         }
     }
-
+    
 }

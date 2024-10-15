@@ -1,8 +1,5 @@
 package com.xkball.tin_tea_tech.api.block.te;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
-import com.xkball.tin_tea_tech.api.annotation.DataField;
 import com.xkball.tin_tea_tech.api.annotation.NonNullByDefault;
 import com.xkball.tin_tea_tech.api.mte.MTEType;
 import com.xkball.tin_tea_tech.common.mte.ticker.MTEClientTicker;
@@ -10,7 +7,6 @@ import com.xkball.tin_tea_tech.common.mte.ticker.MTETicker;
 import com.xkball.tin_tea_tech.api.mte.IMTEBehaviour;
 import com.xkball.tin_tea_tech.common.block.TinTeaTechBlocks;
 import com.xkball.tin_tea_tech.utils.ModUtils;
-import com.xkball.tin_tea_tech.utils.TestData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

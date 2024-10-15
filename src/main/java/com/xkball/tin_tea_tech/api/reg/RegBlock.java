@@ -13,7 +13,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +25,7 @@ public class RegBlock<T extends Block> implements ItemLike {
     
     public static final Map<ResourceLocation, RegBlock<?>> REG_BLOCK_POOL = new Object2ReferenceOpenHashMap<>();
     
-    private final AutoRegHolder<Block,T> holder;
+    private final AutoRegHolder<Block, T> holder;
     private final String name;
     private I18NEntry i18n;
     private RegItem<? extends BlockItem> blockItemHolder;
@@ -37,47 +36,47 @@ public class RegBlock<T extends Block> implements ItemLike {
     
     public RegBlock(String name, Supplier<T> supplier) {
         this.name = name;
-        this.holder = AutoRegHolder.<Block,T>create(supplier).bind(TinTeaTechRegistries.BLOCK,name);
-        REG_BLOCK_POOL.put(VanillaUtils.modRL(name),this);
+        this.holder = AutoRegHolder.<Block, T>create(supplier).bind(TinTeaTechRegistries.BLOCK, name);
+        REG_BLOCK_POOL.put(VanillaUtils.modRL(name), this);
     }
     
     public RegBlock<T> setBlockItem(Supplier<? extends BlockItem> supplier) {
-        blockItemHolder = new RegItem<>(this.name,supplier);
+        blockItemHolder = new RegItem<>(this.name, supplier);
         return this;
     }
     
-    public RegBlock<T> simpleBlockItem(){
+    public RegBlock<T> simpleBlockItem() {
         blockItemHolder = new RegItem<>(this.name, () -> new BlockItem(holder.get(), new Item.Properties()));
         return this;
     }
     
-    public RegBlock<T> setI18n(String en_us,String zh_cn) {
-        this.i18n = new I18NEntry("block."+ TinTeaTech.MODID+"."+name,en_us,zh_cn);
+    public RegBlock<T> setI18n(String en_us, String zh_cn) {
+        this.i18n = new I18NEntry("block." + TinTeaTech.MODID + "." + name, en_us, zh_cn);
         return this;
     }
     
     public RegBlock<T> setBlockEntityLocation(ResourceLocation location) {
         this.blockEntityLocation = location;
-        RegBlockEntity.addBlockForTE(this,location);
+        RegBlockEntity.addBlockForTE(this, location);
         return this;
     }
     
-    public RegBlock<T> setBlockStateLocation(ResourceLocation location){
+    public RegBlock<T> setBlockStateLocation(ResourceLocation location) {
         this.blockStateLocation = location;
         return this;
     }
     
-    public RegBlock<T> setItemModelParent(ResourceLocation location){
+    public RegBlock<T> setItemModelParent(ResourceLocation location) {
         this.itemModelLocation = location;
         return this;
     }
     
-    public RegBlock<T> setItemModelLocation(ResourceLocation location){
+    public RegBlock<T> setItemModelLocation(ResourceLocation location) {
         this.blockItemHolder.setModelLocation(location);
         return this;
     }
     
-    public RegBlock<T> setCreativeTab(Holder<CreativeModeTab> tab){
+    public RegBlock<T> setCreativeTab(Holder<CreativeModeTab> tab) {
         this.blockItemHolder.setCreativeTab(tab);
         return this;
     }
@@ -103,7 +102,7 @@ public class RegBlock<T extends Block> implements ItemLike {
     }
     
     
-    public T get(){
+    public T get() {
         return holder.get();
     }
     

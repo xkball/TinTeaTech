@@ -1,7 +1,6 @@
 package dev.vfyjxf.cumulonimbus.test;
 
 
-
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.IOException;
@@ -10,13 +9,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class TestCompiler {
     public byte[] compile(String qualifiedClassName, String testSource) throws IOException {
         StringWriter output = new StringWriter();
-
+        
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         SimpleFileManager fileManager = new SimpleFileManager(
                 compiler.getStandardFileManager(null, null, null));
@@ -27,7 +25,7 @@ public class TestCompiler {
 //                                "-Xplugin:" + CumulonimbusPlugin.NAME));
         JavaCompiler.CompilationTask task
                 = compiler.getTask(output, fileManager, null, arguments, null,
-                                   compilationUnits);
+                compilationUnits);
         task.call();
         System.out.write(output.getBuffer().toString().getBytes(StandardCharsets.UTF_8));
         return fileManager.getCompiled().getFirst().getCompiledBinaries();

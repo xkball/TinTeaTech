@@ -1,6 +1,5 @@
 package com.xkball.tin_tea_tech.common.blockentity;
 
-import com.mojang.serialization.Codec;
 import com.xkball.tin_tea_tech.api.annotation.NonNullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
