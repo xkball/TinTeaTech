@@ -27,7 +27,7 @@ import java.util.Set;
 public class CodecProviderProcessor extends AbstractProcessor {
     
     public static final String CODEC_PROVIDER = "com.xkball.tin_tea_tech.api.annotation.CodecProvider";
-    
+    public static final String LOG_HEAD = "[TinTeaTechAnnotationProcessor.CodecProviderProcessor] ";
     private ProcessingEnvironment processingEnv;
     private Elements elementUtils;
     private Filer filer;
@@ -64,34 +64,36 @@ public class CodecProviderProcessor extends AbstractProcessor {
     public static void handleJCTree(String className, JCTree.JCClassDecl tree,boolean inAnnoProcessor){
         if(!inAnnoProcessor){
             if(sourceHandledClasses.contains(className)) return;
+            System.out.println(LOG_HEAD + "Scanning " + className);
             sourceHandledClasses.add(className);
         }
         else {
             if(processorHandledClasses.contains(className)) return;
+            System.out.println(LOG_HEAD + "Checking " + className);
             processorHandledClasses.add(className);
         }
-            JCTreeUtils.findFieldWithAnno(tree,CODEC_PROVIDER)
-                .forEach(def -> {
-                    if(!JCTreeUtils.isPublicStatic(def)) return;
-                    var codecType = StringUtils.splitTypeNameWithArg(def.vartype.toString());
-                    var typeName = StringUtils.fixTypeNameWithArgRecursive(className,codecType.snd);
-                    var codecRef = className+"."+def.name.toString();
-                    var anno = Objects.requireNonNull(JCTreeUtils.findAnnotation(def,CODEC_PROVIDER));
-                    var codecInsOrder = 0;
-                    var codecInsName = "";
-                    for(var arg : anno.args){
-                        if(arg instanceof JCTree.JCAssign assign){
-                            if(assign.lhs.toString().equals("name")) codecInsName = StringUtils.removeDoubleQuotes(assign.rhs.toString());
-                            if(assign.lhs.toString().equals("order")) codecInsOrder = Integer.parseInt(assign.rhs.toString());
-                        }
+        JCTreeUtils.findFieldWithAnno(tree,CODEC_PROVIDER)
+            .forEach(def -> {
+                if(!JCTreeUtils.isPublicStatic(def)) return;
+                var codecType = StringUtils.splitTypeNameWithArg(def.vartype.toString());
+                var typeName = StringUtils.fixTypeNameWithArgRecursive(className,codecType.snd);
+                var codecRef = className+"."+def.name.toString();
+                var anno = Objects.requireNonNull(JCTreeUtils.findAnnotation(def,CODEC_PROVIDER));
+                var codecInsOrder = 0;
+                var codecInsName = "";
+                for(var arg : anno.args){
+                    if(arg instanceof JCTree.JCAssign assign){
+                        if(assign.lhs.toString().equals("name")) codecInsName = StringUtils.removeDoubleQuotes(assign.rhs.toString());
+                        if(assign.lhs.toString().equals("order")) codecInsOrder = Integer.parseInt(assign.rhs.toString());
                     }
-                    var data = new CodecManager.CodecProviderData(codecType.fst,typeName,codecRef,codecInsName,codecInsOrder);
-                    if(!CodecManager.NEW_CODEC_PROVIDERS.contains(data)){
-                        if(inAnnoProcessor)
-                            throw new IllegalArgumentException("Can not support codec provider from code generation!!! " + data);
-                        CodecManager.NEW_CODEC_PROVIDERS.add(data);
-                        CodecManager.addCodec(codecType.fst,typeName,codecRef,codecInsName,codecInsOrder);
-                    }
+                }
+                var data = new CodecManager.CodecProviderData(codecType.fst,typeName,codecRef,codecInsName,codecInsOrder);
+                if(!CodecManager.NEW_CODEC_PROVIDERS.contains(data)){
+                    if(inAnnoProcessor)
+                        throw new IllegalArgumentException("Can not support codec provider from code generation!!! " + data);
+                    CodecManager.NEW_CODEC_PROVIDERS.add(data);
+                    CodecManager.addCodec(codecType.fst,typeName,codecRef,codecInsName,codecInsOrder);
+                }
         });
     }
 

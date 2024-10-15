@@ -36,7 +36,7 @@ jobs:
       - name: Build
         id: build
         env:
-          VERSION_IDENTIFIER: SNAPSHOT+${{ steps.short-sha.outputs.sha }}
+          VERSION_IDENTIFIER: ${{ steps.short-sha.outputs.sha }}
         run: ./gradlew :build --stacktrace
 
       - name: GitHub Action Artifact

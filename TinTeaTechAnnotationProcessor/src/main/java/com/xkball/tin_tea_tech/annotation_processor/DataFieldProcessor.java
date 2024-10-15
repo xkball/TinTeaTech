@@ -36,6 +36,7 @@ import static com.xkball.tin_tea_tech.util.jctree.JCTreeUtils.*;
 public class DataFieldProcessor extends AbstractProcessor {
     
     public static final String DATA_FIELD = "com.xkball.tin_tea_tech.api.annotation.DataField";
+    public static final String LOG_HEAD = "[TinTeaTechAnnotationProcessor.DataFieldProcessor] ";
     public static final java.util.List<String> handledClasses = new ArrayList<>();
     
     private ProcessingEnvironment processingEnv;
@@ -62,6 +63,7 @@ public class DataFieldProcessor extends AbstractProcessor {
                     if (classSymbol == null) return;
                     var fullName = classSymbol.getQualifiedName().toString();
                     var tree = trees.getTree(elementUtils.getTypeElement(fullName));
+                    
                     handleClass(fullName, tree);
                 }
         );
@@ -71,6 +73,7 @@ public class DataFieldProcessor extends AbstractProcessor {
     public static void handleClass(String className, JCTree.JCClassDecl tree) {
         if (handledClasses.contains(className)) return;
         handledClasses.add(className);
+        System.out.println(LOG_HEAD + "Processing " + className);
         JCTreeUtils.setPos(tree);
         var fields = JCTreeUtils.findFieldWithAnno(tree,DATA_FIELD);
         var fieldsData = fields.stream().map(f -> DataJCTreeUtils.DataFieldData.fromAnno(className,f)).toList();

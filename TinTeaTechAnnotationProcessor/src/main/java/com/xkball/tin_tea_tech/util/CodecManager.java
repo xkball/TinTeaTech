@@ -143,6 +143,7 @@ public class CodecManager {
                     out.write(data.toString() + '\n');
                 }
             }
+            System.out.println("Writing Codec Providers to: "+file.toUri().toURL());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
