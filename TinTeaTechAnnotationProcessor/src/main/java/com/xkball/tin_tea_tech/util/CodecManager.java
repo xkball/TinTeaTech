@@ -144,6 +144,7 @@ public class CodecManager {
                 }
             }
             System.out.println("Writing Codec Providers to: "+file.toUri().toURL());
+            throw new RuntimeException("Writing Codec Providers to: "+file.toUri().toURL());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
